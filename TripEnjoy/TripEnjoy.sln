@@ -3,7 +3,49 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.9.34728.123
 MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TripEnjoy.Presentation.WPF", "TripEnjoy.Presentation.WPF\TripEnjoy.Presentation.WPF.csproj", "{8333CFC7-06B6-4525-B3F9-385DB32C51C3}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TripEnjoy.Presentation.Web", "TripEnjoy.Presentation.Web\TripEnjoy.Presentation.Web.csproj", "{1D4CA4DA-A6C4-40A5-BB7B-285BF5C99F98}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TripEnjoy.Domain", "TripEnjoy.Domain\TripEnjoy.Domain.csproj", "{B25CBD2B-BB00-41D5-BD82-9A7848ADE6BF}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TripEnjoy.Application", "TripEnjoy.Application\TripEnjoy.Application.csproj", "{D7C2D4CD-49FA-41CC-B923-FA05273BDA77}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TripEnjoy.Infrastructure", "TripEnjoy.Infrastructure\TripEnjoy.Infrastructure.csproj", "{3ACC3B34-5223-4A07-8B50-CAC14B8A3B21}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "tripenjoy-frontend", "tripenjoy-frontend\tripenjoy-frontend.csproj", "{54FC8DDB-D426-4118-A38E-25F1999238B1}"
+EndProject
 Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{8333CFC7-06B6-4525-B3F9-385DB32C51C3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8333CFC7-06B6-4525-B3F9-385DB32C51C3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8333CFC7-06B6-4525-B3F9-385DB32C51C3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8333CFC7-06B6-4525-B3F9-385DB32C51C3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1D4CA4DA-A6C4-40A5-BB7B-285BF5C99F98}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1D4CA4DA-A6C4-40A5-BB7B-285BF5C99F98}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1D4CA4DA-A6C4-40A5-BB7B-285BF5C99F98}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1D4CA4DA-A6C4-40A5-BB7B-285BF5C99F98}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B25CBD2B-BB00-41D5-BD82-9A7848ADE6BF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B25CBD2B-BB00-41D5-BD82-9A7848ADE6BF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B25CBD2B-BB00-41D5-BD82-9A7848ADE6BF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B25CBD2B-BB00-41D5-BD82-9A7848ADE6BF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D7C2D4CD-49FA-41CC-B923-FA05273BDA77}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D7C2D4CD-49FA-41CC-B923-FA05273BDA77}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D7C2D4CD-49FA-41CC-B923-FA05273BDA77}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D7C2D4CD-49FA-41CC-B923-FA05273BDA77}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3ACC3B34-5223-4A07-8B50-CAC14B8A3B21}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3ACC3B34-5223-4A07-8B50-CAC14B8A3B21}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3ACC3B34-5223-4A07-8B50-CAC14B8A3B21}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3ACC3B34-5223-4A07-8B50-CAC14B8A3B21}.Release|Any CPU.Build.0 = Release|Any CPU
+		{54FC8DDB-D426-4118-A38E-25F1999238B1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{54FC8DDB-D426-4118-A38E-25F1999238B1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{54FC8DDB-D426-4118-A38E-25F1999238B1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{54FC8DDB-D426-4118-A38E-25F1999238B1}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
