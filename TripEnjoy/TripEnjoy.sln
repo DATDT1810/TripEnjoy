@@ -13,8 +13,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TripEnjoy.Application", "Tr
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TripEnjoy.Infrastructure", "TripEnjoy.Infrastructure\TripEnjoy.Infrastructure.csproj", "{3ACC3B34-5223-4A07-8B50-CAC14B8A3B21}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "tripenjoy-frontend", "tripenjoy-frontend\tripenjoy-frontend.csproj", "{54FC8DDB-D426-4118-A38E-25F1999238B1}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -41,10 +39,6 @@ Global
 		{3ACC3B34-5223-4A07-8B50-CAC14B8A3B21}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3ACC3B34-5223-4A07-8B50-CAC14B8A3B21}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{3ACC3B34-5223-4A07-8B50-CAC14B8A3B21}.Release|Any CPU.Build.0 = Release|Any CPU
-		{54FC8DDB-D426-4118-A38E-25F1999238B1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{54FC8DDB-D426-4118-A38E-25F1999238B1}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{54FC8DDB-D426-4118-A38E-25F1999238B1}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{54FC8DDB-D426-4118-A38E-25F1999238B1}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
