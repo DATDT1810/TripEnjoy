@@ -18,22 +18,7 @@ namespace TripEnjoy.Presentation.Web.Controllers
 
         [HttpPost]
         [Route("Login")]
-        public async Task<IActionResult> Login([FromBody] AccountDTO accountDTO)
-        {
-            if (accountDTO.email != null && accountDTO.password != null)
-            {
-                var result = await accountRepository.Login(accountDTO);
-                if (result != null)
-                {
-                    return Ok(result); // trả về chuỗi token
-                }
-            }
-            return StatusCode(500, "Invalid Account");
-        }
-
-        [HttpPost]
-        [Route("Register")]
-        public async Task<IActionResult> Register(string email, string password)
+        public async Task<IActionResult> Login(string email, string password)
         {
             if (email != null && password != null)
             {
@@ -42,14 +27,14 @@ namespace TripEnjoy.Presentation.Web.Controllers
                     email = email,
                     password = password
                 };
-                var result = await accountRepository.Register(accountDTO);
+                var result = await accountRepository.Login(accountDTO);
                 if (result != null)
                 {
                     return Ok(result);
-                    // trả về thông tin user
+                    // trả về chuỗi token
                 }
             }
-            return StatusCode(500, "Create failed");
+            return StatusCode(500);
         }
     }
 }
