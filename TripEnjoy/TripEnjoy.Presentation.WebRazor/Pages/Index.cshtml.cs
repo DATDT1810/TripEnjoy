@@ -12,9 +12,14 @@ namespace TripEnjoy.Presentation.WebRazor.Pages
             _logger = logger;
         }
 
-        public void OnGet()
+        public IActionResult OnGet()
         {
-
+            var token = Request.Cookies["token"];
+            if (!string.IsNullOrEmpty(token))
+            {
+               ViewData["token"] = "User";
+            }
+            return Page();
         }
     }
 }
