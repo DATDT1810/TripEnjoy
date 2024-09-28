@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Identity;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -11,6 +12,6 @@ namespace TripEnjoy.Application.Interface
     public interface IAccountService
     {
         Task<string> Login(AccountDTO account);
-        Task<bool> Register(AccountDTO account);
+        Task<IdentityUser> Register(AccountDTO account);
     }
 }
