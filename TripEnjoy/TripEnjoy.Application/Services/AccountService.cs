@@ -1,4 +1,5 @@
-﻿using TripEnjoy.Application.Data;
+﻿using Microsoft.AspNetCore.Identity;
+using TripEnjoy.Application.Data;
 using TripEnjoy.Application.Interface;
 
 namespace TripEnjoy.Application.Services
@@ -12,18 +13,16 @@ namespace TripEnjoy.Application.Services
         {
             this.accountRepository = accountRepository;
         }
-       
-
-        public Task<bool> Register(AccountDTO account)
-        {
-            
-            throw new NotImplementedException();
-        }
 
         Task<string> IAccountService.Login(AccountDTO account)
         {
          
             return accountRepository.Login(account);
+        }
+
+        Task<IdentityUser> IAccountService.Register(AccountDTO account)
+        {
+            return accountRepository.Register(account);
         }
     }
 }

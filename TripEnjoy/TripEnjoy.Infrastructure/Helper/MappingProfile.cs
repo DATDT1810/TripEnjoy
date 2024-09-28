@@ -13,7 +13,13 @@ namespace TripEnjoy.Infrastructure.Helper
     {
         public MappingProfile()
         {
-           CreateMap<Account , AccountDTO>().ReverseMap();
+            CreateMap<Account, AccountDTO>()
+            .ForMember(dest => dest.email, otp => otp.MapFrom(src => src.AccountEmail))
+            .ReverseMap()
+            .ForMember(dest => dest.AccountEmail, opt => opt.MapFrom(src => src.email))
+            .ForMember(dest => dest.AccountPassword, opt => opt.MapFrom(src => src.password))
+            .ReverseMap()
+            .ForMember(dest => dest.password, opt => opt.MapFrom(src => src.AccountPassword));
         }
     }
 }

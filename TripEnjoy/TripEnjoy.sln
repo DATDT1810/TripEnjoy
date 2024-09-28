@@ -5,13 +5,15 @@ VisualStudioVersion = 17.9.34728.123
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TripEnjoy.Presentation.WPF", "TripEnjoy.Presentation.WPF\TripEnjoy.Presentation.WPF.csproj", "{8333CFC7-06B6-4525-B3F9-385DB32C51C3}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TripEnjoy.Presentation.Web", "TripEnjoy.Presentation.Web\TripEnjoy.Presentation.Web.csproj", "{1D4CA4DA-A6C4-40A5-BB7B-285BF5C99F98}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TripEnjoy.Presentation.API", "TripEnjoy.Presentation.Web\TripEnjoy.Presentation.API.csproj", "{1D4CA4DA-A6C4-40A5-BB7B-285BF5C99F98}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TripEnjoy.Domain", "TripEnjoy.Domain\TripEnjoy.Domain.csproj", "{B25CBD2B-BB00-41D5-BD82-9A7848ADE6BF}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TripEnjoy.Application", "TripEnjoy.Application\TripEnjoy.Application.csproj", "{D7C2D4CD-49FA-41CC-B923-FA05273BDA77}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TripEnjoy.Infrastructure", "TripEnjoy.Infrastructure\TripEnjoy.Infrastructure.csproj", "{3ACC3B34-5223-4A07-8B50-CAC14B8A3B21}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TripEnjoy.Presentation.WebRazor", "TripEnjoy.Presentation.WebRazor\TripEnjoy.Presentation.WebRazor.csproj", "{FCBC6934-F6C1-4656-8C4E-CA1987535FF3}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -39,6 +41,10 @@ Global
 		{3ACC3B34-5223-4A07-8B50-CAC14B8A3B21}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3ACC3B34-5223-4A07-8B50-CAC14B8A3B21}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{3ACC3B34-5223-4A07-8B50-CAC14B8A3B21}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FCBC6934-F6C1-4656-8C4E-CA1987535FF3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FCBC6934-F6C1-4656-8C4E-CA1987535FF3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FCBC6934-F6C1-4656-8C4E-CA1987535FF3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FCBC6934-F6C1-4656-8C4E-CA1987535FF3}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
