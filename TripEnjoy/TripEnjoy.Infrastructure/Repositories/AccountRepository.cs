@@ -25,7 +25,7 @@ namespace TripEnjoy.Infrastructure.Repositories
         private readonly IMapper mapper;
         private readonly RoleManager<IdentityRole> roleManager;
 
-        public AccountRepository(ApplicationDbContext context, UserManager<IdentityUser> userManager,SignInManager<IdentityUser> signInManager , IConfiguration configuration , IMapper mapper , RoleManager<IdentityRole> roleManager)
+        public AccountRepository(ApplicationDbContext context, UserManager<IdentityUser> userManager, SignInManager<IdentityUser> signInManager, IConfiguration configuration, IMapper mapper, RoleManager<IdentityRole> roleManager)
         {
             this.context = context;
             this.userManager = userManager;
@@ -36,18 +36,22 @@ namespace TripEnjoy.Infrastructure.Repositories
         }
         public async Task<string> Login(AccountDTO account)
         {
-            if (account.email == null || account.password == null)
+            if (string.IsNullOrWhiteSpace(account.email) || string.IsNullOrWhiteSpace(account.password))
             {
                 throw new ArgumentNullException("Email and password must not be null");
+            }
+            var userBlock = context.Accounts.FirstOrDefault(a => a.AccountEmail == account.email);
+            if (userBlock?.AccountIsDeleted == true)
+            {
+                throw new UnauthorizedAccessException("This account has been banned");
             }
             // check user identity
             var user = await userManager.FindByEmailAsync(account.email);
             if (user == null)
             {
-                throw new ArgumentNullException("User not found");
+                throw new UnauthorizedAccessException("User not found");
             }
-            // check password identity
-            var password = await userManager.CheckPasswordAsync(user, account.password);
+
             var result = await signInManager.PasswordSignInAsync(account.email, account.password, false, false);
             if (result.Succeeded)
             {
@@ -66,22 +70,28 @@ namespace TripEnjoy.Infrastructure.Repositories
                 var token = new JwtSecurityToken(
                     issuer: configuration["JWT:Issuer"],
                     audience: configuration["JWT:Audience"],
-                    expires: DateTime.Now.AddHours(1),
+                    expires: DateTime.UtcNow.AddHours(1),
                     claims: authClaims,
-                    signingCredentials: new SigningCredentials(authSigningKey, SecurityAlgorithms.HmacSha512Signature)
+                    signingCredentials: new SigningCredentials(authSigningKey, SecurityAlgorithms.HmacSha256Signature)
                 );
                 return new JwtSecurityTokenHandler().WriteToken(token);
             }
-            return "";
+
+            throw new UnauthorizedAccessException("Invalid login attempt");
         }
 
-        public async Task<bool> Register(AccountDTO account)
+        public async Task<IdentityUser> Register(AccountDTO account)
         {
-            if (account.email == null || account.password == null)
+            if (string.IsNullOrWhiteSpace(account.email) || string.IsNullOrWhiteSpace(account.password))
             {
-                throw new ArgumentNullException("Email and password must not be null");
+                throw new ArgumentNullException("Email and password must not be null or empty");
             }
-
+            // check email exists
+            var email = await userManager.FindByEmailAsync(account.email);
+            if (email != null)
+            {
+                throw new InvalidOperationException("Email already exists");
+            }
             var user = new IdentityUser()
             {
                 UserName = account.email,
@@ -90,17 +100,36 @@ namespace TripEnjoy.Infrastructure.Repositories
             var identity = await userManager.CreateAsync(user, account.password);
             if (identity.Succeeded)
             {
-                if(!await roleManager.RoleExistsAsync(AppRole.User))
+                if (!await roleManager.RoleExistsAsync(AppRole.User))
                 {
                     await roleManager.CreateAsync(new IdentityRole(AppRole.User));
                 }
                 await userManager.AddToRoleAsync(user, AppRole.User);
-              
+
                 var accountNew = mapper.Map<Account>(account);
+
+                // Start
+                // Set giá trị mặc định cho Account
+                // accountNew.AccountPassword = user.PasswordHash;
+                accountNew.AccountUsername = account.email;
+                accountNew.AccountFullname = "Anonymous Customer";
+                accountNew.AccountRole = 1;
+                accountNew.AccountIsDeleted = false;
+                accountNew.AccountBalance = 0;
+                accountNew.AccountUpLevel = false;
+                accountNew.AccountPhone = "+84";
+                accountNew.AccountAddress = "VietNam";
+                accountNew.AccountGender = "Male";
+                accountNew.AccountDateOfBirth = DateTime.Now;
+                accountNew.AccountImage = "/...";
+                accountNew.UserId = user.Id;
+                // End 
+
                 context.Accounts.Add(accountNew);
-                return true;
+                await context.SaveChangesAsync();
+                return user;
             }
-            return false;
+            throw new InvalidOperationException("User registration failed");
         }
     }
 
