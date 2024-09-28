@@ -1,0 +1,43 @@
+﻿@page
+@model TripEnjoy.Presentation.WebRazor.Pages.LoginModel
+@{
+
+}
+
+<h1>
+    Đay la trang Login
+</h1>
+
+<form method="post">
+ Email : <input  asp-for="LoginViewModel.email"/> 
+ Password : <input  asp-for="LoginViewModel.passWord"/>
+ <button type="submit">Login</button>
+</form>
+
+
+<h2>
+    Hiển thị
+</h2>
+
+<table>
+    <tr>
+        <th>
+            Email
+        </th>
+        <th>
+            Password
+        </th>
+    </tr>
+
+    @foreach (var item in Model.List)
+    {
+        <tr>
+            <td>
+             @item.email
+            </td>
+            <td>
+                @item.passWord
+            </td>
+        </tr>
+    }
+</table>
