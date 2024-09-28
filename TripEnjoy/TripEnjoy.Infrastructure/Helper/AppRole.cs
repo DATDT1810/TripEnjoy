@@ -12,5 +12,6 @@ namespace TripEnjoy.Infrastructure.Helper
         public const string Staff = "Staff";
         public const string Partner = "Partner";
         public const string User = "User";
+        public const string Customer = "Customer";
     }
 }
