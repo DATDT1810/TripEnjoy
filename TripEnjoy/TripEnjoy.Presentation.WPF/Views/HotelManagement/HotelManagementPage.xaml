@@ -25,6 +25,71 @@
         <vm:HotelManagementViewModel/>
     </Page.DataContext>
     <Grid>
-        <TextBlock Text="Hotel Management" FontSize="50"/>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="auto"/>
+            <RowDefinition/>
+        </Grid.RowDefinitions>
+        <Grid Margin="10,0,10,0">
+            <TextBlock VerticalAlignment="Center" HorizontalAlignment="Left" Width="auto" Text="Hotel" FontWeight="Bold" FontSize="15"/>
+            <Border  Background="#FFC5C5C5" Height="1" Margin="0,48,0,0"/>
+            <materialDesign:PopupBox PlacementMode="BottomAndAlignCentres" HorizontalAlignment="Right" Height="auto" VerticalAlignment="Center">
+                <materialDesign:PopupBox.ToggleContent>
+                    <Border BorderBrush="LightGray" BorderThickness="1" CornerRadius="5">
+                        <TextBlock VerticalAlignment="Center" Margin="10,2" FontSize="13">
+                            <materialDesign:PackIcon Kind="HomePlus" Foreground="#FF676767" Height="20" Width="20"/> Create Hotel
+                        </TextBlock>
+                        <Border.Style>
+                            <Style TargetType="Border">
+                                <Setter Property="Background" Value="#fff" />
+                                <Style.Triggers>
+                                    <Trigger Property="IsMouseOver" Value="True">
+                                        <Setter Property="Background" Value="#EAEAEA" />
+                                    </Trigger>
+                                </Style.Triggers>
+                            </Style>
+                        </Border.Style>
+                    </Border>
+                </materialDesign:PopupBox.ToggleContent>
+                <ListBox>
+                    <ListBoxItem>
+                        <TextBlock VerticalAlignment="Center" Margin="10,2" FontSize="13">
+                            <materialDesign:PackIcon Kind="HomeImportOutline" Foreground="#FF676767" Height="20" Width="20"/> New Hotel
+                        </TextBlock>
+                    </ListBoxItem>
+                </ListBox>
+            </materialDesign:PopupBox>
+        </Grid>
+        <WrapPanel Grid.Row="1" Margin="10,10,10,0">
+            <Grid Width="240" Margin="10">
+                <Button Height="180"
+                        materialDesign:ButtonAssist.CornerRadius="5"
+                        Style="{StaticResource MaterialDesignRaisedLightButton}"
+                        ToolTip="MaterialDesignRaisedLightButton with Round Corners" Background="#EAEAEA" BorderBrush="{x:Null}">
+                    <StackPanel>
+                        <Border BorderBrush="LightGray" BorderThickness="1" CornerRadius="15" Height="130" Width="190">
+                            <Border.Background>
+                                <ImageBrush ImageSource="/Assets/Images/Hotel.jpg" Stretch="UniformToFill"/>
+                            </Border.Background>
+                        </Border>
+                        <TextBlock Margin="0,10,0,0" Text="Muong Thanh Hotel" />
+                    </StackPanel>
+                </Button>
+            </Grid>
+            <Grid Width="240" Margin="10">
+                <Button Height="180"
+                        materialDesign:ButtonAssist.CornerRadius="5"
+                        Style="{StaticResource MaterialDesignRaisedLightButton}"
+                        ToolTip="MaterialDesignRaisedLightButton with Round Corners" Background="#EAEAEA" BorderBrush="{x:Null}">
+                    <StackPanel>
+                        <Border BorderBrush="LightGray" BorderThickness="1" CornerRadius="15" Height="130" Width="190">
+                            <Border.Background>
+                                <ImageBrush ImageSource="/Assets/Images/Hotel.jpg" Stretch="UniformToFill"/>
+                            </Border.Background>
+                        </Border>
+                        <TextBlock Margin="0,10,0,0" Text="Muong Thanh Hotel" />
+                    </StackPanel>
+                </Button>
+            </Grid>
+        </WrapPanel>
     </Grid>
 </Page>

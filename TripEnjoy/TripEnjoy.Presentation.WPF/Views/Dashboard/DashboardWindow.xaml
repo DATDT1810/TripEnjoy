@@ -17,7 +17,7 @@
         TextElement.FontSize="13"
         TextOptions.TextFormattingMode="Ideal"
         TextOptions.TextRenderingMode="Auto"
-        Background="#fff"
+        Background=" #EAEAEA"
         FontFamily="{DynamicResource MaterialDesignFont}"
         
         WindowStyle="None"
@@ -48,7 +48,7 @@
             <Grid Grid.Row="0" Grid.ColumnSpan="2" Panel.ZIndex="1">
                 <uc:ControllBarUC/>
             </Grid>
-            <Grid Grid.Column="0" Width="80" Background="White">
+            <Grid Grid.Column="0" Width="80" Background=" #EAEAEA">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="auto" />
                     <RowDefinition Height="auto" />
