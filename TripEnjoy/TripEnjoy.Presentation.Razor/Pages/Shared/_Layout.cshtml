@@ -90,9 +90,20 @@
                             </div>
                             @if (ViewData["token"] != null)
                             {
-                                <a class="btn btn-warning text-white rounded-0 py-2 px-5 w-auto d-none d-lg-block me-3" asp-page="Login">
-                                    @ViewData["token"]   <i class="fa-solid fa-user"></i>
-                                </a>
+                                <div class="dropdown">
+                                    <button class="btn btn-warning dropdown-toggle text-white rounded-0 py-2 px-5 w-auto d-none d-lg-block me-3"
+                                            type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
+                                        Welcome @ViewData["token"]
+                                    </button>
+                                    <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                        <li>
+                                            <a class="dropdown-item" asp-page="Profile">View Profile</a>
+                                        </li>
+                                        <li>
+                                            <a class="dropdown-item" asp-page="Logout">Logout</a>
+                                        </li>
+                                    </ul>
+                                </div>
                             }
                             else
                             {
@@ -100,6 +111,7 @@
                                     Login <i class="fa-solid fa-right-to-bracket"></i>
                                 </a>
                             }
+
                         </div>
                     </nav>
                 </div>
@@ -229,7 +241,7 @@
 
 
 
-        <a href="#" class="btn btn-lg btn-warning btn-lg-square back-to-top"><i class="bi bi-arrow-up"></i></a>
+        <a href="/" class="btn btn-lg btn-warning btn-lg-square back-to-top"><i class="bi bi-arrow-up"></i></a>
     </div>
 
 

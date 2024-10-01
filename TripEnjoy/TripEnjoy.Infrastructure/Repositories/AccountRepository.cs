@@ -57,42 +57,66 @@ namespace TripEnjoy.Infrastructure.Repositories
             var result = await signInManager.PasswordSignInAsync(account.email, account.password, false, false);
             if (result.Succeeded)
             {
-                var authClaims = new List<Claim>
+                var token = await GenerateAccessToken(user);
+                if (token != null)
                 {
-                    new Claim(ClaimTypes.Email, account.email),
-                    new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
-                };
-                var userRole = await userManager.GetRolesAsync(user);
-                foreach (var roles in userRole)
-                {
-                    authClaims.Add(new Claim(ClaimTypes.Role, roles.ToString()));
+                    return new TokenResponseDTO
+                    {
+                        AccessToken = token.AccessToken,
+                        RefreshToken = token.RefreshToken
+                    };
                 }
-                // key value
-                var authSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["JWT:Key"]));
-                // access token
-                var token = new JwtSecurityToken(
-                    issuer: configuration["JWT:Issuer"],
-                    audience: configuration["JWT:Audience"],
-                    expires: DateTime.UtcNow.AddMinutes(30),
-                    claims: authClaims,
-                    signingCredentials: new SigningCredentials(authSigningKey, SecurityAlgorithms.HmacSha256Signature)
-                );
-
-
-                var accessToken = new JwtSecurityTokenHandler().WriteToken(token);
-                var refreshToken = GenerateRefreshToken();
-
-                // set refresh token vào identity 
-                await userManager.SetAuthenticationTokenAsync(user, "TripEnjoy", "RefreshToken", refreshToken);
-
-                return new TokenResponseDTO
-                {
-                    AccessToken = accessToken,
-                    RefreshToken = refreshToken
-                };
             }
 
             throw new UnauthorizedAccessException("Invalid login attempt");
+        }
+
+        public async Task<TokenResponseDTO> GenerateAccessToken(IdentityUser identityUser)
+        {
+            var authClaims = new List<Claim>
+            {
+                new Claim(ClaimTypes.Email, identityUser.Email),
+                new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
+            };
+            var userRole = await userManager.GetRolesAsync(identityUser);
+            foreach (var roles in userRole)
+            {
+                authClaims.Add(new Claim(ClaimTypes.Role, roles.ToString()));
+            }
+            // key value
+            var authSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["JWT:Key"]));
+            // access token
+            var token = new JwtSecurityToken(
+                issuer: configuration["JWT:Issuer"],
+                audience: configuration["JWT:Audience"],
+                expires: DateTime.UtcNow.AddMinutes(30),
+                claims: authClaims,
+                signingCredentials: new SigningCredentials(authSigningKey, SecurityAlgorithms.HmacSha256Signature)
+            );
+
+            var accessToken = new JwtSecurityTokenHandler().WriteToken(token);
+            var refreshToken = GenerateRefreshToken();
+
+            await userManager.SetAuthenticationTokenAsync(identityUser, "TripEnjoy", "RefreshToken", refreshToken);
+
+            return new TokenResponseDTO
+            {
+                AccessToken = accessToken,
+                RefreshToken = refreshToken
+            };
+
+        }
+
+        public string GenerateRefreshToken()
+        {
+            var randomNumber = new byte[32];
+            using (var rng = RandomNumberGenerator.Create())
+            {
+                rng.GetBytes(randomNumber);
+                return Convert.ToBase64String(randomNumber).Replace('+', '-')
+                .Replace('/', '_')
+                .Replace("=", "");
+            }
         }
 
         public async Task<IdentityUser> Register(AccountDTO account)
@@ -147,15 +171,29 @@ namespace TripEnjoy.Infrastructure.Repositories
             throw new InvalidOperationException("User registration failed");
         }
 
-        public string GenerateRefreshToken()
+        public async Task<TokenResponseDTO> RefreshToken(string refreshToken)
         {
-            var randomNumber = new byte[32];
-            using (var rng = RandomNumberGenerator.Create())
+            var user = userManager.Users.SingleOrDefault(u =>
+             userManager.GetAuthenticationTokenAsync(u, "TripEnjoy", "RefreshToken")
+             .Result == refreshToken);
+            if (user != null)
             {
-                rng.GetBytes(randomNumber);
-                return Convert.ToBase64String(randomNumber);
+                var tokens = await GenerateAccessToken(user);
+                return tokens;
             }
+            throw new UnauthorizedAccessException("Invalid refresh token");
+        }
+
+        public async Task<bool> Logout(string email)
+        {
+            var user = await userManager.FindByEmailAsync(email);
+            if (user != null)
+            {
+                await signInManager.SignOutAsync();
+                await userManager.RemoveAuthenticationTokenAsync(user, "TripEnjoy", "RefreshToken");
+                return true;
+            }
+            return false;
         }
     }
-
 }

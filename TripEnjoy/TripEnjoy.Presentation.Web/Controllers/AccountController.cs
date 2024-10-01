@@ -1,5 +1,7 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 using TripEnjoy.Application.Data;
 using TripEnjoy.Application.Interface;
 
@@ -33,20 +35,15 @@ namespace TripEnjoy.Presentation.Web.Controllers
                     return Ok(tokens); // trả về chuỗi token
                 }
             }
-            return StatusCode(500, "Invalid Account");
+            return Unauthorized("Invalid credentials");
         }
 
         [HttpPost]
         [Route("Register")]
-        public async Task<IActionResult> Register(string email, string password)
+        public async Task<IActionResult> Register(AccountDTO accountDTO)
         {
-            if (email != null && password != null)
-            {
-                AccountDTO accountDTO = new AccountDTO
-                {
-                    email = email,
-                    password = password
-                };
+            if (accountDTO.email != null && accountDTO.password != null)
+            {     
                 var result = await accountRepository.Register(accountDTO);
                 if (result != null)
                 {
@@ -56,5 +53,38 @@ namespace TripEnjoy.Presentation.Web.Controllers
             }
             return StatusCode(500, "Create failed");
         }
+
+        [HttpPost]
+        [Route("RefreshToken")]
+        public async Task<IActionResult> RefreshToken(string refreshToken)
+        {
+          if(refreshToken != null)
+            {
+                var newAccessToken = await accountRepository.RefreshToken(refreshToken);
+                if(newAccessToken != null)
+                {
+                    return Ok(newAccessToken);
+                }
+            }
+                return Unauthorized("Invalid credentials");
+        }
+
+        [HttpPost]
+        [Route("Logout")]
+        [Authorize]
+        public async Task<IActionResult> Logout()
+        {
+            var user = User.FindFirstValue(ClaimTypes.Email);
+            if (user != null)
+            {
+               var result = await accountRepository.Logout(user);
+                if (result)
+                {
+                    return StatusCode(200);
+                }          
+            }
+            return BadRequest();
+        }
+
     }
 }

@@ -25,15 +25,20 @@ namespace TripEnjoy.Presentation.Razor.Pages
         {
             if (ModelState.IsValid)
             {
+                var model = new
+                {
+                    email = registerViewModel.email,
+                    password = registerViewModel.password
+                };
                 var request = new HttpRequestMessage(HttpMethod.Post, "https://localhost:7126/api/Account/Register");
-                request.Content = new StringContent(JsonConvert.SerializeObject(registerViewModel), Encoding.UTF8, "application/json");
+                request.Content = new StringContent(JsonConvert.SerializeObject(model), Encoding.UTF8, "application/json");
                 var client = _clientFactory.CreateClient();
                 try
                 {
                     var response = await client.SendAsync(request);
                     if (response.IsSuccessStatusCode)
                     {
-                        return RedirectToPage("/Index");
+                        return RedirectToPage("/Login");
                     }
                     else
                     {
@@ -43,7 +48,7 @@ namespace TripEnjoy.Presentation.Razor.Pages
                 }
                 catch (HttpRequestException e)
                 {
-                    ModelState.AddModelError(string.Empty, "Invalid register attempt.");
+                    ModelState.AddModelError(string.Empty, e.Message);
                     return Page();
                 }
             }
