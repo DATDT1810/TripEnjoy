@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
@@ -7,6 +8,7 @@ using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Security.Claims;
+using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 using TripEnjoy.Application.Data;
@@ -34,7 +36,7 @@ namespace TripEnjoy.Infrastructure.Repositories
             this.mapper = mapper;
             this.roleManager = roleManager;
         }
-        public async Task<string> Login(AccountDTO account)
+        public async Task<TokenResponseDTO> Login(AccountDTO account)
         {
             if (string.IsNullOrWhiteSpace(account.email) || string.IsNullOrWhiteSpace(account.password))
             {
@@ -67,14 +69,27 @@ namespace TripEnjoy.Infrastructure.Repositories
                 }
                 // key value
                 var authSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["JWT:Key"]));
+                // access token
                 var token = new JwtSecurityToken(
                     issuer: configuration["JWT:Issuer"],
                     audience: configuration["JWT:Audience"],
-                    expires: DateTime.UtcNow.AddHours(1),
+                    expires: DateTime.UtcNow.AddMinutes(30),
                     claims: authClaims,
                     signingCredentials: new SigningCredentials(authSigningKey, SecurityAlgorithms.HmacSha256Signature)
                 );
-                return new JwtSecurityTokenHandler().WriteToken(token);
+
+
+                var accessToken = new JwtSecurityTokenHandler().WriteToken(token);
+                var refreshToken = GenerateRefreshToken();
+
+                // set refresh token vào identity 
+                await userManager.SetAuthenticationTokenAsync(user, "TripEnjoy", "RefreshToken", refreshToken);
+
+                return new TokenResponseDTO
+                {
+                    AccessToken = accessToken,
+                    RefreshToken = refreshToken
+                };
             }
 
             throw new UnauthorizedAccessException("Invalid login attempt");
@@ -130,6 +145,16 @@ namespace TripEnjoy.Infrastructure.Repositories
                 return user;
             }
             throw new InvalidOperationException("User registration failed");
+        }
+
+        public string GenerateRefreshToken()
+        {
+            var randomNumber = new byte[32];
+            using (var rng = RandomNumberGenerator.Create())
+            {
+                rng.GetBytes(randomNumber);
+                return Convert.ToBase64String(randomNumber);
+            }
         }
     }
 

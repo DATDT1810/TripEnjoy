@@ -43,7 +43,7 @@ namespace TripEnjoy.Presentation.Razor.Pages
                         {
                             HttpOnly = true,
                             Secure = true,
-                            Expires = DateTime.UtcNow.AddDays(1),
+                            Expires = DateTime.UtcNow.AddMinutes(30),
                             SameSite = SameSiteMode.Strict,
                         };
 

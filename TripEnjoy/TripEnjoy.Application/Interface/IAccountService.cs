@@ -11,7 +11,7 @@ namespace TripEnjoy.Application.Interface
 {
     public interface IAccountService
     {
-        Task<string> Login(AccountDTO account);
+        Task<TokenResponseDTO> Login(AccountDTO account);
         Task<IdentityUser> Register(AccountDTO account);
     }
 }

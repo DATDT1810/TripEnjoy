@@ -18,7 +18,7 @@ namespace TripEnjoy.Infrastructure.Entities
         public DateTime RateDate { get; set; }
      
         public int RoomId { get; set; }
-        [ForeignKey("RoomID")]
+        [ForeignKey("RoomId")]
         public virtual Room Room { get; set; }
         public int AccountId { get; set; }
         [ForeignKey("AccountId")]
