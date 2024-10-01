@@ -12,6 +12,8 @@ namespace TripEnjoy.Application.Interface
     public interface IAccountRepository
     {
         Task<TokenResponseDTO> Login(AccountDTO account);
+        Task<TokenResponseDTO> RefreshToken(string refreshToken);
         Task<IdentityUser> Register(AccountDTO account);
+        Task<bool> Logout(string email);
     }
 }

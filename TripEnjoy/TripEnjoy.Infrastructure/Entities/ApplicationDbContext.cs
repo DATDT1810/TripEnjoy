@@ -86,7 +86,7 @@ namespace TripEnjoy.Infrastructure.Entities
                 .OnDelete(DeleteBehavior.NoAction);
 
             modelBuilder.Entity<Rate>()
-       .HasKey(r => r.RateId); // Thiết lập khóa chính cho Rate
+            .HasKey(r => r.RateId); // Thiết lập khóa chính cho Rate
 
             modelBuilder.Entity<Rate>()
                 .HasOne(r => r.Account) // Mỗi Rate có một Account

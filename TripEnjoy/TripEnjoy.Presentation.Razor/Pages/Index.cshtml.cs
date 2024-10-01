@@ -14,7 +14,7 @@ namespace TripEnjoy.Presentation.Razor.Pages
 
         public IActionResult OnGet()
         {
-            var token = Request.Cookies["token"];
+            var token = Request.Cookies["accessToken"];
             if (!string.IsNullOrEmpty(token))
             {
                 ViewData["token"] = "User";
