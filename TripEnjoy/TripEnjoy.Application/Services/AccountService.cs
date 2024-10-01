@@ -14,7 +14,7 @@ namespace TripEnjoy.Application.Services
             this.accountRepository = accountRepository;
         }
 
-        Task<string> IAccountService.Login(AccountDTO account)
+        Task<TokenResponseDTO> IAccountService.Login(AccountDTO account)
         {
 
             return accountRepository.Login(account);

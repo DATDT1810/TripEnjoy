@@ -25,7 +25,12 @@ namespace TripEnjoy.Presentation.Web.Controllers
                 var result = await accountRepository.Login(accountDTO);
                 if (result != null)
                 {
-                    return Ok(result); // trả về chuỗi token
+                var tokens = new
+                {
+                    accessToken = result.AccessToken,
+                    refreshToken = result.RefreshToken
+                };
+                    return Ok(tokens); // trả về chuỗi token
                 }
             }
             return StatusCode(500, "Invalid Account");

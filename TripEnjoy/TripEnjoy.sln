@@ -13,7 +13,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TripEnjoy.Application", "Tr
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TripEnjoy.Infrastructure", "TripEnjoy.Infrastructure\TripEnjoy.Infrastructure.csproj", "{3ACC3B34-5223-4A07-8B50-CAC14B8A3B21}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TripEnjoy.Presentation.Razor", "TripEnjoy.Presentation.Razor\TripEnjoy.Presentation.Razor.csproj", "{D733AB39-2CA0-4750-893B-258075E338E9}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TripEnjoy.Presentation.Razor", "TripEnjoy.Presentation.Razor\TripEnjoy.Presentation.Razor.csproj", "{D733AB39-2CA0-4750-893B-258075E338E9}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

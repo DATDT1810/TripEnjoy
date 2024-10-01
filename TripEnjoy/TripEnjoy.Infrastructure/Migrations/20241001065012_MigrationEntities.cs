@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace TripEnjoy.Infrastructure.Migrations
 {
     /// <inheritdoc />
-    public partial class AddIndentityProject : Migration
+    public partial class MigrationEntities : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -488,8 +488,7 @@ namespace TripEnjoy.Infrastructure.Migrations
                         name: "FK_Bookings_Rooms_RoomId",
                         column: x => x.RoomId,
                         principalTable: "Rooms",
-                        principalColumn: "RoomId",
-                        onDelete: ReferentialAction.NoAction);
+                        principalColumn: "RoomId");
                     table.ForeignKey(
                         name: "FK_Bookings_Vouchers_VoucherId",
                         column: x => x.VoucherId,
@@ -518,14 +517,12 @@ namespace TripEnjoy.Infrastructure.Migrations
                         name: "FK_Comments_Accounts_AccountId",
                         column: x => x.AccountId,
                         principalTable: "Accounts",
-                        principalColumn: "AccountId",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "AccountId");
                     table.ForeignKey(
                         name: "FK_Comments_Rooms_RoomId",
                         column: x => x.RoomId,
                         principalTable: "Rooms",
-                        principalColumn: "RoomId",
-                        onDelete: ReferentialAction.NoAction);
+                        principalColumn: "RoomId");
                 });
 
             migrationBuilder.CreateTable(
@@ -537,7 +534,6 @@ namespace TripEnjoy.Infrastructure.Migrations
                     RateValue = table.Column<int>(type: "int", nullable: false),
                     RateDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     RoomId = table.Column<int>(type: "int", nullable: false),
-                  
                     AccountId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
@@ -547,14 +543,12 @@ namespace TripEnjoy.Infrastructure.Migrations
                         name: "FK_Rates_Accounts_AccountId",
                         column: x => x.AccountId,
                         principalTable: "Accounts",
-                        principalColumn: "AccountId",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "AccountId");
                     table.ForeignKey(
-                        name: "FK_Rates_Rooms_RoomID",
+                        name: "FK_Rates_Rooms_RoomId",
                         column: x => x.RoomId,
                         principalTable: "Rooms",
-                        principalColumn: "RoomId",
-                        onDelete: ReferentialAction.NoAction);
+                        principalColumn: "RoomId");
                 });
 
             migrationBuilder.CreateTable(
@@ -724,9 +718,9 @@ namespace TripEnjoy.Infrastructure.Migrations
                 column: "AccountId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Rates_RoomID",
+                name: "IX_Rates_RoomId",
                 table: "Rates",
-                column: "RoomID");
+                column: "RoomId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_RoomImages_RoomId",

@@ -12,8 +12,8 @@ using TripEnjoy.Infrastructure.Entities;
 namespace TripEnjoy.Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20240921173839_AddIndentityProject")]
-    partial class AddIndentityProject
+    [Migration("20241001065012_MigrationEntities")]
+    partial class MigrationEntities
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -632,9 +632,6 @@ namespace TripEnjoy.Infrastructure.Migrations
                     b.Property<int>("RateValue")
                         .HasColumnType("int");
 
-                    b.Property<int>("RoomID")
-                        .HasColumnType("int");
-
                     b.Property<int>("RoomId")
                         .HasColumnType("int");
 
@@ -642,7 +639,7 @@ namespace TripEnjoy.Infrastructure.Migrations
 
                     b.HasIndex("AccountId");
 
-                    b.HasIndex("RoomID");
+                    b.HasIndex("RoomId");
 
                     b.ToTable("Rates");
                 });
@@ -878,7 +875,7 @@ namespace TripEnjoy.Infrastructure.Migrations
                     b.HasOne("TripEnjoy.Infrastructure.Entities.Room", "Room")
                         .WithMany()
                         .HasForeignKey("RoomId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.HasOne("TripEnjoy.Infrastructure.Entities.Voucher", "Voucher")
@@ -910,13 +907,13 @@ namespace TripEnjoy.Infrastructure.Migrations
                     b.HasOne("TripEnjoy.Infrastructure.Entities.Account", "Account")
                         .WithMany()
                         .HasForeignKey("AccountId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.HasOne("TripEnjoy.Infrastructure.Entities.Room", "Room")
                         .WithMany()
                         .HasForeignKey("RoomId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.Navigation("Account");
@@ -1022,13 +1019,13 @@ namespace TripEnjoy.Infrastructure.Migrations
                     b.HasOne("TripEnjoy.Infrastructure.Entities.Account", "Account")
                         .WithMany()
                         .HasForeignKey("AccountId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.HasOne("TripEnjoy.Infrastructure.Entities.Room", "Room")
                         .WithMany()
-                        .HasForeignKey("RoomID")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .HasForeignKey("RoomId")
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.Navigation("Account");
