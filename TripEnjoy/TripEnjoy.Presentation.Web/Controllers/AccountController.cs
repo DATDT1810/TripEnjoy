@@ -11,11 +11,11 @@ namespace TripEnjoy.Presentation.Web.Controllers
     [ApiController]
     public class AccountController : ControllerBase
     {
-        private readonly IAccountRepository accountRepository;
+        private readonly IAccountService accountService;
 
-        public AccountController(IAccountRepository accountRepository)
-        {
-            this.accountRepository = accountRepository;
+        public AccountController(IAccountService accountService)
+        {           
+            this.accountService = accountService;
         }
 
         [HttpPost]
@@ -24,7 +24,7 @@ namespace TripEnjoy.Presentation.Web.Controllers
         {
             if (accountDTO.email != null && accountDTO.password != null)
             {
-                var result = await accountRepository.Login(accountDTO);
+                var result = await accountService.Login(accountDTO);
                 if (result != null)
                 {
                 var tokens = new
@@ -44,7 +44,7 @@ namespace TripEnjoy.Presentation.Web.Controllers
         {
             if (accountDTO.email != null && accountDTO.password != null)
             {     
-                var result = await accountRepository.Register(accountDTO);
+                var result = await accountService.Register(accountDTO);
                 if (result != null)
                 {
                     return Ok(result);
@@ -56,14 +56,14 @@ namespace TripEnjoy.Presentation.Web.Controllers
 
         [HttpPost]
         [Route("RefreshToken")]
-        public async Task<IActionResult> RefreshToken(string refreshToken)
+        public async Task<IActionResult> RefreshToken([FromBody] TokenRefreshDTO tokenRefreshDTO)
         {
-          if(refreshToken != null)
+          if(tokenRefreshDTO.refreshToken != null)
             {
-                var newAccessToken = await accountRepository.RefreshToken(refreshToken);
-                if(newAccessToken != null)
+                var tokens = await accountService.RefreshToken(tokenRefreshDTO.refreshToken);
+                if(tokens != null)
                 {
-                    return Ok(newAccessToken);
+                    return Ok(tokens);
                 }
             }
                 return Unauthorized("Invalid credentials");
@@ -77,13 +77,33 @@ namespace TripEnjoy.Presentation.Web.Controllers
             var user = User.FindFirstValue(ClaimTypes.Email);
             if (user != null)
             {
-               var result = await accountRepository.Logout(user);
+               var result = await accountService.Logout(user);
                 if (result)
                 {
                     return StatusCode(200);
                 }          
             }
             return BadRequest();
+        }
+        
+        [HttpPost]
+        [Route("LoginGoogle")]
+        public async Task<IActionResult> LoginGoogle([FromBody] EmailDTO emailDTO)
+        {
+            if(emailDTO.email != null)
+            {
+                var result = await accountService.LoginGoogle(emailDTO.email);
+                if (result != null)
+                {
+                    var tokens = new
+                    {
+                        accessToken = result.AccessToken,
+                        refreshToken = result.RefreshToken
+                    };
+                    return Ok(tokens); // trả về chuỗi token
+                }
+            }
+            return Unauthorized("Invalid credentials");
         }
 
     }

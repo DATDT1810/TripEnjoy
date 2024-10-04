@@ -17,9 +17,6 @@ namespace TripEnjoy.Infrastructure.Entities
         [StringLength(50)]                         // category_name - nvarchar(50)
         public string CategoryName { get; set; }
         public bool CategoryStatus { get; set; }   // category_Status - bit
-        public int HotelId { get; set; }          // hotel_id (có thể null)
-
-        [ForeignKey("HotelId")]                   
-        public virtual Hotel Hotel { get; set; }
+     
     }
 }

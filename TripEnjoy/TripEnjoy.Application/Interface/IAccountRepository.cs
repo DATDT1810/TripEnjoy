@@ -15,5 +15,6 @@ namespace TripEnjoy.Application.Interface
         Task<TokenResponseDTO> RefreshToken(string refreshToken);
         Task<IdentityUser> Register(AccountDTO account);
         Task<bool> Logout(string email);
+        Task<TokenResponseDTO> LoginGoogle(string email);
     }
 }
