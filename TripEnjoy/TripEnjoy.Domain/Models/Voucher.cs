@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace TripEnjoy.Infrastructure.Entities
+namespace TripEnjoy.Domain.Models
 {
     public class Voucher
     {

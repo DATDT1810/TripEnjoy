@@ -6,6 +6,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using TripEnjoy.Domain.Models;
+using TripEnjoy.Domain.Modelss;
 
 namespace TripEnjoy.Infrastructure.Entities
 {

@@ -5,8 +5,9 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using TripEnjoy.Domain.Modelss;
 
-namespace TripEnjoy.Infrastructure.Entities
+namespace TripEnjoy.Domain.Models
 {
     public class Hotel
     {

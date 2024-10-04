@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace TripEnjoy.Infrastructure.Entities
+namespace TripEnjoy.Domain.Models
 {
     public class Conversation
     {
