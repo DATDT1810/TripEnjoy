@@ -14,7 +14,6 @@ namespace TripEnjoy.Presentation.Razor.Pages
         public LoginModel(IHttpClientFactory clientFactory)
         {
             this._clientFactory = clientFactory;
-
         }
 
         // binding dữ liệu
