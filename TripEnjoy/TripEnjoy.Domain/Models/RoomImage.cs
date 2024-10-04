@@ -6,16 +6,17 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace TripEnjoy.Infrastructure.Entities
+namespace TripEnjoy.Domain.Models
 {
-    public class ImageHotel
+    public class RoomImage
     {
         [Key]
+        [Required]
         public int ImageId { get; set; }
         public string ImageUrl { get; set; }
 
-        public int HotelId { get; set; }
-        [ForeignKey("HotelId")]
-        public virtual Hotel Hotel { get; set; }
+        public int RoomId { get; set; }
+        [ForeignKey("RoomId")]
+        public virtual Room Room { get; set; }
     }
 }

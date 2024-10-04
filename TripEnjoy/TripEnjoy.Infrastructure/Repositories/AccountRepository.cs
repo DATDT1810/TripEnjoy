@@ -13,6 +13,7 @@ using System.Text;
 using System.Threading.Tasks;
 using TripEnjoy.Application.Data;
 using TripEnjoy.Application.Interface;
+using TripEnjoy.Domain.Models;
 using TripEnjoy.Infrastructure.Entities;
 using TripEnjoy.Infrastructure.Helper;
 

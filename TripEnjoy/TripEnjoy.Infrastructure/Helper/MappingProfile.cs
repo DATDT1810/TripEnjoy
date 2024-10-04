@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using TripEnjoy.Application.Data;
+using TripEnjoy.Domain.Models;
 using TripEnjoy.Infrastructure.Entities;
 
 namespace TripEnjoy.Infrastructure.Helper
