@@ -6,6 +6,7 @@ using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using TripEnjoy.Application.Data;
 using TripEnjoy.Application.Interface;
+using TripEnjoy.Application.Interface.Hotel;
 using TripEnjoy.Application.Services;
 using TripEnjoy.Infrastructure.Entities;
 using TripEnjoy.Infrastructure.Helper;
@@ -32,8 +33,11 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
 );
 builder.Services.AddAutoMapper(typeof(MappingProfile));
 // Khai Báo Dependency Cho các tầng sử dụng
-builder.Services.AddScoped<IAccountRepository, AccountRepository>();
-builder.Services.AddScoped<IAccountService, AccountService>();
+builder.Services.AddScoped<IHotelRepository, HotelRepository>();
+builder.Services.AddScoped<IHotelService, HotelService>();
+
+
+
 
 // Add services to the container.
 builder.Services.AddIdentity<IdentityUser, IdentityRole>(options => 
