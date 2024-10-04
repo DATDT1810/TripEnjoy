@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
+using TripEnjoy.Application.Data;
 using TripEnjoy.Application.Interface;
 using TripEnjoy.Application.Services;
 using TripEnjoy.Infrastructure.Entities;
@@ -33,6 +34,7 @@ builder.Services.AddAutoMapper(typeof(MappingProfile));
 // Khai Báo Dependency Cho các tầng sử dụng
 builder.Services.AddScoped<IAccountRepository, AccountRepository>();
 builder.Services.AddScoped<IAccountService, AccountService>();
+
 // Add services to the container.
 builder.Services.AddIdentity<IdentityUser, IdentityRole>(options => 
 {
@@ -52,7 +54,8 @@ builder.Services.AddAuthentication(options =>
     options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
     options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
 }).AddJwtBearer(options =>
-{   options.SaveToken = true;
+{
+    options.SaveToken = true;
     options.RequireHttpsMetadata = false;
     options.TokenValidationParameters = new TokenValidationParameters
     {
@@ -74,6 +77,8 @@ builder.Services.AddAuthorization(options =>
     options.AddPolicy("Partner", policy => policy.RequireRole("Partner"));
     options.AddPolicy("UserPolicy", policy => policy.RequireRole("User"));
 });
+
+builder.Services.Configure<MailSetting>(builder.Configuration.GetSection("EmailSetttings"));
 
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle

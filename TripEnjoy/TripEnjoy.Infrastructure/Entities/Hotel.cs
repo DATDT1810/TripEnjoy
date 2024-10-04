@@ -36,5 +36,9 @@ namespace TripEnjoy.Infrastructure.Entities
         public int AccountId { get; set; }
         [ForeignKey("AccountId")]                    // account_id là khóa ngoại trỏ đến bảng Account
         public virtual Account Account { get; set; }       // Điều này thiết lập quan hệ 1-n với bảng Account
+        public int CategoryId { get; set; }
+       
+        [ForeignKey("CategoryId")]                   // category_id là khóa ngoại trỏ đến bảng Category
+        public virtual Category Category { get; set; }     // Điều này thiết lập quan hệ 1-n với bảng Category
     }
 }

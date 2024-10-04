@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Newtonsoft.Json;
 using System.Text;
@@ -9,9 +10,10 @@ namespace TripEnjoy.Presentation.Razor.Pages
     public class LoginModel : PageModel
     {
         private readonly IHttpClientFactory _clientFactory;
+
         public LoginModel(IHttpClientFactory clientFactory)
         {
-          this._clientFactory = clientFactory;
+            this._clientFactory = clientFactory;
 
         }
 
@@ -50,7 +52,7 @@ namespace TripEnjoy.Presentation.Razor.Pages
 
                         Response.Cookies.Append("accessToken", tokenResponse.AccessToken, cookieOptions);
                         Response.Cookies.Append("refreshToken", tokenResponse.RefreshToken, cookieOptions);
-                      
+
                         return RedirectToPage("/Index");
                     }
                     else
@@ -65,8 +67,15 @@ namespace TripEnjoy.Presentation.Razor.Pages
                     return Page();
                 }
             }
-            return Page();
+            return RedirectToPage("/Index");
         }
-    }
 
+        public IActionResult OnGetLoginWithGoogle()
+        {
+            var redirectUrl = Url.Page("/LoginGoogle");
+            var properties = new AuthenticationProperties { RedirectUri = redirectUrl };
+            return new ChallengeResult("Google", properties);
+        }
+
+    }
 }

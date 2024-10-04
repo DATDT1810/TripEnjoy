@@ -195,5 +195,61 @@ namespace TripEnjoy.Infrastructure.Repositories
             }
             return false;
         }
+
+        public async Task<TokenResponseDTO> LoginGoogle(string email)
+        {
+            var user = await userManager.FindByEmailAsync(email);
+            if (user == null)
+            {
+                user = new IdentityUser()
+                {
+                    UserName = email,
+                    Email = email
+                };
+                var identity = await userManager.CreateAsync(user);
+                if (identity.Succeeded)
+                {
+                    if (!await roleManager.RoleExistsAsync(AppRole.User))
+                    {
+                        await roleManager.CreateAsync(new IdentityRole(AppRole.User));
+                    }
+                    await userManager.AddToRoleAsync(user, AppRole.User);
+
+                    var accountNew = new Account();
+
+                    // Start
+                    // Set giá trị mặc định cho Account
+                    accountNew.AccountEmail = user.Email;
+                    accountNew.AccountPassword = RandowPassword.GenaratePasss(6, true);
+                    accountNew.AccountUsername = user.Email;
+                    accountNew.AccountFullname = "Anonymous Customer";
+                    accountNew.AccountRole = 1;
+                    accountNew.AccountIsDeleted = false;
+                    accountNew.AccountBalance = 0;
+                    accountNew.AccountUpLevel = false;
+                    accountNew.AccountPhone = "+84";
+                    accountNew.AccountAddress = "VietNam";
+                    accountNew.AccountGender = "Male";
+                    accountNew.AccountDateOfBirth = DateTime.Now;
+                    accountNew.AccountImage = "/...";
+                    accountNew.UserId = user.Id;
+                    // End 
+
+                    context.Accounts.Add(accountNew);
+                    await context.SaveChangesAsync();
+                }
+            }
+            var result = await signInManager.CanSignInAsync(user);
+            var token = await GenerateAccessToken(user);
+            if (token != null)
+            {
+                return new TokenResponseDTO
+                {
+                    AccessToken = token.AccessToken,
+                    RefreshToken = token.RefreshToken
+                };
+            }
+            throw new UnauthorizedAccessException("Invalid login attempt");
+        }
     }
 }

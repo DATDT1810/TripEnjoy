@@ -34,5 +34,10 @@ namespace TripEnjoy.Application.Services
         {
            return this.accountRepository.Logout(email);
         }
+
+        public Task<TokenResponseDTO> LoginGoogle(string email)
+        {
+            return this.accountRepository.LoginGoogle(email);
+        }
     }
 }

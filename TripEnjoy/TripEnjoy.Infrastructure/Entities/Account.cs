@@ -51,7 +51,7 @@ namespace TripEnjoy.Infrastructure.Entities
         public string AccountImage { get; set; }  // account_image
 
         // Thêm UserId để kết nối với bảng AspNetUsers
-        [Required]
+        [Required]  
         public string UserId { get; set; }  // Đây là khóa ngoại trỏ đến bảng AspNetUsers
 
         [ForeignKey("UserId")]
