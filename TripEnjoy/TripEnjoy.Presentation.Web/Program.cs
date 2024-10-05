@@ -7,6 +7,7 @@ using System.Text;
 using TripEnjoy.Application.Data;
 using TripEnjoy.Application.Interface;
 using TripEnjoy.Application.Interface.EmailService;
+using TripEnjoy.Application.Interface.Hotel;
 using TripEnjoy.Application.Services;
 using TripEnjoy.Application.Services.Email;
 using TripEnjoy.Infrastructure.Entities;
@@ -44,6 +45,9 @@ builder.Services.Configure<MailSetting>(builder.Configuration.GetSection("EmailS
 // cấu hình auto mapper
 builder.Services.AddAutoMapper(typeof(MappingProfile));
 // Khai Báo Dependency Cho các tầng sử dụng
+builder.Services.AddScoped<IHotelRepository, HotelRepository>();
+builder.Services.AddScoped<IHotelService, HotelService>();
+
 builder.Services.AddScoped<IAccountRepository, AccountRepository>();
 builder.Services.AddScoped<IAccountService, AccountService>();
 builder.Services.AddTransient<IEmailService, EmailService>();
