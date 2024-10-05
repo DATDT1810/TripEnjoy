@@ -28,6 +28,7 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="auto"/>
             <RowDefinition/>
+            <RowDefinition/>
         </Grid.RowDefinitions>
         <Grid Margin="10,0,10,0">
             <TextBlock VerticalAlignment="Center" HorizontalAlignment="Left" Width="auto" Text="Hotel" FontWeight="Bold" FontSize="15"/>
@@ -91,5 +92,21 @@
                 </Button>
             </Grid>
         </WrapPanel>
+        <StackPanel Grid.Row="3" Margin="20">
+    <TextBlock Text="Danh Sách"/>
+    <ListView x:Name="StudentList" ItemsSource="{Binding StudentList}" SelectedItem="{Binding SelectedItem, Mode=OneWayToSource}" Height="auto">
+        <ListView.View>
+            <GridView>
+                <GridViewColumn Header="Mã Sinh Viên" DisplayMemberBinding="{Binding StudentId}"/>
+                <GridViewColumn Header="Họ và Tên" DisplayMemberBinding="{Binding StudentFullname}" Width="110"/>
+                <GridViewColumn Header="Lớp" DisplayMemberBinding="{Binding StdentClass}"/>
+                <GridViewColumn Header="Ngày Sinh" DisplayMemberBinding="{Binding Birth}" Width="80"/>
+                <GridViewColumn Header="Số Điện Thoại" DisplayMemberBinding="{Binding PhoneNumber}" Width="100"/>
+                <GridViewColumn Header="Địa Chỉ" DisplayMemberBinding="{Binding Address}" Width="200"/>
+                <GridViewColumn Header="Giới Tính" DisplayMemberBinding="{Binding Gender}"/>
+            </GridView>
+        </ListView.View>
+    </ListView>
+</StackPanel>
     </Grid>
 </Page>
