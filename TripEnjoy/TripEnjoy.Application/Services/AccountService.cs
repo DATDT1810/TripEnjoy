@@ -39,5 +39,17 @@ namespace TripEnjoy.Application.Services
         {
             return this.accountRepository.LoginGoogle(email);
         }
+
+        public Task<string> CheckEmail(string email)
+        {
+            return this.accountRepository.CheckEmail(email);
+        }
+
+      
+
+        public Task<bool> ResetPassword(string email, string password)
+        {
+          return this.accountRepository.ResetPassword(email, password);
+        }
     }
 }

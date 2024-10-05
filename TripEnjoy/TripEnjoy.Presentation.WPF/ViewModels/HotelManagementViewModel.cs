@@ -8,6 +8,7 @@ namespace TripEnjoy.Presentation.WPF.ViewModels
 {
     public class HotelManagementViewModel : BaseViewModel
     {
+
         public HotelManagementViewModel()
         {
             

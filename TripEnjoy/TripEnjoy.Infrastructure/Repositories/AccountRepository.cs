@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using System;
@@ -251,6 +252,38 @@ namespace TripEnjoy.Infrastructure.Repositories
                 };
             }
             throw new UnauthorizedAccessException("Invalid login attempt");
+        }
+
+       
+
+        public async Task<string> CheckEmail(string email)
+        {
+            var user = await userManager.FindByEmailAsync(email);    
+            return user.Email;
+        }
+
+            public async Task<bool> ResetPassword(string email, string password)
+            {
+            var user = await userManager.FindByEmailAsync(email);
+            if (user != null)
+            {
+                // Mã hóa mật khẩu mới
+                user.PasswordHash = userManager.PasswordHasher.HashPassword(user, password);
+                var identity = await userManager.UpdateAsync(user);
+                if (identity.Succeeded)
+                {
+                    var account = await context.Accounts.FirstOrDefaultAsync(a => a.UserId == user.Id);
+                    if (account != null)
+                    {
+                        account.AccountPassword = password;
+                        context.Accounts.Update(account);
+                        await context.SaveChangesAsync();
+                        return true;
+                    }
+                }
+            }
+                return false;
+
         }
     }
 }
