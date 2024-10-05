@@ -123,7 +123,11 @@
     font-weight: 900;
     vertical-align: middle;
     margin-left: 5px;
-    transition: .5s;
+    transition: transform .5s ease; 
+}
+
+.navbar .nav-item:hover .dropdown-toggle::after {
+    transform: rotate(-180deg);
 }
 
 .navbar .dropdown-toggle[aria-expanded=true]::after {
@@ -205,6 +209,12 @@
 
 
 /*** Header ***/
+.header{
+    height:120px; 
+    padding:20px;
+    position: fixed;
+    z-index: 10;
+}
 .carousel-caption {
     top: 0;
     left: 0;
