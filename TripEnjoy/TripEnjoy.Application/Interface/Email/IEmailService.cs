@@ -5,10 +5,11 @@ using System.Text;
 using System.Threading.Tasks;
 using TripEnjoy.Application.Data;
 
-namespace TripEnjoy.Infrastructure.Services
+namespace TripEnjoy.Application.Interface.EmailService
 {
-     public interface IEmailService
+    public interface IEmailService
     {
         Task SendEmailAsync(MailRequest mailRequest);
+        public string GetCodeHtmlContent(string content, string code);
     }
 }
