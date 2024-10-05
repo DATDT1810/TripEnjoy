@@ -1,7 +1,9 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using TripEnjoy.Application.Interface.Hotel;
 using TripEnjoy.Domain.Models;
+using TripEnjoy.Infrastructure.Entities;
 
 namespace TripEnjoy.Presentation.Web.Controllers
 {
@@ -10,10 +12,11 @@ namespace TripEnjoy.Presentation.Web.Controllers
     public class HotelController : ControllerBase
     {
         private readonly IHotelService _hotelService;
-
-        public HotelController(IHotelService hotelService)
+		private readonly ApplicationDbContext _context;
+        public HotelController(IHotelService hotelService, ApplicationDbContext applicationDbContext)
         {
             this._hotelService = hotelService;
+			_context = applicationDbContext;
         }
 		//check
         [HttpGet]
@@ -48,17 +51,17 @@ namespace TripEnjoy.Presentation.Web.Controllers
 		[HttpPut("{id}")]
 		public async Task<IActionResult> UpdateHotel(int id, Hotel hotel)
 		{
-			if(hotel == null)
+			if (hotel == null)
 			{
 				return BadRequest("Hotel can be null");
 			}
 			Hotel obj = await this._hotelService.GetHotelsByIdAsync(id);
 			if (obj == null)
 			{
-				return NotFound("Hotel could be found");
+				return NotFound("could not be found");
 			}
 			await this._hotelService.UpdateHotelAsync(hotel);
-			return CreatedAtRoute("GetHotel", new {id = hotel.HotelId}, hotel);
+			return CreatedAtRoute("GetHotel", new { id = hotel.HotelId }, hotel);
 		}
 
 		[HttpDelete("{id}")]

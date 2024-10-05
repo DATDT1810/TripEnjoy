@@ -130,11 +130,14 @@ namespace TripEnjoy.Presentation.WPF.ViewModels
             HttpResponseMessage response = await client.PostAsync(api+ "/Login", content);
             if (response.IsSuccessStatusCode) // nhận phản hồi về sau khi gửi dữ liệu đi
             {
-				var dataResponse = response.Content.ReadAsStringAsync().Result;
-                MessageBox.Show(dataResponse);
+				var dataResponse = response.Content.ReadAsStringAsync().Result; // take token
+                //MessageBox.Show(dataResponse);
 				DashboardWindow dashboardWindow = new DashboardWindow();
                 dashboardWindow.Show();
-            }else
+
+				
+			}
+			else
             {
                 this.ErrorMessage = "Thông tin xác thực đăng nhập của bạn không khớp với tài khoản trong hệ thống";
             }

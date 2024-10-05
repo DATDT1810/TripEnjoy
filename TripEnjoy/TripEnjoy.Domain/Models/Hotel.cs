@@ -41,5 +41,25 @@ namespace TripEnjoy.Domain.Models
        
         [ForeignKey("CategoryId")]                   // category_id là khóa ngoại trỏ đến bảng Category
         public virtual Category Category { get; set; }     // Điều này thiết lập quan hệ 1-n với bảng Category
-    }
+
+        public Hotel()
+        {
+            
+        }
+
+		public Hotel(int hotelId, string hotelName, string hotelAddress, string hotelPhone, string hotelDescription, bool isDeleted, string hotelStatus, DateTime hotelTimeStart, DateTime hotelTimeEnd, int accountId, int categoryId)
+		{
+			HotelId = hotelId;
+			HotelName = hotelName;
+			HotelAddress = hotelAddress;
+			HotelPhone = hotelPhone;
+			HotelDescription = hotelDescription;
+			IsDeleted = isDeleted;
+			HotelStatus = hotelStatus;
+			HotelTimeStart = hotelTimeStart;
+			HotelTimeEnd = hotelTimeEnd;
+			AccountId = accountId;
+			CategoryId = categoryId;
+		}
+	}
 }

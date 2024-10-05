@@ -21,7 +21,7 @@ namespace TripEnjoy.Infrastructure.Repositories
 
 		public async Task<Hotel> AddHotelAsync(Hotel hotel)
 		{
-			await this._context.AddAsync(hotel);
+			await this._context.AddAsync(new Hotel(hotel.HotelId, hotel.HotelName, hotel.HotelAddress, hotel.HotelPhone, hotel.HotelDescription, hotel.IsDeleted, hotel.HotelStatus, hotel.HotelTimeStart, hotel.HotelTimeEnd, hotel.AccountId, hotel.CategoryId));
 			await this._context.SaveChangesAsync();
 			return hotel;
 		}
@@ -41,8 +41,22 @@ namespace TripEnjoy.Infrastructure.Repositories
 
 		public async Task<Hotel> UpdateHotelAsync(Hotel hotel)
 		{
-			_context.Hotels.Update(hotel);
-			await _context.SaveChangesAsync();
+			Hotel? hotel1 = await this._context.Hotels.FirstOrDefaultAsync(p => p.HotelId == hotel.HotelId);
+			if(hotel1 == null)
+			{
+				return null;
+			}
+			hotel1.HotelName = hotel.HotelName;
+			hotel1.HotelAddress = hotel.HotelAddress;	
+			hotel1.HotelPhone = hotel.HotelPhone;
+			hotel1.HotelDescription = hotel.HotelDescription;
+			hotel1.IsDeleted = hotel1.IsDeleted;
+			hotel1.HotelStatus = hotel.HotelStatus;
+			hotel1.HotelTimeStart = hotel.HotelTimeStart;
+			hotel1.HotelTimeEnd = hotel.HotelTimeEnd;
+			hotel1.AccountId = hotel.AccountId;
+			hotel1.CategoryId = hotel.CategoryId;
+			await this._context.SaveChangesAsync();
 			return hotel;
 		}
 	}
