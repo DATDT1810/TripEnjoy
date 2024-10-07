@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using TripEnjoy.Application.Data;
 using TripEnjoy.Application.Interface;
+using TripEnjoy.Domain.Models;
 
 namespace TripEnjoy.Application.Services
 {
@@ -50,6 +51,31 @@ namespace TripEnjoy.Application.Services
         public Task<bool> ResetPassword(string email, string password)
         {
           return this.accountRepository.ResetPassword(email, password);
+        }
+
+        public async Task<IEnumerable<Account>> GetAllAccountsAsync()
+        {
+            return await this.accountRepository.GetAllAccountsAsync();
+        }
+
+        public async Task<Account> GetAccountByIdAsync(string accountId)
+        {
+            return await this.accountRepository.GetAccountByIdAsync(accountId);
+        }
+
+        public async Task<Account> AddAccountAsync(Account account)
+        {
+            return await this.accountRepository.AddAccountAsync(account);
+        }
+
+        public async Task<Account> UpdateAccountAsync(Account account)
+        {
+            return await this.accountRepository.UpdateAccountAsync(account);
+        }
+
+        public async Task<Account> UpdateAccountLevelAsync(string UId)
+        {
+            return await this.accountRepository.UpdateAccountLevelAsync(UId);
         }
     }
 }

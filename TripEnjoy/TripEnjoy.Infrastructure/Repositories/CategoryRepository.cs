@@ -47,7 +47,7 @@ namespace TripEnjoy.Infrastructure.Repositories
             {
                 return false;
             }
-            _context.Categories.Remove(category);
+            category.CategoryStatus = false;
             await _context.SaveChangesAsync();
             return true;
         }

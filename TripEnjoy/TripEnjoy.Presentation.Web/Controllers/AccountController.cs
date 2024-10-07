@@ -13,12 +13,12 @@ namespace TripEnjoy.Presentation.Web.Controllers
     [ApiController]
     public class AccountController : ControllerBase
     {
-        private readonly IAccountService accountService;
+        private readonly IAccountService _accountService;
         private readonly IEmailService emailService;
 
         public AccountController(IAccountService accountService, IEmailService emailService)
         {
-            this.accountService = accountService;
+            this._accountService = accountService;
             this.emailService = emailService;
         }
 
@@ -28,7 +28,7 @@ namespace TripEnjoy.Presentation.Web.Controllers
         {
             if (accountDTO.email != null && accountDTO.password != null)
             {
-                var result = await accountService.Login(accountDTO);
+                var result = await _accountService.Login(accountDTO);
                 if (result != null)
                 {
                     var tokens = new
@@ -48,7 +48,7 @@ namespace TripEnjoy.Presentation.Web.Controllers
         {
             if (accountDTO.email != null && accountDTO.password != null)
             {
-                var result = await accountService.Register(accountDTO);
+                var result = await _accountService.Register(accountDTO);
                 if (result != null)
                 {
                     return Ok(result);
@@ -64,7 +64,7 @@ namespace TripEnjoy.Presentation.Web.Controllers
         {
             if (tokenRefreshDTO.refreshToken != null)
             {
-                var tokens = await accountService.RefreshToken(tokenRefreshDTO.refreshToken);
+                var tokens = await _accountService.RefreshToken(tokenRefreshDTO.refreshToken);
                 if (tokens != null)
                 {
                     return Ok(tokens);
@@ -81,7 +81,7 @@ namespace TripEnjoy.Presentation.Web.Controllers
             var user = User.FindFirstValue(ClaimTypes.Email);
             if (user != null)
             {
-                var result = await accountService.Logout(user);
+                var result = await _accountService.Logout(user);
                 if (result)
                 {
                     return StatusCode(200);
@@ -96,7 +96,7 @@ namespace TripEnjoy.Presentation.Web.Controllers
         {
             if (emailDTO.email != null)
             {
-                var result = await accountService.LoginGoogle(emailDTO.email);
+                var result = await _accountService.LoginGoogle(emailDTO.email);
                 if (result != null)
                 {
                     var tokens = new
@@ -122,7 +122,7 @@ namespace TripEnjoy.Presentation.Web.Controllers
                 if(passwordRequest.code.Trim().Equals(code))
                 {
                     
-                    var result = await accountService.ResetPassword(passwordRequest.email,passwordRequest.password);
+                    var result = await _accountService.ResetPassword(passwordRequest.email,passwordRequest.password);
                     if (result)
                     {
                         HttpContext.Session.Remove("code");
@@ -140,7 +140,7 @@ namespace TripEnjoy.Presentation.Web.Controllers
         {
             if (emailDTO.email != null)
             {
-                var result = await accountService.CheckEmail(emailDTO.email);
+                var result = await _accountService.CheckEmail(emailDTO.email);
                 if (result != null)
                 {
                     return Ok();
@@ -170,5 +170,66 @@ namespace TripEnjoy.Presentation.Web.Controllers
             }
             return BadRequest();
         }
+
+        [HttpGet]
+        public async Task<IActionResult> GetAllAccount()
+        {
+            var accountList = await _accountService.GetAllAccountsAsync();
+            return Ok(accountList);
+        }
+
+        [HttpGet("{id}", Name = "GetAccountById")]
+        public async Task<IActionResult> GetAccountById(string id)
+        {
+            var account = await _accountService.GetAccountByIdAsync(id);
+            if (account == null)
+            {
+                return NotFound();
+            }
+            return Ok(account);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> AddAccount([FromBody] TripEnjoy.Domain.Models.Account account)
+        {
+            if(account == null)
+            {
+                return BadRequest("Account can't be null");
+            }
+            await _accountService.AddAccountAsync(account);
+            return CreatedAtRoute(nameof(GetAccountById), new { id = account.UserId }, account);
+        }
+
+        [HttpPut("{id}")]
+        public async Task<IActionResult> UpdateAccount(string id, [FromBody] TripEnjoy.Domain.Models.Account account)
+        {
+            if(account == null)
+            {
+                return BadRequest("Account can't be null");
+            }
+            TripEnjoy.Domain.Models.Account obj = await _accountService.GetAccountByIdAsync(id);
+            if (obj == null)
+            {
+                return NotFound();
+            }
+            await _accountService.UpdateAccountAsync(obj);
+            return CreatedAtRoute(nameof(GetAccountById), new { id = account.UserId }, account);
+        }
+
+        [HttpPut("UpgradeLevel/{UId}")]
+        public async Task<IActionResult> UpdateAccountLevel(string UId)
+        {
+            if(UId == null)
+            {
+                return Unauthorized("User not authenticated");
+            }
+            var account = await _accountService.UpdateAccountLevelAsync(UId);
+            if (account != null)
+            {
+                return Ok("Account has been upgraded to premium");
+            }
+            return BadRequest("Failed to upgrade account");
+        }
+
     }
 }
