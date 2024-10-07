@@ -22,7 +22,7 @@ namespace TripEnjoy.Infrastructure.Repositories
 {
     public class AccountRepository : IAccountRepository
     {
-        private readonly ApplicationDbContext context;
+        private readonly ApplicationDbContext _context;
         private readonly UserManager<IdentityUser> userManager;
         private readonly SignInManager<IdentityUser> signInManager;
         private readonly IConfiguration configuration;
@@ -31,7 +31,7 @@ namespace TripEnjoy.Infrastructure.Repositories
 
         public AccountRepository(ApplicationDbContext context, UserManager<IdentityUser> userManager, SignInManager<IdentityUser> signInManager, IConfiguration configuration, IMapper mapper, RoleManager<IdentityRole> roleManager)
         {
-            this.context = context;
+            this._context = context;
             this.userManager = userManager;
             this.signInManager = signInManager;
             this.configuration = configuration;
@@ -44,7 +44,7 @@ namespace TripEnjoy.Infrastructure.Repositories
             {
                 throw new ArgumentNullException("Email and password must not be null");
             }
-            var userBlock = context.Accounts.FirstOrDefault(a => a.AccountEmail == account.email);
+            var userBlock = _context.Accounts.FirstOrDefault(a => a.AccountEmail == account.email);
             if (userBlock?.AccountIsDeleted == true)
             {
                 throw new UnauthorizedAccessException("This account has been banned");
@@ -166,8 +166,8 @@ namespace TripEnjoy.Infrastructure.Repositories
                 accountNew.UserId = user.Id;
                 // End 
 
-                context.Accounts.Add(accountNew);
-                await context.SaveChangesAsync();
+                _context.Accounts.Add(accountNew);
+                await _context.SaveChangesAsync();
                 return user;
             }
             throw new InvalidOperationException("User registration failed");
@@ -237,8 +237,8 @@ namespace TripEnjoy.Infrastructure.Repositories
                     accountNew.UserId = user.Id;
                     // End 
 
-                    context.Accounts.Add(accountNew);
-                    await context.SaveChangesAsync();
+                    _context.Accounts.Add(accountNew);
+                    await _context.SaveChangesAsync();
                 }
             }
             var result = await signInManager.CanSignInAsync(user);
@@ -272,18 +272,63 @@ namespace TripEnjoy.Infrastructure.Repositories
                 var identity = await userManager.UpdateAsync(user);
                 if (identity.Succeeded)
                 {
-                    var account = await context.Accounts.FirstOrDefaultAsync(a => a.UserId == user.Id);
+                    var account = await _context.Accounts.FirstOrDefaultAsync(a => a.UserId == user.Id);
                     if (account != null)
                     {
                         account.AccountPassword = password;
-                        context.Accounts.Update(account);
-                        await context.SaveChangesAsync();
+                        _context.Accounts.Update(account);
+                        await _context.SaveChangesAsync();
                         return true;
                     }
                 }
             }
                 return false;
 
+        }
+
+        // Get all accounts
+        public async Task<IEnumerable<Account>> GetAllAccountsAsync()
+        {
+            return await _context.Accounts.ToListAsync();
+        }
+
+        // Get account by Id
+        public async Task<Account> GetAccountByIdAsync(string accountId)
+        {
+            TripEnjoy.Domain.Models.Account account = await _context.Accounts.Where(a => a.UserId != accountId).FirstOrDefaultAsync();
+            return account;
+        }
+
+        // Add a new account
+        public async Task<Account> AddAccountAsync(Account account)
+        {
+            _context.Accounts.Add(account);
+            await _context.SaveChangesAsync();
+            return account;
+        }
+
+        // Update an existing account
+        public async Task<Account> UpdateAccountAsync(Account account)
+        {
+            Account acc = await _context.Accounts.FindAsync(account);
+            if (acc == null)
+            {
+                _context.Accounts.Update(account);
+                await _context.SaveChangesAsync();
+            }
+            return acc;
+        }
+
+        public async Task<Account> UpdateAccountLevelAsync(string UId)
+        {
+            Account acc = await _context.Accounts.Where(a => a.UserId == UId).FirstOrDefaultAsync();
+            if (acc != null) {
+                acc.AccountUpLevel = true;
+                acc.AccountRole = 2;
+                _context.Accounts.Update(acc);
+                await _context.SaveChangesAsync();
+            }
+            return acc;
         }
     }
 }
