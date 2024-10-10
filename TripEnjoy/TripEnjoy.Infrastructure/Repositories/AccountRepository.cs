@@ -77,6 +77,7 @@ namespace TripEnjoy.Infrastructure.Repositories
         {
             var authClaims = new List<Claim>
             {
+                //new Claim(ClaimTypes.NameIdentifier, identityUser.Id),
                 new Claim(ClaimTypes.Email, identityUser.Email),
                 new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
             };
@@ -284,6 +285,55 @@ namespace TripEnjoy.Infrastructure.Repositories
             }
                 return false;
 
+        }
+
+        public async Task<UserProfile> GetUserProfile(string userId)
+        {
+            try
+            {
+                var user = await context.Accounts.FirstOrDefaultAsync(a => a.AccountEmail.Equals(userId));
+                if (user != null)
+                {
+                    return mapper.Map<UserProfile>(user);
+                }
+            }
+            catch (TaskCanceledException ex)
+            {
+                Console.WriteLine("The task was canceled. Possible timeout issue.");
+                Console.WriteLine($"Error details: {ex.Message}");
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine($"An error occurred: {e.Message}");
+            }
+            return null;
+        }
+
+        public async Task<UserProfile> UpdateUserProfile(UserProfile userProfile)
+        {
+            var user = await context.Accounts.FirstOrDefaultAsync(a => a.AccountId == userProfile.AccountId);
+            if (user == null)
+            {
+                throw new Exception("User not found");
+            }
+            mapper.Map(userProfile, user);
+            context.Accounts.Update(user);
+            var result = await context.SaveChangesAsync();
+            if (result > 0)
+            {
+                return mapper.Map<UserProfile>(user);
+            }
+            throw new Exception("No changes were made to the user profile.");
+        }
+
+        public Task<UserProfile> CreateUser(UserProfile userProfile)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<bool> DeleteUser(int accountId)
+        {
+            throw new NotImplementedException();
         }
     }
 }

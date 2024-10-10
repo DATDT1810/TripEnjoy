@@ -23,6 +23,8 @@
     <link rel="stylesheet" href="~/lib/owlcarousel/assets/owl.carousel.min.css" />
     <link rel="stylesheet" href="~/lib/tempusdominus/css/tempusdominus-bootstrap-4.min.css" />
     <link rel="stylesheet" href="~/css/style.css" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.all.min.js"></script>
 
     @RenderSection("Styles", required: false)
 </head>
@@ -92,7 +94,11 @@
                                 </div>
 
                             </div>
-                            @if (ViewData["token"] != null)
+                            @{                           
+                                    var token = Context.Request.Cookies["accessToken"]; 
+                                    var isLoggedIn = !string.IsNullOrEmpty(token);                            
+                            }
+                            @if (isLoggedIn)
                             {
                                 <div class="dropdown">
                                     <button
@@ -103,7 +109,7 @@
                                     </button>
                                     <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
                                         <li>
-                                            <a class="dropdown-item" asp-page="Profile">View Profile</a>
+                                            <a class="dropdown-item" asp-page="/User/ViewProfile">View Profile</a>
                                         </li>
                                         <li>
                                             <a class="dropdown-item" asp-page="Logout">Logout</a>
@@ -329,7 +335,7 @@
 
 
 
-    @await RenderSectionAsync("Scripts", required: false)
+    @RenderSection("Scripts", required: false)
 
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
