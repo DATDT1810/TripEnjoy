@@ -7,7 +7,7 @@ using System.Text;
 using TripEnjoy.Application.Data;
 using TripEnjoy.Application.Interface;
 using TripEnjoy.Application.Interface.Category;
-using TripEnjoy.Application.Interface.EmailService;
+using TripEnjoy.Application.Interface.EmailService; 
 using TripEnjoy.Application.Interface.Hotel;
 using TripEnjoy.Application.Interface.ImageCloud;
 using TripEnjoy.Application.Interface.User;
