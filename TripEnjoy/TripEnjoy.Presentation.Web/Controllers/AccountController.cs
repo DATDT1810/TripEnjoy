@@ -5,6 +5,8 @@ using System.Security.Claims;
 using TripEnjoy.Application.Data;
 using TripEnjoy.Application.Interface;
 using TripEnjoy.Application.Interface.EmailService;
+using TripEnjoy.Application.Interface.ImageCloud;
+using TripEnjoy.Infrastructure.Service;
 
 
 namespace TripEnjoy.Presentation.Web.Controllers
@@ -15,11 +17,13 @@ namespace TripEnjoy.Presentation.Web.Controllers
     {
         private readonly IAccountService _accountService;
         private readonly IEmailService emailService;
+        private readonly IImageService imageService;
 
-        public AccountController(IAccountService accountService, IEmailService emailService)
+        public AccountController(IAccountService accountService, IEmailService emailService, IImageService imageService )
         {
             this._accountService = accountService;
             this.emailService = emailService;
+            this.imageService = imageService;
         }
 
         [HttpPost]
@@ -171,6 +175,7 @@ namespace TripEnjoy.Presentation.Web.Controllers
             return BadRequest();
         }
 
+
         [HttpGet]
         public async Task<IActionResult> GetAllAccount()
         {
@@ -215,6 +220,7 @@ namespace TripEnjoy.Presentation.Web.Controllers
             }
             return BadRequest("Failed to upgrade account");
         }
+
 
     }
 }

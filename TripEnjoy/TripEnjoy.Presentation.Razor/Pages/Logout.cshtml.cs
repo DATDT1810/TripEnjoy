@@ -26,8 +26,7 @@ namespace TripEnjoy.Presentation.Razor.Pages
                     var response = await client.SendAsync(request);
                     if (response.IsSuccessStatusCode)
                     {
-                        //Response.Cookies.Delete("accessToken");
-                        //Response.Cookies.Delete("refreshToken");
+                       
                         foreach(var cookie in Request.Cookies.Keys)
                         {
                             Response.Cookies.Delete(cookie);
