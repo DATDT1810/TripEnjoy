@@ -58,19 +58,14 @@ namespace TripEnjoy.Application.Services
             return await this.accountRepository.GetAllAccountsAsync();
         }
 
-        public async Task<Account> GetAccountByIdAsync(string accountId)
+        public async Task<Account> GetAccountByIdAsync(string userId)
         {
-            return await this.accountRepository.GetAccountByIdAsync(accountId);
+            return await this.accountRepository.GetAccountByIdAsync(userId);
         }
 
         public async Task<Account> AddAccountAsync(Account account)
         {
             return await this.accountRepository.AddAccountAsync(account);
-        }
-
-        public async Task<Account> UpdateAccountAsync(Account account)
-        {
-            return await this.accountRepository.UpdateAccountAsync(account);
         }
 
         public async Task<Account> UpdateAccountLevelAsync(string UId)

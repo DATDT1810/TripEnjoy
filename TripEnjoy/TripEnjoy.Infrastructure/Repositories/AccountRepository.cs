@@ -218,7 +218,7 @@ namespace TripEnjoy.Infrastructure.Repositories
                     }
                     await userManager.AddToRoleAsync(user, AppRole.User);
 
-                    var accountNew = new Account();
+                    var accountNew = new Domain.Models.Account();
 
                     // Start
                     // Set giá trị mặc định cho Account
@@ -255,16 +255,16 @@ namespace TripEnjoy.Infrastructure.Repositories
             throw new UnauthorizedAccessException("Invalid login attempt");
         }
 
-       
+
 
         public async Task<string> CheckEmail(string email)
         {
-            var user = await userManager.FindByEmailAsync(email);    
+            var user = await userManager.FindByEmailAsync(email);
             return user.Email;
         }
 
-            public async Task<bool> ResetPassword(string email, string password)
-            {
+        public async Task<bool> ResetPassword(string email, string password)
+        {
             var user = await userManager.FindByEmailAsync(email);
             if (user != null)
             {
@@ -283,7 +283,7 @@ namespace TripEnjoy.Infrastructure.Repositories
                     }
                 }
             }
-                return false;
+            return false;
 
         }
 
@@ -292,7 +292,7 @@ namespace TripEnjoy.Infrastructure.Repositories
         {
             try
             {
-                var user = await context.Accounts.FirstOrDefaultAsync(a => a.AccountEmail.Equals(userId));
+                var user = await _context.Accounts.FirstOrDefaultAsync(a => a.AccountEmail.Equals(userId));
                 if (user != null)
                 {
                     return mapper.Map<UserProfile>(user);
@@ -312,14 +312,14 @@ namespace TripEnjoy.Infrastructure.Repositories
 
         public async Task<UserProfile> UpdateUserProfile(UserProfile userProfile)
         {
-            var user = await context.Accounts.FirstOrDefaultAsync(a => a.AccountId == userProfile.AccountId);
+            var user = await _context.Accounts.FirstOrDefaultAsync(a => a.AccountId == userProfile.AccountId);
             if (user == null)
             {
                 throw new Exception("User not found");
             }
             mapper.Map(userProfile, user);
-            context.Accounts.Update(user);
-            var result = await context.SaveChangesAsync();
+            _context.Accounts.Update(user);
+            var result = await _context.SaveChangesAsync();
             if (result > 0)
             {
                 return mapper.Map<UserProfile>(user);
@@ -335,18 +335,18 @@ namespace TripEnjoy.Infrastructure.Repositories
         public Task<bool> DeleteUser(int accountId)
         {
             throw new NotImplementedException();
+        }
 
         // Get all accounts
-        public async Task<IEnumerable<Account>> GetAllAccountsAsync()
+        public async Task<IEnumerable<TripEnjoy.Domain.Models.Account>> GetAllAccountsAsync()
         {
             return await _context.Accounts.ToListAsync();
         }
 
         // Get account by Id
-        public async Task<Account> GetAccountByIdAsync(string accountId)
+        public async Task<Account> GetAccountByIdAsync(string userId)
         {
-            TripEnjoy.Domain.Models.Account account = await _context.Accounts.Where(a => a.UserId != accountId).FirstOrDefaultAsync();
-            return account;
+            return await _context.Accounts.FirstOrDefaultAsync(a => a.UserId == userId);
         }
 
         // Add a new account
@@ -360,19 +360,20 @@ namespace TripEnjoy.Infrastructure.Repositories
         // Update an existing account
         public async Task<Account> UpdateAccountAsync(Account account)
         {
-            Account acc = await _context.Accounts.FindAsync(account);
-            if (acc == null)
+            Account obj = await _context.Accounts.FirstOrDefaultAsync(a => a.UserId == account.UserId);
+            if (obj == null)
             {
                 _context.Accounts.Update(account);
                 await _context.SaveChangesAsync();
             }
-            return acc;
+            return obj;
         }
 
         public async Task<Account> UpdateAccountLevelAsync(string UId)
         {
             Account acc = await _context.Accounts.Where(a => a.UserId == UId).FirstOrDefaultAsync();
-            if (acc != null) {
+            if (acc != null)
+            {
                 acc.AccountUpLevel = true;
                 acc.AccountRole = 2;
                 _context.Accounts.Update(acc);

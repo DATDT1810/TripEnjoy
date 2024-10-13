@@ -47,11 +47,11 @@ namespace TripEnjoy.Presentation.Web.Controllers
 
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdateCategory(int id, [FromBody] Category category)
-            {
+        {
             if (category == null)
             {
                 return BadRequest("Invalid data.");
-            }   
+            }
 
             Category obj = await _categoryService.GetCategoryByIdAsync(id);
             if (obj == null)
@@ -66,7 +66,7 @@ namespace TripEnjoy.Presentation.Web.Controllers
         public async Task<IActionResult> DeleteCategory(int id)
         {
             Category cate = await _categoryService.GetCategoryByIdAsync(id);
-            if(cate == null)
+            if (cate == null)
             {
                 return NotFound();
             }
