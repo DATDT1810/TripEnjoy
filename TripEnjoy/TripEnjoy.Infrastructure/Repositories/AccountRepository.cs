@@ -292,7 +292,7 @@ namespace TripEnjoy.Infrastructure.Repositories
         {
             try
             {
-                var user = await context.Accounts.FirstOrDefaultAsync(a => a.AccountEmail.Equals(userId));
+                var user = await _context.Accounts.FirstOrDefaultAsync(a => a.AccountEmail.Equals(userId));
                 if (user != null)
                 {
                     return mapper.Map<UserProfile>(user);
@@ -312,14 +312,14 @@ namespace TripEnjoy.Infrastructure.Repositories
 
         public async Task<UserProfile> UpdateUserProfile(UserProfile userProfile)
         {
-            var user = await context.Accounts.FirstOrDefaultAsync(a => a.AccountId == userProfile.AccountId);
+            var user = await _context.Accounts.FirstOrDefaultAsync(a => a.AccountId == userProfile.AccountId);
             if (user == null)
             {
                 throw new Exception("User not found");
             }
             mapper.Map(userProfile, user);
-            context.Accounts.Update(user);
-            var result = await context.SaveChangesAsync();
+            _context.Accounts.Update(user);
+            var result = await _context.SaveChangesAsync();
             if (result > 0)
             {
                 return mapper.Map<UserProfile>(user);
@@ -335,6 +335,7 @@ namespace TripEnjoy.Infrastructure.Repositories
         public Task<bool> DeleteUser(int accountId)
         {
             throw new NotImplementedException();
+        }
 
         // Get all accounts
         public async Task<IEnumerable<TripEnjoy.Domain.Models.Account>> GetAllAccountsAsync()
