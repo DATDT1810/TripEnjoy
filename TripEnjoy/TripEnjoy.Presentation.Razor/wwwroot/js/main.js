@@ -93,12 +93,36 @@
 
 
     // Date and time picker
-    $('.date').datetimepicker({
-        format: 'L'
+    $('#date1').datetimepicker({
+        format: 'L',
+        icons: {
+            time: 'fa fa-clock',
+            date: 'fa fa-calendar',
+            up: 'fa fa-chevron-up',
+            down: 'fa fa-chevron-down',
+            previous: 'fa fa-chevron-left',
+            next: 'fa fa-chevron-right',
+            today: 'fa fa-check',
+            clear: 'fa fa-trash',
+            close: 'fa fa-times'
+        }
     });
-    $('.time').datetimepicker({
-        format: 'LT'
+
+    $('#date2').datetimepicker({
+        format: 'L',
+        icons: {
+            time: 'fa fa-clock',
+            date: 'fa fa-calendar',
+            up: 'fa fa-chevron-up',
+            down: 'fa fa-chevron-down',
+            previous: 'fa fa-chevron-left',
+            next: 'fa fa-chevron-right',
+            today: 'fa fa-check',
+            clear: 'fa fa-trash',
+            close: 'fa fa-times'
+        }
     });
+
 
 
     // Rating

@@ -116,20 +116,20 @@ namespace TripEnjoy.Presentation.Web.Controllers
         {
             if (passwordRequest != null)
             {
-                
+
                 var code = HttpContext.Session.GetString("code")?.Trim();
-             
-                if(passwordRequest.code.Trim().Equals(code))
+
+                if (passwordRequest.code.Trim().Equals(code))
                 {
-                    
-                    var result = await _accountService.ResetPassword(passwordRequest.email,passwordRequest.password);
+
+                    var result = await _accountService.ResetPassword(passwordRequest.email, passwordRequest.password);
                     if (result)
                     {
                         HttpContext.Session.Remove("code");
                         return Ok();
-                    }              
+                    }
                 }
-               
+
             }
             return BadRequest();
         }
@@ -181,6 +181,7 @@ namespace TripEnjoy.Presentation.Web.Controllers
         [HttpGet("{id}", Name = "GetAccountById")]
         public async Task<IActionResult> GetAccountById(string id)
         {
+
             var account = await _accountService.GetAccountByIdAsync(id);
             if (account == null)
             {
@@ -192,7 +193,7 @@ namespace TripEnjoy.Presentation.Web.Controllers
         [HttpPost]
         public async Task<IActionResult> AddAccount([FromBody] TripEnjoy.Domain.Models.Account account)
         {
-            if(account == null)
+            if (account == null)
             {
                 return BadRequest("Account can't be null");
             }
@@ -200,26 +201,10 @@ namespace TripEnjoy.Presentation.Web.Controllers
             return CreatedAtRoute(nameof(GetAccountById), new { id = account.UserId }, account);
         }
 
-        [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateAccount(string id, [FromBody] TripEnjoy.Domain.Models.Account account)
-        {
-            if(account == null)
-            {
-                return BadRequest("Account can't be null");
-            }
-            TripEnjoy.Domain.Models.Account obj = await _accountService.GetAccountByIdAsync(id);
-            if (obj == null)
-            {
-                return NotFound();
-            }
-            await _accountService.UpdateAccountAsync(obj);
-            return CreatedAtRoute(nameof(GetAccountById), new { id = account.UserId }, account);
-        }
-
         [HttpPut("UpgradeLevel/{UId}")]
         public async Task<IActionResult> UpdateAccountLevel(string UId)
         {
-            if(UId == null)
+            if (UId == null)
             {
                 return Unauthorized("User not authenticated");
             }

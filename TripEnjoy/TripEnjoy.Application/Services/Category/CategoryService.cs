@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using TripEnjoy.Application.Interface.Category;
 using TripEnjoy.Domain.Models;
-namespace TripEnjoy.Application.Services
+namespace TripEnjoy.Application.Services.Category
 {
     public class CategoryService : ICategoryService
     {
@@ -16,22 +16,22 @@ namespace TripEnjoy.Application.Services
             _categoryRepository = categoryRepository;
         }
 
-        public async Task<IEnumerable<Category>> GetCategoriesAsync()
+        public async Task<IEnumerable<TripEnjoy.Domain.Models.Category>> GetCategoriesAsync()
         {
             return await _categoryRepository.GetCategoriesAsync();
         }
 
-        public async Task<Category> GetCategoryByIdAsync(int id)
+        public async Task<TripEnjoy.Domain.Models.Category> GetCategoryByIdAsync(int id)
         {
             return await _categoryRepository.GetCategoryByIdAsync(id);
         }
 
-        public async Task<Category> AddCategoryAsync(Category category)
+        public async Task<TripEnjoy.Domain.Models.Category> AddCategoryAsync(TripEnjoy.Domain.Models.Category category)
         {
             return await _categoryRepository.AddCategoryAsync(category);
         }
 
-        public async Task<Category> UpdateCatgoryAsync(Category category)
+        public async Task<TripEnjoy.Domain.Models.Category> UpdateCatgoryAsync(TripEnjoy.Domain.Models.Category category)
         {
             return await _categoryRepository.UpdateCatgoryAsync(category);
         }

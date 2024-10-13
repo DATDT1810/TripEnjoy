@@ -21,6 +21,8 @@ namespace TripEnjoy.Infrastructure.Helper
             .ForMember(dest => dest.AccountPassword, opt => opt.MapFrom(src => src.password))
             .ReverseMap()
             .ForMember(dest => dest.password, opt => opt.MapFrom(src => src.AccountPassword));
+
+            CreateMap<Booking, BookingDTO>().ReverseMap();
         }
     }
 }

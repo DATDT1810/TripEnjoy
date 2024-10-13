@@ -6,10 +6,13 @@ using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using TripEnjoy.Application.Data;
 using TripEnjoy.Application.Interface;
+using TripEnjoy.Application.Interface.Booking_Room;
 using TripEnjoy.Application.Interface.Category;
-using TripEnjoy.Application.Interface.EmailService; 
+using TripEnjoy.Application.Interface.EmailService;
 using TripEnjoy.Application.Interface.Hotel;
 using TripEnjoy.Application.Services;
+using TripEnjoy.Application.Services.Booking;
+using TripEnjoy.Application.Services.Category;
 using TripEnjoy.Application.Services.Email;
 using TripEnjoy.Infrastructure.Entities;
 using TripEnjoy.Infrastructure.Helper;
@@ -45,14 +48,15 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
 builder.Services.Configure<MailSetting>(builder.Configuration.GetSection("EmailSettings"));
 // cấu hình auto mapper
 builder.Services.AddAutoMapper(typeof(MappingProfile));
-// Khai Báo Dependency Cho các tầng sử dụng
+//Khai Báo Dependency Cho các tầng sử dụng
 builder.Services.AddScoped<IHotelRepository, HotelRepository>();
 builder.Services.AddScoped<IHotelService, HotelService>();
 
 builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
 builder.Services.AddScoped<ICategoryService, CategoryService>();
 
-
+builder.Services.AddScoped<IBookingRepository, BookingRepository>();
+builder.Services.AddScoped<IBookingService, BookingService>();
 
 
 builder.Services.AddScoped<IAccountRepository, AccountRepository>();
