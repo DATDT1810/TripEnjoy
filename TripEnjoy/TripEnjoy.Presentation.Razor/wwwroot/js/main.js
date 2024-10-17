@@ -67,6 +67,33 @@
         return false;
     });
 
+    // Hotel Scroll 
+    $(document).ready(function () {
+        $(".room-carousel").owlCarousel({
+            autoplay: true,
+            smartSpeed: 1000,
+            margin: 30,
+            loop: true,
+            nav: true,
+            navText: [
+                '<i class="fa fa-angle-left"></i>',
+                '<i class="fa fa-angle-right"></i>'
+            ],
+            responsive: {
+                0: {
+                    items: 1
+                },
+                768: {
+                    items: 2
+                },
+                992: {
+                    items: 3
+                }
+            }
+        });
+    });
+
+
 
     // Modal Video
     $(document).ready(function () {
