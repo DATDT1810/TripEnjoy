@@ -26,7 +26,7 @@ namespace TripEnjoy.Domain.Models
 
         public bool AccountIsDeleted { get; set; }  // account_isDeleted
 
-        public decimal AccountBalance { get; set; }  // account_balance
+        public int? WalletID { get; set; }  // account_balance
 
         public bool AccountUpLevel { get; set; }  // account_upLevel
 
@@ -51,10 +51,13 @@ namespace TripEnjoy.Domain.Models
         public string AccountImage { get; set; }  // account_image
 
         // Thêm UserId để kết nối với bảng AspNetUsers
-        [Required]  
+        [Required]
         public string UserId { get; set; }  // Đây là khóa ngoại trỏ đến bảng AspNetUsers
 
         [ForeignKey("UserId")]
         public virtual IdentityUser User { get; set; }  // Liên kết với bảng AspNetUsers
+
+        [ForeignKey("WalletID")]
+        public virtual Wallet Wallet { get; set; } //  liên kết voi bảng Wallet
     }
 }

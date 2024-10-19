@@ -7,9 +7,11 @@ using TripEnjoy.Application.Data;
 
 namespace TripEnjoy.Application.Interface.EmailService
 {
-    public interface IEmailService
-    {
-        Task SendEmailAsync(MailRequest mailRequest);
-        public string GetCodeHtmlContent(string content, string code);
-    }
+	public interface IEmailService
+	{
+		Task SendEmailAsync(MailRequest mailRequest);
+		public string GetCodeHtmlContent(string content, string code);
+		public string GetNotificationHtmlContent(string content);
+	}
+
 }

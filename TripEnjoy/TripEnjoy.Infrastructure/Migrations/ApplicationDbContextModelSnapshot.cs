@@ -233,9 +233,6 @@ namespace TripEnjoy.Infrastructure.Migrations
                         .HasMaxLength(255)
                         .HasColumnType("nvarchar(255)");
 
-                    b.Property<decimal>("AccountBalance")
-                        .HasColumnType("decimal(18,2)");
-
                     b.Property<DateTime>("AccountDateOfBirth")
                         .HasColumnType("datetime2");
 
@@ -287,9 +284,14 @@ namespace TripEnjoy.Infrastructure.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
+                    b.Property<int?>("WalletID")
+                        .HasColumnType("int");
+
                     b.HasKey("AccountId");
 
                     b.HasIndex("UserId");
+
+                    b.HasIndex("WalletID");
 
                     b.ToTable("Accounts");
                 });
@@ -594,6 +596,9 @@ namespace TripEnjoy.Infrastructure.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("PaymentId"));
 
+                    b.Property<int>("AccountId")
+                        .HasColumnType("int");
+
                     b.Property<int>("BookingId")
                         .HasColumnType("int");
 
@@ -609,6 +614,8 @@ namespace TripEnjoy.Infrastructure.Migrations
                         .HasColumnType("nvarchar(10)");
 
                     b.HasKey("PaymentId");
+
+                    b.HasIndex("AccountId");
 
                     b.HasIndex("BookingId");
 
@@ -747,6 +754,38 @@ namespace TripEnjoy.Infrastructure.Migrations
                     b.ToTable("RoomTypes");
                 });
 
+            modelBuilder.Entity("TripEnjoy.Domain.Models.TransactionHistory", b =>
+                {
+                    b.Property<int>("TransactionId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("TransactionId"));
+
+                    b.Property<decimal>("TransactionAmount")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<DateTime>("TransactionDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("TransactionDescription")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("TransactionType")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("WalletId")
+                        .HasColumnType("int");
+
+                    b.HasKey("TransactionId");
+
+                    b.HasIndex("WalletId");
+
+                    b.ToTable("TransactionHistories");
+                });
+
             modelBuilder.Entity("TripEnjoy.Domain.Models.Voucher", b =>
                 {
                     b.Property<int>("VoucherId")
@@ -787,7 +826,7 @@ namespace TripEnjoy.Infrastructure.Migrations
                         .HasColumnType("int")
                         .HasColumnOrder(0);
 
-                    b.Property<int>("AccountId")
+                    b.Property<int?>("AccountId")
                         .HasColumnType("int")
                         .HasColumnOrder(1);
 
@@ -800,6 +839,27 @@ namespace TripEnjoy.Infrastructure.Migrations
                     b.HasIndex("AccountId");
 
                     b.ToTable("VoucherUsers");
+                });
+
+            modelBuilder.Entity("TripEnjoy.Domain.Models.Wallet", b =>
+                {
+                    b.Property<int>("WalletId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("WalletId"));
+
+                    b.Property<int>("AccountId")
+                        .HasColumnType("int");
+
+                    b.Property<decimal>("WalletBalance")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.HasKey("WalletId");
+
+                    b.HasIndex("AccountId");
+
+                    b.ToTable("Wallets");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -861,7 +921,13 @@ namespace TripEnjoy.Infrastructure.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("TripEnjoy.Domain.Models.Wallet", "Wallet")
+                        .WithMany()
+                        .HasForeignKey("WalletID");
+
                     b.Navigation("User");
+
+                    b.Navigation("Wallet");
                 });
 
             modelBuilder.Entity("TripEnjoy.Domain.Models.Booking", b =>
@@ -1002,11 +1068,19 @@ namespace TripEnjoy.Infrastructure.Migrations
 
             modelBuilder.Entity("TripEnjoy.Domain.Models.Payment", b =>
                 {
+                    b.HasOne("TripEnjoy.Domain.Models.Account", "Account")
+                        .WithMany()
+                        .HasForeignKey("AccountId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("TripEnjoy.Domain.Models.Booking", "Booking")
                         .WithMany()
                         .HasForeignKey("BookingId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Account");
 
                     b.Navigation("Booking");
                 });
@@ -1068,6 +1142,17 @@ namespace TripEnjoy.Infrastructure.Migrations
                     b.Navigation("Room");
                 });
 
+            modelBuilder.Entity("TripEnjoy.Domain.Models.TransactionHistory", b =>
+                {
+                    b.HasOne("TripEnjoy.Domain.Models.Wallet", "Wallet")
+                        .WithMany()
+                        .HasForeignKey("WalletId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Wallet");
+                });
+
             modelBuilder.Entity("TripEnjoy.Domain.Models.VoucherUser", b =>
                 {
                     b.HasOne("TripEnjoy.Domain.Models.Account", "Account")
@@ -1085,6 +1170,17 @@ namespace TripEnjoy.Infrastructure.Migrations
                     b.Navigation("Account");
 
                     b.Navigation("Voucher");
+                });
+
+            modelBuilder.Entity("TripEnjoy.Domain.Models.Wallet", b =>
+                {
+                    b.HasOne("TripEnjoy.Domain.Models.Account", "Account")
+                        .WithMany()
+                        .HasForeignKey("AccountId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Account");
                 });
 #pragma warning restore 612, 618
         }

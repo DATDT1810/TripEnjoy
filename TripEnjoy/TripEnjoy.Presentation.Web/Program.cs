@@ -11,6 +11,7 @@ using TripEnjoy.Application.Interface.Category;
 using TripEnjoy.Application.Interface.EmailService;
 using TripEnjoy.Application.Interface.Hotel;
 using TripEnjoy.Application.Interface.ImageCloud;
+using TripEnjoy.Application.Interface.Payment;
 using TripEnjoy.Application.Interface.Room;
 using TripEnjoy.Application.Interface.RoomImage;
 using TripEnjoy.Application.Interface.RoomType;
@@ -20,6 +21,7 @@ using TripEnjoy.Application.Services.Booking;
 using TripEnjoy.Application.Services.Category;
 using TripEnjoy.Application.Services.Email;
 using TripEnjoy.Application.Services.ImageCloud;
+using TripEnjoy.Application.Services.Payment;
 using TripEnjoy.Application.Services.Room;
 using TripEnjoy.Application.Services.RoomImage;
 using TripEnjoy.Application.Services.RoomType;
@@ -80,6 +82,9 @@ builder.Services.AddScoped<IAccountService, AccountService>();
 
 builder.Services.AddTransient<IEmailService, EmailService>();
 
+builder.Services.AddSingleton<IVnPayServices, VnPayService>();
+builder.Services.AddScoped<IPaymentService, PaymentService>();
+builder.Services.AddScoped<IPaymentRepository, PaymentRepository>();
 builder.Services.AddScoped<IRoomRepository, RoomRepository>();
 builder.Services.AddScoped<IRoomService, RoomService>();
 

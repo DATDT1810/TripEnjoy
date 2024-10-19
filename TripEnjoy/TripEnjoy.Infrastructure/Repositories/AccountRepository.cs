@@ -76,11 +76,11 @@ namespace TripEnjoy.Infrastructure.Repositories
         public async Task<TokenResponseDTO> GenerateAccessToken(IdentityUser identityUser)
         {
             var authClaims = new List<Claim>
-            {
-                //new Claim(ClaimTypes.NameIdentifier, identityUser.Id),
-                new Claim(ClaimTypes.Email, identityUser.Email),
-                new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
-            };
+             {
+                 //new Claim(ClaimTypes.NameIdentifier, identityUser.Id),
+                 new Claim(ClaimTypes.Email, identityUser.Email),
+                 new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
+             };
             var userRole = await userManager.GetRolesAsync(identityUser);
             foreach (var roles in userRole)
             {
@@ -148,28 +148,52 @@ namespace TripEnjoy.Infrastructure.Repositories
                 }
                 await userManager.AddToRoleAsync(user, AppRole.User);
 
-                var accountNew = mapper.Map<Account>(account);
+                using (var transaction = await _context.Database.BeginTransactionAsync())
+                {
+                    try
+                    {
+                        var accountNew = mapper.Map<Account>(account);
 
-                // Start
-                // Set giá trị mặc định cho Account
-                // accountNew.AccountPassword = user.PasswordHash;
-                accountNew.AccountUsername = account.email;
-                accountNew.AccountFullname = "Anonymous Customer";
-                accountNew.AccountRole = 1;
-                accountNew.AccountIsDeleted = false;
-                accountNew.AccountBalance = 0;
-                accountNew.AccountUpLevel = false;
-                accountNew.AccountPhone = "+84";
-                accountNew.AccountAddress = "VietNam";
-                accountNew.AccountGender = "Male";
-                accountNew.AccountDateOfBirth = DateTime.Now;
-                accountNew.AccountImage = "/...";
-                accountNew.UserId = user.Id;
-                // End 
+                        // Start
+                        // Set giá trị mặc định cho Account
+                        // accountNew.AccountPassword = user.PasswordHash;
+                        accountNew.AccountUsername = account.email;
+                        accountNew.AccountFullname = "Anonymous Customer";
+                        accountNew.AccountRole = 1;
+                        accountNew.AccountIsDeleted = false;
+                        //accountNew.WalletID = accountNew.AccountId;
+                        accountNew.AccountUpLevel = false;
+                        accountNew.AccountPhone = "+84";
+                        accountNew.AccountAddress = "VietNam";
+                        accountNew.AccountGender = "Male";
+                        accountNew.AccountDateOfBirth = DateTime.Now;
+                        accountNew.AccountImage = "https://res.cloudinary.com/dgqkuowgr/image/upload/v1729254303/user/haoncce171957%40fpt.edu.vn.jpg";
+                        accountNew.UserId = user.Id;
+                        // End 
+                        _context.Accounts.Add(accountNew);
+                        await _context.SaveChangesAsync();
 
-                _context.Accounts.Add(accountNew);
-                await _context.SaveChangesAsync();
-                return user;
+                        var wallet = new Wallet()
+
+                        {
+                            WalletBalance = 0,
+                            AccountId = accountNew.AccountId
+                        };
+                        _context.Wallets.Add(wallet);
+                        await _context.SaveChangesAsync();
+
+                        accountNew.WalletID = wallet.WalletId;
+                        await _context.SaveChangesAsync();
+
+                        await transaction.CommitAsync();
+                        return user;
+                    }
+                    catch (Exception ex)
+                    {
+                        await transaction.RollbackAsync();
+                        throw;
+                    }
+                }
             }
             throw new InvalidOperationException("User registration failed");
         }
@@ -202,6 +226,7 @@ namespace TripEnjoy.Infrastructure.Repositories
         public async Task<TokenResponseDTO> LoginGoogle(string email)
         {
             var user = await userManager.FindByEmailAsync(email);
+            // chưa có thì tạo thông tin đăng nhập lần đầu
             if (user == null)
             {
                 user = new IdentityUser()
@@ -218,28 +243,53 @@ namespace TripEnjoy.Infrastructure.Repositories
                     }
                     await userManager.AddToRoleAsync(user, AppRole.User);
 
-                    var accountNew = new Domain.Models.Account();
+                    using (var transaction = await _context.Database.BeginTransactionAsync())
+                    {
+                        try
+                        {
+                            var accountNew = new Account();
 
-                    // Start
-                    // Set giá trị mặc định cho Account
-                    accountNew.AccountEmail = user.Email;
-                    accountNew.AccountPassword = RandowPassword.GenaratePasss(6, true);
-                    accountNew.AccountUsername = user.Email;
-                    accountNew.AccountFullname = "Anonymous Customer";
-                    accountNew.AccountRole = 1;
-                    accountNew.AccountIsDeleted = false;
-                    accountNew.AccountBalance = 0;
-                    accountNew.AccountUpLevel = false;
-                    accountNew.AccountPhone = "+84";
-                    accountNew.AccountAddress = "VietNam";
-                    accountNew.AccountGender = "Male";
-                    accountNew.AccountDateOfBirth = DateTime.Now;
-                    accountNew.AccountImage = "/...";
-                    accountNew.UserId = user.Id;
-                    // End 
+                            // Start
+                            // Set giá trị mặc định cho Account
+                            accountNew.AccountEmail = user.Email;
+                            accountNew.AccountPassword = RandowPassword.GenaratePasss(6, true);
+                            accountNew.AccountUsername = user.Email;
+                            accountNew.AccountFullname = "Anonymous Customer";
+                            accountNew.AccountRole = 1;
+                            accountNew.AccountIsDeleted = false;
+                            //accountNew.WalletID = 1;
+                            accountNew.AccountUpLevel = false;
+                            accountNew.AccountPhone = "+84";
+                            accountNew.AccountAddress = "VietNam";
+                            accountNew.AccountGender = "Male";
+                            accountNew.AccountDateOfBirth = DateTime.Now;
+                            accountNew.AccountImage = "https://res.cloudinary.com/dgqkuowgr/image/upload/v1729254303/user/haoncce171957%40fpt.edu.vn.jpg";
+                            accountNew.UserId = user.Id;
+                            // End 
 
-                    _context.Accounts.Add(accountNew);
-                    await _context.SaveChangesAsync();
+                            _context.Accounts.Add(accountNew);
+                            await _context.SaveChangesAsync();
+
+                            var wallet = new Wallet()
+                            {
+                                WalletBalance = 0,
+                                AccountId = accountNew.AccountId
+                            };
+                            _context.Wallets.Add(wallet);
+                            await _context.SaveChangesAsync();
+
+                            accountNew.WalletID = wallet.WalletId;
+                            await _context.SaveChangesAsync();
+
+                            await transaction.CommitAsync();
+                          
+                        }
+                        catch (Exception ex)
+                        {
+                            await transaction.RollbackAsync();
+                            throw;
+                        }
+                    }
                 }
             }
             var result = await signInManager.CanSignInAsync(user);
@@ -332,11 +382,6 @@ namespace TripEnjoy.Infrastructure.Repositories
             throw new NotImplementedException();
         }
 
-        public Task<bool> DeleteUser(int accountId)
-        {
-            throw new NotImplementedException();
-        }
-
         // Get all accounts
         public async Task<IEnumerable<TripEnjoy.Domain.Models.Account>> GetAllAccountsAsync()
         {
@@ -382,5 +427,15 @@ namespace TripEnjoy.Infrastructure.Repositories
             return acc;
 
         }
-    }
+
+		public async Task<Account> GetAccountById(int accountId)
+		{
+			var account = await _context.Accounts.FirstOrDefaultAsync(a => a.AccountId == accountId);
+			if (account == null)
+			{
+				throw new Exception($"Account with ID {accountId} not found.");
+			}
+			return account;
+		}
+	}
 }
