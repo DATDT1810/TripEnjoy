@@ -12,6 +12,9 @@ using TripEnjoy.Application.Interface.EmailService;
 using TripEnjoy.Application.Interface.Hotel;
 using TripEnjoy.Application.Interface.ImageCloud;
 using TripEnjoy.Application.Interface.Payment;
+using TripEnjoy.Application.Interface.Room;
+using TripEnjoy.Application.Interface.RoomImage;
+using TripEnjoy.Application.Interface.RoomType;
 using TripEnjoy.Application.Interface.User;
 using TripEnjoy.Application.Services;
 using TripEnjoy.Application.Services.Booking;
@@ -19,6 +22,9 @@ using TripEnjoy.Application.Services.Category;
 using TripEnjoy.Application.Services.Email;
 using TripEnjoy.Application.Services.ImageCloud;
 using TripEnjoy.Application.Services.Payment;
+using TripEnjoy.Application.Services.Room;
+using TripEnjoy.Application.Services.RoomImage;
+using TripEnjoy.Application.Services.RoomType;
 using TripEnjoy.Application.Services.User;
 using TripEnjoy.Infrastructure.Entities;
 using TripEnjoy.Infrastructure.Helper;
@@ -71,14 +77,23 @@ builder.Services.AddScoped<IBookingRepository, BookingRepository>();
 builder.Services.AddScoped<IBookingService, BookingService>();
 builder.Services.AddScoped<IUserServices, UserService>();
 
-
 builder.Services.AddScoped<IAccountRepository, AccountRepository>();
 builder.Services.AddScoped<IAccountService, AccountService>();
+
 builder.Services.AddTransient<IEmailService, EmailService>();
 
 builder.Services.AddSingleton<IVnPayServices, VnPayService>();
 builder.Services.AddScoped<IPaymentService, PaymentService>();
 builder.Services.AddScoped<IPaymentRepository, PaymentRepository>();
+builder.Services.AddScoped<IRoomRepository, RoomRepository>();
+builder.Services.AddScoped<IRoomService, RoomService>();
+
+builder.Services.AddScoped<IRoomTypeRepository, RoomTypeRepository>();
+builder.Services.AddScoped<IRoomTypeService, RoomTypeService>();
+
+builder.Services.AddScoped<IRoomImageRepository, RoomImageRepository>();
+builder.Services.AddScoped<IRoomImageService, RoomImageService>();
+
 // Add services to the container.
 builder.Services.AddIdentity<IdentityUser, IdentityRole>(options => 
 {
