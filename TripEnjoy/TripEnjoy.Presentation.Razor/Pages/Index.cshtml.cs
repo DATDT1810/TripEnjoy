@@ -1,4 +1,4 @@
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Newtonsoft.Json;
 using System.Text.Json;
@@ -17,7 +17,7 @@ namespace TripEnjoy.Presentation.Razor.Pages
             _httpClientFactory = httpClientFactory;
         }
 
-        public async Task<IActionResult> OnGet()
+        public async Task<IActionResult> OnGet(string location = null)
         {
             var token = Request.Cookies["accessToken"]; //accessToken
             if (!string.IsNullOrEmpty(token))
