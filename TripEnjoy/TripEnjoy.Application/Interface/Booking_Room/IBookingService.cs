@@ -13,6 +13,6 @@ namespace TripEnjoy.Application.Interface.Booking_Room
         Task<Booking> CreateBookingAsync(Booking booking);
         Task<Booking> CancelBookingAsync (int bookingId, int accId);
         Task<Booking> GetBookingByIdAsync(int bookingId);
-
+        Task UpdateBookingAsync(Booking booking);
     }
 }

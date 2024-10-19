@@ -19,7 +19,7 @@ namespace TripEnjoy.Presentation.Web.Controllers
         private readonly IEmailService emailService;
         private readonly IImageService imageService;
 
-        public AccountController(IAccountService accountService, IEmailService emailService, IImageService imageService )
+        public AccountController(IAccountService accountService, IEmailService emailService, IImageService imageService)
         {
             this._accountService = accountService;
             this.emailService = emailService;
@@ -205,6 +205,8 @@ namespace TripEnjoy.Presentation.Web.Controllers
             await _accountService.AddAccountAsync(account);
             return CreatedAtRoute(nameof(GetAccountById), new { id = account.UserId }, account);
         }
+
+   
 
         [HttpPut("UpgradeLevel/{UId}")]
         public async Task<IActionResult> UpdateAccountLevel(string UId)

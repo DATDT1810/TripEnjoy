@@ -14,10 +14,10 @@ namespace TripEnjoy.Infrastructure.Repositories
 	{
         private readonly ApplicationDbContext _context;
 
-        public HotelRepository(ApplicationDbContext applicationDbContext)
-        {
-            this._context = applicationDbContext;
-        }
+		public HotelRepository(ApplicationDbContext applicationDbContext)
+		{
+			this._context = applicationDbContext;
+		}
 
         public async Task<Hotel> AddHotelAsync(Hotel hotel)
         {
