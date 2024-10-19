@@ -19,12 +19,11 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
 
     <!-- Local CSS -->
-    <link rel="stylesheet" href="/css/bootstrap.min.css" />
-    <link rel="stylesheet" href="/css/site.css" asp-append-version="true" />
-    <link rel="stylesheet" href="/lib/animate/animate.min.css" />
-    <link rel="stylesheet" href="/lib/owlcarousel/assets/owl.carousel.min.css" />
-    <link rel="stylesheet" href="/lib/tempusdominus/css/tempusdominus-bootstrap-4.min.css" />
-    <link rel="stylesheet" href="/css/style.css" />
+    <link rel="stylesheet" href="~/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/lib/animate/animate.min.css" />
+    <link rel="stylesheet" href="~/lib/owlcarousel/assets/owl.carousel.min.css" />
+    <link rel="stylesheet" href="~/lib/tempusdominus/css/tempusdominus-bootstrap-4.min.css" />
+    <link rel="stylesheet" href="~/css/style.css" asp-append-version="true" />
 
     <!-- WOW.js từ CDN -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/wow/1.1.2/wow.min.js"></script>
@@ -37,8 +36,8 @@
         <div class="container-fluid bg-dark px-0 header">
             <div class="row gx-0">
                 <div class="col-lg-3 bg-dark d-none d-lg-block">
-                    <a href="#"
-                        class="navbar-brand w-100 h-100 m-0 p-0 d-flex align-items-center justify-content-center">
+                    <a href="./Index"
+                       class="navbar-brand w-100 h-100 m-0 p-0 d-flex align-items-center justify-content-center">
                         <h1 class="m-0 text-warning text-uppercase">tripenjoy</h1>
                     </a>
                 </div>
@@ -48,12 +47,12 @@
                             <h1 class="m-0 text-warning text-uppercase">tripenjoy</h1>
                         </a>
                         <button type="button" class="navbar-toggler" data-bs-toggle="collapse"
-                            data-bs-target="#navbarCollapse">
+                                data-bs-target="#navbarCollapse">
                             <span class="navbar-toggler-icon"></span>
                         </button>
                         <div class="collapse navbar-collapse justify-content-between" id="navbarCollapse">
                             <div class="navbar-nav mr-auto py-0">
-                                 <a asp-page="/Index" class="nav-link">Home</a>
+                                <a asp-page="/Index" class="nav-link">Home</a>
 
                                 <a asp-page="./About/Index" class="nav-link">About</a>
 
@@ -87,17 +86,16 @@
                                 </div>
 
                             </div>
-                            @{                           
-                                    var token = Context.Request.Cookies["accessToken"]; 
-                                    var isLoggedIn = !string.IsNullOrEmpty(token);                            
+                            @{
+                                var token = Context.Request.Cookies["accessToken"];
+                                var isLoggedIn = !string.IsNullOrEmpty(token);
                             }
                             @if (isLoggedIn)
                             {
                                 <div class="dropdown">
-                                    <button
-                                        class="btn btn-warning dropdown-toggle text-white rounded-0 py-2 px-5 w-auto d-none d-lg-block me-3"
-                                        type="button" id="dropdownMenuButton" data-bs-toggle="dropdown"
-                                        aria-expanded="false">
+                                    <button class="btn btn-warning dropdown-toggle text-white rounded-0 py-2 px-5 w-auto d-none d-lg-block me-3"
+                                            type="button" id="dropdownMenuButton" data-bs-toggle="dropdown"
+                                            aria-expanded="false">
                                         Welcome @ViewData["token"]
                                     </button>
                                     <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
@@ -113,7 +111,7 @@
                             else
                             {
                                 <a class="btn btn-warning text-white rounded-0 py-2 px-5 w-auto d-none d-lg-block me-3"
-                                    asp-page="Login">
+                                   asp-page="Login">
                                     Login <i class="fa-solid fa-right-to-bracket"></i>
                                 </a>
                             }
@@ -140,7 +138,7 @@
                                     Enjoy Your Journey
                                 </h1>
                                 <a href="#"
-                                    class="btn btn-warning text-white py-md-3 px-md-5 me-3 animated slideInLeft">
+                                   class="btn btn-warning text-white py-md-3 px-md-5 me-3 animated slideInLeft">
                                     Our Rooms
                                 </a>
                                 <a href="#" class="btn btn-light text-black py-md-3 px-md-5 animated slideInRight">
@@ -163,7 +161,7 @@
                                 </h1>
 
                                 <a href="#"
-                                    class="btn btn-warning text-white py-md-3 px-md-5 me-3 animated slideInLeft">
+                                   class="btn btn-warning text-white py-md-3 px-md-5 me-3 animated slideInLeft">
                                     Our Rooms
                                 </a>
                                 <a href="#" class="btn btn-light text-black py-md-3 px-md-5 animated slideInRight">
@@ -175,12 +173,12 @@
                     </div>
                 </div>
                 <button class="carousel-control-prev" type="button" data-bs-target="#header-carousel"
-                    data-bs-slide="prev">
+                        data-bs-slide="prev">
                     <span class="carousel-control-prev-icon" aria-hidden="true"></span>
                     <span class="visually-hidden">Previous</span>
                 </button>
                 <button class="carousel-control-next" type="button" data-bs-target="#header-carousel"
-                    data-bs-slide="next">
+                        data-bs-slide="next">
                     <span class="carousel-control-next-icon" aria-hidden="true"></span>
                     <span class="visually-hidden">Next</span>
                 </button>
@@ -196,13 +194,13 @@
                                 <div class="col-md-3">
                                     <div class="date" id="date1" data-target-input="nearest">
                                         <input type="text" class="form-control datetimepicker-input"
-                                            placeholder="Check in" data-target="#date1" data-toggle="datetimepicker" />
+                                               placeholder="Check in" data-target="#date1" data-toggle="datetimepicker" />
                                     </div>
                                 </div>
                                 <div class="col-md-3">
                                     <div class="date" id="date2" data-target-input="nearest">
                                         <input type="text" class="form-control datetimepicker-input"
-                                            placeholder="Check out" data-target="#date2" data-toggle="datetimepicker" />
+                                               placeholder="Check out" data-target="#date2" data-toggle="datetimepicker" />
                                     </div>
                                 </div>
                                 <div class="col-md-3">
@@ -242,13 +240,16 @@
                 <div class="col-lg-10 border rounded p-1">
                     <div class="border rounded text-center p-1">
                         <div class="bg-white rounded text-center p-5">
-                            <h4 class="mb-4">Subscribe Our <span class="text-primary text-uppercase">Newsletter</span>
+                            <h4 class="mb-4">
+                                Subscribe Our <span class="text-primary text-uppercase">Newsletter</span>
                             </h4>
                             <div class="position-relative mx-auto" style="max-width: 400px;">
                                 <input class="form-control w-100 py-3 ps-4 pe-5" type="text"
-                                    placeholder="Enter your email">
+                                       placeholder="Enter your email">
                                 <button type="button"
-                                    class="btn btn-primary py-2 px-3 position-absolute top-0 end-0 mt-2 me-2">Submit</button>
+                                        class="btn btn-primary py-2 px-3 position-absolute top-0 end-0 mt-2 me-2">
+                                    Submit
+                                </button>
                             </div>
                         </div>
                     </div>
@@ -271,9 +272,10 @@
                         <h6 class="section-title text-start text-primary text-uppercase mb-4">Contact</h6>
                         <p class="mb-2"><i class="fa fa-map-marker-alt me-3"></i>Nguyen Van Cu, Can Tho, Viet Nam</p>
                         <p class="mb-2"><i class="fa fa-phone-alt me-3"></i>+012 345 67890</p>
-                        <p class="mb-2"><i class="fa fa-envelope me-3"></i><a
-                                href="https://demo.htmlcodex.com/cdn-cgi/l/email-protection" class="__cf_email__"
-                                data-cfemail="90f9fef6ffd0f5e8f1fde0fcf5bef3fffd">[email&#160;protected]</a></p>
+                        <p class="mb-2">
+                            <i class="fa fa-envelope me-3"></i><a href="https://demo.htmlcodex.com/cdn-cgi/l/email-protection" class="__cf_email__"
+                                                                  data-cfemail="90f9fef6ffd0f5e8f1fde0fcf5bef3fffd">[email&#160;protected]</a>
+                        </p>
                         <div class="d-flex pt-2">
                             <a class="btn btn-outline-light btn-social" href><i class="fab fa-twitter"></i></a>
                             <a class="btn btn-outline-light btn-social" href><i class="fab fa-facebook-f"></i></a>
@@ -359,7 +361,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/rocket-loader/1.0.0/rocket-loader.min.js" data-cf-settings="your-settings-here" defer></script>
 
 
-    
+
 </body>
 
 </html>

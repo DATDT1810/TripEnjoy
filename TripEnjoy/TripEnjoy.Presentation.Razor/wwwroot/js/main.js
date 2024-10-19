@@ -67,9 +67,32 @@
         return false;
     });
 
+    $(document).ready(function () {
+    // Function to handle showing locations
+    function showLocation(location) {
+        // Hide all hotel-location sections
+        var hotelSections = document.getElementsByClassName('hotel-location');
+        for (var i = 0; i < hotelSections.length; i++) {
+            hotelSections[i].style.display = 'none';
+        }
+
+        // Show the selected hotel-location section
+        var selectedSection = document.getElementById(location + '-hotels');
+        if (selectedSection) {
+            selectedSection.style.display = 'block';
+        } else {
+            console.error('No section found for location:', location);
+        }
+    }
+
+    // Manually expose the function to global scope for onclick handlers
+    window.showLocation = showLocation;
+});
+
     // Hotel Scroll 
     $(document).ready(function () {
-        $(".room-carousel").owlCarousel({
+        // Common Owl Carousel settings
+        const owlCarouselSettings = {
             autoplay: true,
             smartSpeed: 1000,
             margin: 30,
@@ -83,14 +106,23 @@
                 0: {
                     items: 1
                 },
-                768: {
+                576: {
                     items: 2
                 },
-                992: {
+                768: {
                     items: 3
+                },
+                992: {
+                    items: 4
                 }
             }
-        });
+        };
+
+        // Initialize Owl Carousel for Vietnam Hotels
+        $(".owl-carousel.vietnam-hotels-carousel").owlCarousel(owlCarouselSettings);
+
+        // Initialize Owl Carousel for International Hotels
+        $(".owl-carousel.international-hotels-carousel").owlCarousel(owlCarouselSettings);
     });
 
 
