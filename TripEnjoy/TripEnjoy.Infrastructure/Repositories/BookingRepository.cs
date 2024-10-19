@@ -69,9 +69,9 @@ namespace TripEnjoy.Infrastructure.Repositories
             booking.VoucherId = 1;
 
             var valueDiscount = _context.Vouchers.FirstOrDefault(x => x.VoucherId == booking.VoucherId);
-            if (valueDiscount != null) {  
-                
-                booking.BookingTotalPrice -= (decimal)(1 - valueDiscount.VoucherDiscount * 100);
+            if (valueDiscount != null)
+            {
+                booking.BookingTotalPrice -= booking.BookingTotalPrice * valueDiscount.VoucherDiscount / 100;
             }
 
             // Lưu thông tin booking
@@ -96,7 +96,7 @@ namespace TripEnjoy.Infrastructure.Repositories
             //_context.Accounts.Update(hotelOwner);
             //_context.Accounts.Update(adminAccount);
 
-            await _context.SaveChangesAsync();
+            //  await _context.SaveChangesAsync();
 
             // Commit transaction nếu tất cả đều thành công
             //await transaction.CommitAsync();
@@ -136,6 +136,16 @@ namespace TripEnjoy.Infrastructure.Repositories
             _context.Bookings.Update(booking);
             await _context.SaveChangesAsync();
             return booking;
+        }
+
+        public async Task UpdateBookingAsync(Booking booking)
+        {
+            if (booking == null)
+            {
+                throw new Exception("Booking not found.");
+            }
+            _context.Bookings.Update(booking);
+            await _context.SaveChangesAsync();
         }
     }
 }

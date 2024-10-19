@@ -24,8 +24,6 @@ namespace TripEnjoy.Domain.Models
 
         public int RoomQuantity { get; set; }      // room_quantity - int
 
-      
-
         public int RoomStatusID { get; set; }        // room_status - int
 
         public decimal RoomPrice { get; set; }     // room_price - money

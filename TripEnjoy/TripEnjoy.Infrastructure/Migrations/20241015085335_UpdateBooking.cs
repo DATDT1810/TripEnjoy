@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace TripEnjoy.Infrastructure.Migrations
 {
     /// <inheritdoc />
-    public partial class MigrationEntities : Migration
+    public partial class UpdateBooking : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -48,6 +48,20 @@ namespace TripEnjoy.Infrastructure.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_AspNetUsers", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Categories",
+                columns: table => new
+                {
+                    CategoryId = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    CategoryName = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
+                    CategoryStatus = table.Column<bool>(type: "bit", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Categories", x => x.CategoryId);
                 });
 
             migrationBuilder.CreateTable(
@@ -113,39 +127,7 @@ namespace TripEnjoy.Infrastructure.Migrations
                         column: x => x.RoleId,
                         principalTable: "AspNetRoles",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Accounts",
-                columns: table => new
-                {
-                    AccountId = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    AccountUsername = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
-                    AccountPassword = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
-                    AccountRole = table.Column<int>(type: "int", nullable: false),
-                    AccountIsDeleted = table.Column<bool>(type: "bit", nullable: false),
-                    AccountBalance = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
-                    AccountUpLevel = table.Column<bool>(type: "bit", nullable: false),
-                    AccountFullname = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
-                    AccountPhone = table.Column<string>(type: "nvarchar(12)", maxLength: 12, nullable: false),
-                    AccountEmail = table.Column<string>(type: "nvarchar(255)", maxLength: 255, nullable: false),
-                    AccountAddress = table.Column<string>(type: "nvarchar(255)", maxLength: 255, nullable: false),
-                    AccountGender = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
-                    AccountDateOfBirth = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    AccountImage = table.Column<string>(type: "nvarchar(255)", maxLength: 255, nullable: false),
-                    UserId = table.Column<string>(type: "nvarchar(450)", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Accounts", x => x.AccountId);
-                    table.ForeignKey(
-                        name: "FK_Accounts_AspNetUsers_UserId",
-                        column: x => x.UserId,
-                        principalTable: "AspNetUsers",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.NoAction);
                 });
 
             migrationBuilder.CreateTable(
@@ -166,7 +148,7 @@ namespace TripEnjoy.Infrastructure.Migrations
                         column: x => x.UserId,
                         principalTable: "AspNetUsers",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.NoAction);
                 });
 
             migrationBuilder.CreateTable(
@@ -186,7 +168,7 @@ namespace TripEnjoy.Infrastructure.Migrations
                         column: x => x.UserId,
                         principalTable: "AspNetUsers",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.NoAction);
                 });
 
             migrationBuilder.CreateTable(
@@ -204,13 +186,13 @@ namespace TripEnjoy.Infrastructure.Migrations
                         column: x => x.RoleId,
                         principalTable: "AspNetRoles",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.NoAction);
                     table.ForeignKey(
                         name: "FK_AspNetUserRoles_AspNetUsers_UserId",
                         column: x => x.UserId,
                         principalTable: "AspNetUsers",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.NoAction);
                 });
 
             migrationBuilder.CreateTable(
@@ -230,7 +212,39 @@ namespace TripEnjoy.Infrastructure.Migrations
                         column: x => x.UserId,
                         principalTable: "AspNetUsers",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.NoAction);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Accounts",
+                columns: table => new
+                {
+                    AccountId = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    AccountUsername = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
+                    AccountPassword = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
+                    AccountRole = table.Column<int>(type: "int", nullable: false),
+                    AccountIsDeleted = table.Column<bool>(type: "bit", nullable: false),
+                    WalletID = table.Column<int>(type: "int", nullable: true),
+                    AccountUpLevel = table.Column<bool>(type: "bit", nullable: false),
+                    AccountFullname = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
+                    AccountPhone = table.Column<string>(type: "nvarchar(12)", maxLength: 12, nullable: false),
+                    AccountEmail = table.Column<string>(type: "nvarchar(255)", maxLength: 255, nullable: false),
+                    AccountAddress = table.Column<string>(type: "nvarchar(255)", maxLength: 255, nullable: false),
+                    AccountGender = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
+                    AccountDateOfBirth = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    AccountImage = table.Column<string>(type: "nvarchar(255)", maxLength: 255, nullable: false),
+                    UserId = table.Column<string>(type: "nvarchar(450)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Accounts", x => x.AccountId);
+                    table.ForeignKey(
+                        name: "FK_Accounts_AspNetUsers_UserId",
+                        column: x => x.UserId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.NoAction);
                 });
 
             migrationBuilder.CreateTable(
@@ -274,7 +288,8 @@ namespace TripEnjoy.Infrastructure.Migrations
                     HotelStatus = table.Column<string>(type: "nvarchar(255)", maxLength: 255, nullable: false),
                     HotelTimeStart = table.Column<DateTime>(type: "datetime2", nullable: false),
                     HotelTimeEnd = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    AccountId = table.Column<int>(type: "int", nullable: false)
+                    AccountId = table.Column<int>(type: "int", nullable: false),
+                    CategoryId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -284,7 +299,13 @@ namespace TripEnjoy.Infrastructure.Migrations
                         column: x => x.AccountId,
                         principalTable: "Accounts",
                         principalColumn: "AccountId",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.NoAction);
+                    table.ForeignKey(
+                        name: "FK_Hotels_Categories_CategoryId",
+                        column: x => x.CategoryId,
+                        principalTable: "Categories",
+                        principalColumn: "CategoryId",
+                        onDelete: ReferentialAction.NoAction);
                 });
 
             migrationBuilder.CreateTable(
@@ -305,7 +326,7 @@ namespace TripEnjoy.Infrastructure.Migrations
                         column: x => x.AccountId,
                         principalTable: "Accounts",
                         principalColumn: "AccountId",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.NoAction);
                 });
 
             migrationBuilder.CreateTable(
@@ -324,13 +345,33 @@ namespace TripEnjoy.Infrastructure.Migrations
                         column: x => x.AccountId,
                         principalTable: "Accounts",
                         principalColumn: "AccountId",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.NoAction);
                     table.ForeignKey(
                         name: "FK_VoucherUsers_Vouchers_VoucherId",
                         column: x => x.VoucherId,
                         principalTable: "Vouchers",
                         principalColumn: "VoucherId",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.NoAction);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Wallets",
+                columns: table => new
+                {
+                    WalletId = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    WalletBalance = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    AccountId = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Wallets", x => x.WalletId);
+                    table.ForeignKey(
+                        name: "FK_Wallets_Accounts_AccountId",
+                        column: x => x.AccountId,
+                        principalTable: "Accounts",
+                        principalColumn: "AccountId",
+                        onDelete: ReferentialAction.NoAction);
                 });
 
             migrationBuilder.CreateTable(
@@ -353,34 +394,13 @@ namespace TripEnjoy.Infrastructure.Migrations
                         column: x => x.SenderId,
                         principalTable: "Accounts",
                         principalColumn: "AccountId",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.NoAction);
                     table.ForeignKey(
                         name: "FK_Messages_Conversations_ConversationId",
                         column: x => x.ConversationId,
                         principalTable: "Conversations",
                         principalColumn: "ConversationId",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Categories",
-                columns: table => new
-                {
-                    CategoryId = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    CategoryName = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
-                    CategoryStatus = table.Column<bool>(type: "bit", nullable: false),
-                    HotelId = table.Column<int>(type: "int", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Categories", x => x.CategoryId);
-                    table.ForeignKey(
-                        name: "FK_Categories_Hotels_HotelId",
-                        column: x => x.HotelId,
-                        principalTable: "Hotels",
-                        principalColumn: "HotelId",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.NoAction);
                 });
 
             migrationBuilder.CreateTable(
@@ -401,7 +421,7 @@ namespace TripEnjoy.Infrastructure.Migrations
                         column: x => x.HotelId,
                         principalTable: "Hotels",
                         principalColumn: "HotelId",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.NoAction);
                 });
 
             migrationBuilder.CreateTable(
@@ -421,7 +441,7 @@ namespace TripEnjoy.Infrastructure.Migrations
                         column: x => x.HotelId,
                         principalTable: "Hotels",
                         principalColumn: "HotelId",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.NoAction);
                 });
 
             migrationBuilder.CreateTable(
@@ -446,19 +466,42 @@ namespace TripEnjoy.Infrastructure.Migrations
                         column: x => x.HotelId,
                         principalTable: "Hotels",
                         principalColumn: "HotelId",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.NoAction);
                     table.ForeignKey(
                         name: "FK_Rooms_RoomStatuses_RoomStatusID",
                         column: x => x.RoomStatusID,
                         principalTable: "RoomStatuses",
                         principalColumn: "RoomStatusId",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.NoAction);
                     table.ForeignKey(
                         name: "FK_Rooms_RoomTypes_RoomTypeId",
                         column: x => x.RoomTypeId,
                         principalTable: "RoomTypes",
                         principalColumn: "RoomTypeId",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.NoAction);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "TransactionHistories",
+                columns: table => new
+                {
+                    TransactionId = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    WalletId = table.Column<int>(type: "int", nullable: false),
+                    TransactionDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    TransactionAmount = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    TransactionType = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    TransactionDescription = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_TransactionHistories", x => x.TransactionId);
+                    table.ForeignKey(
+                        name: "FK_TransactionHistories_Wallets_WalletId",
+                        column: x => x.WalletId,
+                        principalTable: "Wallets",
+                        principalColumn: "WalletId",
+                        onDelete: ReferentialAction.NoAction);
                 });
 
             migrationBuilder.CreateTable(
@@ -471,6 +514,7 @@ namespace TripEnjoy.Infrastructure.Migrations
                     CheckinDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     CheckoutDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     BookingStatus = table.Column<string>(type: "nvarchar(10)", maxLength: 10, nullable: false),
+                    RoomQuantity = table.Column<int>(type: "int", nullable: false),
                     RoomId = table.Column<int>(type: "int", nullable: false),
                     VoucherId = table.Column<int>(type: "int", nullable: false),
                     BookingTotalPrice = table.Column<decimal>(type: "decimal(18,2)", nullable: false)
@@ -483,7 +527,7 @@ namespace TripEnjoy.Infrastructure.Migrations
                         column: x => x.AccountId,
                         principalTable: "Accounts",
                         principalColumn: "AccountId",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.NoAction);
                     table.ForeignKey(
                         name: "FK_Bookings_Rooms_RoomId",
                         column: x => x.RoomId,
@@ -494,7 +538,7 @@ namespace TripEnjoy.Infrastructure.Migrations
                         column: x => x.VoucherId,
                         principalTable: "Vouchers",
                         principalColumn: "VoucherId",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.NoAction);
                 });
 
             migrationBuilder.CreateTable(
@@ -568,7 +612,7 @@ namespace TripEnjoy.Infrastructure.Migrations
                         column: x => x.RoomId,
                         principalTable: "Rooms",
                         principalColumn: "RoomId",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.NoAction);
                 });
 
             migrationBuilder.CreateTable(
@@ -580,23 +624,35 @@ namespace TripEnjoy.Infrastructure.Migrations
                     PaymentDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     PaymentAmount = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
                     PaymentStatus = table.Column<string>(type: "nvarchar(10)", maxLength: 10, nullable: false),
-                    BookingId = table.Column<int>(type: "int", nullable: false)
+                    BookingId = table.Column<int>(type: "int", nullable: false),
+                    AccountId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Payments", x => x.PaymentId);
                     table.ForeignKey(
+                        name: "FK_Payments_Accounts_AccountId",
+                        column: x => x.AccountId,
+                        principalTable: "Accounts",
+                        principalColumn: "AccountId",
+                        onDelete: ReferentialAction.NoAction);
+                    table.ForeignKey(
                         name: "FK_Payments_Bookings_BookingId",
                         column: x => x.BookingId,
                         principalTable: "Bookings",
                         principalColumn: "BookingId",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.NoAction);
                 });
 
             migrationBuilder.CreateIndex(
                 name: "IX_Accounts_UserId",
                 table: "Accounts",
                 column: "UserId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Accounts_WalletID",
+                table: "Accounts",
+                column: "WalletID");
 
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetRoleClaims_RoleId",
@@ -653,11 +709,6 @@ namespace TripEnjoy.Infrastructure.Migrations
                 column: "VoucherId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Categories_HotelId",
-                table: "Categories",
-                column: "HotelId");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_Comments_AccountId",
                 table: "Comments",
                 column: "AccountId");
@@ -688,6 +739,11 @@ namespace TripEnjoy.Infrastructure.Migrations
                 column: "AccountId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Hotels_CategoryId",
+                table: "Hotels",
+                column: "CategoryId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_ImageHotels_HotelId",
                 table: "ImageHotels",
                 column: "HotelId");
@@ -705,6 +761,11 @@ namespace TripEnjoy.Infrastructure.Migrations
             migrationBuilder.CreateIndex(
                 name: "IX_Notifications_AccountId",
                 table: "Notifications",
+                column: "AccountId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Payments_AccountId",
+                table: "Payments",
                 column: "AccountId");
 
             migrationBuilder.CreateIndex(
@@ -743,14 +804,39 @@ namespace TripEnjoy.Infrastructure.Migrations
                 column: "RoomTypeId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_TransactionHistories_WalletId",
+                table: "TransactionHistories",
+                column: "WalletId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_VoucherUsers_AccountId",
                 table: "VoucherUsers",
                 column: "AccountId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Wallets_AccountId",
+                table: "Wallets",
+                column: "AccountId");
+
+            migrationBuilder.AddForeignKey(
+                name: "FK_Accounts_Wallets_WalletID",
+                table: "Accounts",
+                column: "WalletID",
+                principalTable: "Wallets",
+                principalColumn: "WalletId");
         }
 
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.DropForeignKey(
+                name: "FK_Accounts_AspNetUsers_UserId",
+                table: "Accounts");
+
+            migrationBuilder.DropForeignKey(
+                name: "FK_Accounts_Wallets_WalletID",
+                table: "Accounts");
+
             migrationBuilder.DropTable(
                 name: "AspNetRoleClaims");
 
@@ -765,9 +851,6 @@ namespace TripEnjoy.Infrastructure.Migrations
 
             migrationBuilder.DropTable(
                 name: "AspNetUserTokens");
-
-            migrationBuilder.DropTable(
-                name: "Categories");
 
             migrationBuilder.DropTable(
                 name: "Comments");
@@ -792,6 +875,9 @@ namespace TripEnjoy.Infrastructure.Migrations
 
             migrationBuilder.DropTable(
                 name: "RoomImages");
+
+            migrationBuilder.DropTable(
+                name: "TransactionHistories");
 
             migrationBuilder.DropTable(
                 name: "VoucherUsers");
@@ -821,10 +907,16 @@ namespace TripEnjoy.Infrastructure.Migrations
                 name: "RoomTypes");
 
             migrationBuilder.DropTable(
-                name: "Accounts");
+                name: "Categories");
 
             migrationBuilder.DropTable(
                 name: "AspNetUsers");
+
+            migrationBuilder.DropTable(
+                name: "Wallets");
+
+            migrationBuilder.DropTable(
+                name: "Accounts");
         }
     }
 }

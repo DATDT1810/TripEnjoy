@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using TripEnjoy.Application.Data;
@@ -28,6 +29,7 @@ namespace TripEnjoy.Presentation.Web.Controllers
         }
 
         [HttpGet("{id}", Name = "GetBookingById")]
+        [HttpGet("GetBookingId/{id}")]
         public async Task<IActionResult> GetBookingById(int id)
         {
             var booking = await _bookingService.GetBookingByIdAsync(id);
@@ -40,6 +42,7 @@ namespace TripEnjoy.Presentation.Web.Controllers
 
 
         [HttpPost]
+        [Route("CreateBooking")]
         public async Task<IActionResult> CreateBooking([FromBody] BookingDTO bookingDto)
         {
             if (bookingDto == null)
@@ -48,7 +51,7 @@ namespace TripEnjoy.Presentation.Web.Controllers
             }
             var booking = _mapper.Map<Booking>(bookingDto);
             await _bookingService.CreateBookingAsync(booking);
-            return CreatedAtRoute("GetBookingById", new { id = booking.BookingId }, booking);
+          return Ok(booking.BookingId);
         }
 
         [HttpPut("cancel/{accId}")]
@@ -66,5 +69,17 @@ namespace TripEnjoy.Presentation.Web.Controllers
             }
             return Ok(cancelBooking);
         }
-    }
+
+        [HttpGet]
+        [Route("CheckBookingStatus")]
+        public async Task<IActionResult> CheckBookingStatus([FromBody] int bookingId)
+		{
+			var booking = await _bookingService.GetBookingByIdAsync(bookingId);
+			if (booking == null)
+			{
+				return NotFound();
+			}
+			return Ok(booking.BookingStatus);
+		}
+	}
 }

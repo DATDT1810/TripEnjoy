@@ -36,5 +36,10 @@ namespace TripEnjoy.Application.Services.Booking
             return await _bookingRepository.CancelBookingAsync(bookingId, accId);
         }
 
+        public Task UpdateBookingAsync(Domain.Models.Booking booking)
+        {
+           _bookingRepository.UpdateBookingAsync(booking);
+            return Task.CompletedTask;
+        }
     }
 }

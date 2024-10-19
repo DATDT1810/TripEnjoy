@@ -35,7 +35,9 @@ namespace TripEnjoy.Infrastructure.Entities
         public DbSet<RoomStatus> RoomStatuses { get; set; }
         public DbSet<Voucher> Vouchers { get; set; }
         public DbSet<VoucherUser> VoucherUsers { get; set; }
-
+        public DbSet<TransactionHistory> TransactionHistories { get; set; }
+        public DbSet<Wallet> Wallets { get; set; }
+        
 
         #endregion
 
