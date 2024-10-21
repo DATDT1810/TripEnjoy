@@ -26,7 +26,7 @@ namespace TripEnjoy.Application.Services
             return accountRepository.Register(account);
         }
 
-        public Task<TokenResponseDTO> RefreshToken(string refreshToken)
+        public Task<TokenResponseDTO> RefreshToken(TokenRefreshDTO refreshToken)
         {
             return this.accountRepository.RefreshToken(refreshToken);
         }

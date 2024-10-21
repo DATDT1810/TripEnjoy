@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Newtonsoft.Json;
 using System.Text;
+using TripEnjoy.Presentation.Razor.Services;
 using TripEnjoy.Presentation.Razor.ViewModels;
 
 namespace TripEnjoy.Presentation.Razor.Pages
@@ -10,10 +11,11 @@ namespace TripEnjoy.Presentation.Razor.Pages
     public class LoginModel : PageModel
     {
         private readonly IHttpClientFactory _clientFactory;
-
-        public LoginModel(IHttpClientFactory clientFactory)
+        private readonly TokenServices _tokenServices;
+        public LoginModel(IHttpClientFactory clientFactory, TokenServices tokenServices)
         {
             this._clientFactory = clientFactory;
+            this._tokenServices = tokenServices;
         }
 
         // binding dữ liệu
@@ -41,16 +43,13 @@ namespace TripEnjoy.Presentation.Razor.Pages
                     {
                         var token = await response.Content.ReadAsStringAsync();
                         var tokenResponse = JsonConvert.DeserializeObject<TokenResponse>(token);
-                        var cookieOptions = new CookieOptions
+                        if (tokenResponse?.AccessToken == null || tokenResponse?.RefreshToken == null)
                         {
-                            HttpOnly = true,
-                            Secure = true,
-                            Expires = DateTime.UtcNow.AddMinutes(30),
-                            SameSite = SameSiteMode.Strict,
-                        };
+                            ModelState.AddModelError(string.Empty, "Invalid login attempt.");
+                            return Page();
+                        }
 
-                        Response.Cookies.Append("accessToken", tokenResponse.AccessToken, cookieOptions);
-                        Response.Cookies.Append("refreshToken", tokenResponse.RefreshToken, cookieOptions);
+                        _tokenServices.SetTokens(tokenResponse.AccessToken, tokenResponse.RefreshToken);
 
                         return RedirectToPage("/Index");
                     }

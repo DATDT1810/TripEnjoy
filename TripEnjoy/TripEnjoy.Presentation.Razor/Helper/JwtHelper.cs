@@ -30,7 +30,7 @@ namespace TripEnjoy.Presentation.Razor.Helper
                     var timeRemaining = expirationTime - DateTime.UtcNow;
 
                     // có lớn hơn 5 phút hay không
-                    return timeRemaining.TotalSeconds > timeStamp;
+                    return timeRemaining.TotalSeconds >= timeStamp;
                 }
             }
             catch (Exception ex)

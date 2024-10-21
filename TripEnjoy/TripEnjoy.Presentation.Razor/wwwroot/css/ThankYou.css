@@ -98,3 +98,9 @@ h1 {
         box-shadow: 4px 8px 40px 8px rgba(88, 146, 255, 0.2);
     }
 }
+.backHome{
+    margin-top : 30px;
+}
+.backHome a{
+    text-decoration: none;
+}

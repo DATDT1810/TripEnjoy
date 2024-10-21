@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Newtonsoft.Json;
 using System.Text.Json;
+using TripEnjoy.Presentation.Razor.Services;
 using TripEnjoy.Presentation.Razor.ViewModels;
 
 namespace TripEnjoy.Presentation.Razor.Pages
@@ -9,17 +10,19 @@ namespace TripEnjoy.Presentation.Razor.Pages
     public class IndexModel : PageModel
     {
         private readonly IHttpClientFactory _httpClientFactory;
+        private readonly TokenServices _tokenServices;
         [BindProperty(SupportsGet = true)]
         public IEnumerable<Hotel> Hotels { get; set; }
 
-        public IndexModel(IHttpClientFactory httpClientFactory)
+        public IndexModel(IHttpClientFactory httpClientFactory , TokenServices tokenServices)
         {
             _httpClientFactory = httpClientFactory;
+            _tokenServices = tokenServices;
         }
 
         public async Task<IActionResult> OnGet(string location = null)
         {
-            var token = Request.Cookies["accessToken"]; //accessToken
+            var token = _tokenServices.GetAccessToken(); //accessToken
             if (!string.IsNullOrEmpty(token))
             {
                 ViewData["token"] = "User";

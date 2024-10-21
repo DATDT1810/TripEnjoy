@@ -8,6 +8,7 @@ namespace TripEnjoy.Application.Data
 {
     public class TokenRefreshDTO
     {
-        public string refreshToken { get; set; }
+        public string? RefreshToken { get; set; }
+        public DateTime Expiration { get; set; }
     }
 }

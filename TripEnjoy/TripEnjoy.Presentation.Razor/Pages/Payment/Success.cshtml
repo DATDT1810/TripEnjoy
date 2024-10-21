@@ -1,23 +1,26 @@
-﻿@page
+﻿    @page
 @model TripEnjoy.Presentation.Razor.Pages.Payment.SuccessModel
 @{
     Layout = "";
 }
+<title>SuccessPayment - TripEnjoy</title>
+<link rel="stylesheet" href="~/css/ThankYou.css" />
 <div class=content>
     <div class="wrapper-1">
         <div class="wrapper-2">
             <h1>Thank you !</h1>
             <p>you should receive a confirmation email soon  </p>
-            <button class="go-home">
+            <div class="backHome">
+            <a asp-page="/Index" class="go-home ">
                 go home
-            </button>
+            </a>
+            </div>
         </div>
-        
+
     </div>
 </div>
 
 
 
- <link src="~/css/ThankYou.css"/>
 
 <link href="https://fonts.googleapis.com/css?family=Kaushan+Script|Source+Sans+Pro" rel="stylesheet">
