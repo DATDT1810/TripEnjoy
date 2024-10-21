@@ -22,7 +22,9 @@ namespace TripEnjoy.Domain.Models
         public int BookingId { get; set; }
         [ForeignKey("BookingId")]
         public virtual Booking Booking { get; set; }
-
+        public int AccountId { get; set; }
+        [ForeignKey("AccountId")]
+        public virtual Account Account { get; set; }
 
     }
 }

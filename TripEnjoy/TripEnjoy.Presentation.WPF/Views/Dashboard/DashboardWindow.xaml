@@ -133,7 +133,7 @@
                 </Button>
             </Grid>
             <Grid Grid.RowSpan="2" Grid.Column="1" Margin="10,20,0,0">
-                <Frame Name="_mainContent" NavigationUIVisibility="Hidden"/>
+                <Frame Content="{Binding ActivePage}" Name="_mainContent" NavigationUIVisibility="Hidden"/>
             </Grid>
         </Grid>
     </Grid>

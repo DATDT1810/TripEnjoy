@@ -67,6 +67,65 @@
         return false;
     });
 
+    $(document).ready(function () {
+    // Function to handle showing locations
+    function showLocation(location) {
+        // Hide all hotel-location sections
+        var hotelSections = document.getElementsByClassName('hotel-location');
+        for (var i = 0; i < hotelSections.length; i++) {
+            hotelSections[i].style.display = 'none';
+        }
+
+        // Show the selected hotel-location section
+        var selectedSection = document.getElementById(location + '-hotels');
+        if (selectedSection) {
+            selectedSection.style.display = 'block';
+        } else {
+            console.error('No section found for location:', location);
+        }
+    }
+
+    // Manually expose the function to global scope for onclick handlers
+    window.showLocation = showLocation;
+});
+
+    // Hotel Scroll 
+    $(document).ready(function () {
+        // Common Owl Carousel settings
+        const owlCarouselSettings = {
+            autoplay: true,
+            smartSpeed: 1000,
+            margin: 30,
+            loop: true,
+            nav: true,
+            navText: [
+                '<i class="fa fa-angle-left"></i>',
+                '<i class="fa fa-angle-right"></i>'
+            ],
+            responsive: {
+                0: {
+                    items: 1
+                },
+                576: {
+                    items: 2
+                },
+                768: {
+                    items: 3
+                },
+                992: {
+                    items: 4
+                }
+            }
+        };
+
+        // Initialize Owl Carousel for Vietnam Hotels
+        $(".owl-carousel.vietnam-hotels-carousel").owlCarousel(owlCarouselSettings);
+
+        // Initialize Owl Carousel for International Hotels
+        $(".owl-carousel.international-hotels-carousel").owlCarousel(owlCarouselSettings);
+    });
+
+
 
     // Modal Video
     $(document).ready(function () {
@@ -93,12 +152,36 @@
 
 
     // Date and time picker
-    $('.date').datetimepicker({
-        format: 'L'
+    $('#date1').datetimepicker({
+        format: 'L',
+        icons: {
+            time: 'fa fa-clock',
+            date: 'fa fa-calendar',
+            up: 'fa fa-chevron-up',
+            down: 'fa fa-chevron-down',
+            previous: 'fa fa-chevron-left',
+            next: 'fa fa-chevron-right',
+            today: 'fa fa-check',
+            clear: 'fa fa-trash',
+            close: 'fa fa-times'
+        }
     });
-    $('.time').datetimepicker({
-        format: 'LT'
+
+    $('#date2').datetimepicker({
+        format: 'L',
+        icons: {
+            time: 'fa fa-clock',
+            date: 'fa fa-calendar',
+            up: 'fa fa-chevron-up',
+            down: 'fa fa-chevron-down',
+            previous: 'fa fa-chevron-left',
+            next: 'fa fa-chevron-right',
+            today: 'fa fa-check',
+            clear: 'fa fa-trash',
+            close: 'fa fa-times'
+        }
     });
+
 
 
     // Rating

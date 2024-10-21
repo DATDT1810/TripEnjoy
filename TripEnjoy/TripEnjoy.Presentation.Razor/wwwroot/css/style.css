@@ -412,16 +412,120 @@
     transition-delay: .5s;
 }
 
-
 /*** Rooms ***/
+.rating {
+    font-weight: bold;
+}
+
+.discount-badge {
+    color: red;
+    font-weight: bold;
+}
+
+.old-price {
+    text-decoration: line-through;
+    color: grey;
+}
+
+.price {
+    font-size: 1.2rem;
+    color: #dc3545;
+}
+
+.hidden {
+    display: none;
+}
+    
+
+/*** Hotels ***/
 .room-item {
     box-shadow: 0 0 45px rgba(0, 0, 0, .08);
+    margin: 0 2px 30px 2px;
+    border-radius: 15px;
+    height: 400px;
 }
 
 .nav-pills .nav-item .active {
     border-bottom: 2px solid var(--primary);
 }
 
+.room-item .p-4 {
+   padding: 15px !important;
+}
+
+
+/* owl-prev */
+.owl-carousel .owl-nav {
+    position: absolute;
+    top: 50%;
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    transform: translateY(-50%);
+}
+
+.owl-carousel .owl-prev,
+.owl-carousel .owl-next {
+    position: absolute;
+    background-color: #ffcc00;
+    font-size: 10px;
+    color: white;
+    padding: 5px 13px;
+    cursor: pointer;
+    border: 1px solid #fff;
+    border-radius: 50%;
+    z-index: 100;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+}
+
+.owl-carousel .owl-prev {
+    left: -30px;
+    margin-top: -20px;  
+}
+
+.owl-carousel .owl-next {
+    right: -30px;
+    margin-top: -20px;
+}
+
+    .owl-carousel .owl-prev i,
+    .owl-carousel .owl-next i {
+        font-size: 24px;
+        color: #000;
+    }
+
+    .owl-carousel .owl-prev:hover,
+    .owl-carousel .owl-next:hover {
+        background-color: #ffa500;
+        color: white;
+    }
+
+
+.owl-nav .owl-prev, .owl-nav .owl-next {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    display: block;
+    background-color: #ffcc00;
+    color: #fff;
+    font-size: 24px;
+    padding: 5px 10px;
+    border-radius: 50%;
+    cursor: pointer;
+    z-index: 100;
+}
+
+.owl-nav .owl-prev {
+    left: -25px; 
+}
+
+.owl-nav .owl-next {
+    right: -25px; 
+}
+
+.owl-nav.disabled {
+    display: block !important;  
+}
 
 /*** Service ***/
 .service-item {

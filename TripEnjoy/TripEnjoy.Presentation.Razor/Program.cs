@@ -1,8 +1,18 @@
-using Microsoft.AspNetCore.Authentication.Cookies;
+﻿using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.Google;
 
 var builder = WebApplication.CreateBuilder(args);
 
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowAll",
+        builder =>
+        {
+            builder.AllowAnyOrigin()  // Cho phép tất cả các nguồn
+                   .AllowAnyMethod()  // Cho phép tất cả các phương thức (GET, POST, v.v.)
+                   .AllowAnyHeader(); // Cho phép tất cả các tiêu đề
+        });
+});
 // Add services to the container.
 builder.Services.AddRazorPages();
 builder.Services.AddHttpClient();
@@ -20,7 +30,7 @@ builder.Services.AddAuthentication(options =>
 
 
 var app = builder.Build();
-
+app.UseCors("AllowAllOrigins");
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
 {

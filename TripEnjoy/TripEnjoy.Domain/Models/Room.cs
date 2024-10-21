@@ -13,25 +13,15 @@ namespace TripEnjoy.Domain.Models
         [Key]
         [Required]
         public int RoomId { get; set; }            // room_id
-
         public int HotelId { get; set; }           // hotel_id (khóa ngoại đến bảng Hotel)
-
         [Required]
         [StringLength(255)]                        // room_title - nvarchar(255)
         public string RoomTitle { get; set; }
-
         public int RoomTypeId { get; set; }          // room_type - int
-
         public int RoomQuantity { get; set; }      // room_quantity - int
-
-      
-
         public int RoomStatusID { get; set; }        // room_status - int
-
         public decimal RoomPrice { get; set; }     // room_price - money
-
         public string? RoomDescription { get; set; }  // room_description - nvarchar(MAX)
-      
         [ForeignKey("HotelId")]
         public virtual Hotel Hotel { get; set; }
         [ForeignKey("RoomTypeId")]

@@ -220,7 +220,7 @@ namespace TripEnjoy.Infrastructure.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
-            modelBuilder.Entity("TripEnjoy.Infrastructure.Entities.Account", b =>
+            modelBuilder.Entity("TripEnjoy.Domain.Models.Account", b =>
                 {
                     b.Property<int>("AccountId")
                         .ValueGeneratedOnAdd()
@@ -232,9 +232,6 @@ namespace TripEnjoy.Infrastructure.Migrations
                         .IsRequired()
                         .HasMaxLength(255)
                         .HasColumnType("nvarchar(255)");
-
-                    b.Property<decimal>("AccountBalance")
-                        .HasColumnType("decimal(18,2)");
 
                     b.Property<DateTime>("AccountDateOfBirth")
                         .HasColumnType("datetime2");
@@ -287,14 +284,19 @@ namespace TripEnjoy.Infrastructure.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
+                    b.Property<int?>("WalletID")
+                        .HasColumnType("int");
+
                     b.HasKey("AccountId");
 
                     b.HasIndex("UserId");
 
+                    b.HasIndex("WalletID");
+
                     b.ToTable("Accounts");
                 });
 
-            modelBuilder.Entity("TripEnjoy.Infrastructure.Entities.Booking", b =>
+            modelBuilder.Entity("TripEnjoy.Domain.Models.Booking", b =>
                 {
                     b.Property<int>("BookingId")
                         .ValueGeneratedOnAdd()
@@ -322,6 +324,9 @@ namespace TripEnjoy.Infrastructure.Migrations
                     b.Property<int>("RoomId")
                         .HasColumnType("int");
 
+                    b.Property<int>("RoomQuantity")
+                        .HasColumnType("int");
+
                     b.Property<int>("VoucherId")
                         .HasColumnType("int");
 
@@ -336,7 +341,7 @@ namespace TripEnjoy.Infrastructure.Migrations
                     b.ToTable("Bookings");
                 });
 
-            modelBuilder.Entity("TripEnjoy.Infrastructure.Entities.Category", b =>
+            modelBuilder.Entity("TripEnjoy.Domain.Models.Category", b =>
                 {
                     b.Property<int>("CategoryId")
                         .ValueGeneratedOnAdd()
@@ -357,7 +362,7 @@ namespace TripEnjoy.Infrastructure.Migrations
                     b.ToTable("Categories");
                 });
 
-            modelBuilder.Entity("TripEnjoy.Infrastructure.Entities.Comment", b =>
+            modelBuilder.Entity("TripEnjoy.Domain.Models.Comment", b =>
                 {
                     b.Property<int>("CommentId")
                         .ValueGeneratedOnAdd()
@@ -395,7 +400,7 @@ namespace TripEnjoy.Infrastructure.Migrations
                     b.ToTable("Comments");
                 });
 
-            modelBuilder.Entity("TripEnjoy.Infrastructure.Entities.Conversation", b =>
+            modelBuilder.Entity("TripEnjoy.Domain.Models.Conversation", b =>
                 {
                     b.Property<int>("ConversationId")
                         .ValueGeneratedOnAdd()
@@ -421,7 +426,7 @@ namespace TripEnjoy.Infrastructure.Migrations
                     b.ToTable("Conversations");
                 });
 
-            modelBuilder.Entity("TripEnjoy.Infrastructure.Entities.Hotel", b =>
+            modelBuilder.Entity("TripEnjoy.Domain.Models.Hotel", b =>
                 {
                     b.Property<int>("HotelId")
                         .ValueGeneratedOnAdd()
@@ -477,7 +482,7 @@ namespace TripEnjoy.Infrastructure.Migrations
                     b.ToTable("Hotels");
                 });
 
-            modelBuilder.Entity("TripEnjoy.Infrastructure.Entities.HotelQuestions", b =>
+            modelBuilder.Entity("TripEnjoy.Domain.Models.HotelQuestions", b =>
                 {
                     b.Property<int>("QuestionId")
                         .ValueGeneratedOnAdd()
@@ -503,7 +508,7 @@ namespace TripEnjoy.Infrastructure.Migrations
                     b.ToTable("HotelQuestions");
                 });
 
-            modelBuilder.Entity("TripEnjoy.Infrastructure.Entities.ImageHotel", b =>
+            modelBuilder.Entity("TripEnjoy.Domain.Models.ImageHotel", b =>
                 {
                     b.Property<int>("ImageId")
                         .ValueGeneratedOnAdd()
@@ -525,7 +530,7 @@ namespace TripEnjoy.Infrastructure.Migrations
                     b.ToTable("ImageHotels");
                 });
 
-            modelBuilder.Entity("TripEnjoy.Infrastructure.Entities.Message", b =>
+            modelBuilder.Entity("TripEnjoy.Domain.Models.Message", b =>
                 {
                     b.Property<int>("MessageId")
                         .ValueGeneratedOnAdd()
@@ -558,7 +563,7 @@ namespace TripEnjoy.Infrastructure.Migrations
                     b.ToTable("Messages");
                 });
 
-            modelBuilder.Entity("TripEnjoy.Infrastructure.Entities.Notification", b =>
+            modelBuilder.Entity("TripEnjoy.Domain.Models.Notification", b =>
                 {
                     b.Property<int>("NotificationId")
                         .ValueGeneratedOnAdd()
@@ -583,13 +588,16 @@ namespace TripEnjoy.Infrastructure.Migrations
                     b.ToTable("Notifications");
                 });
 
-            modelBuilder.Entity("TripEnjoy.Infrastructure.Entities.Payment", b =>
+            modelBuilder.Entity("TripEnjoy.Domain.Models.Payment", b =>
                 {
                     b.Property<int>("PaymentId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("PaymentId"));
+
+                    b.Property<int>("AccountId")
+                        .HasColumnType("int");
 
                     b.Property<int>("BookingId")
                         .HasColumnType("int");
@@ -607,12 +615,14 @@ namespace TripEnjoy.Infrastructure.Migrations
 
                     b.HasKey("PaymentId");
 
+                    b.HasIndex("AccountId");
+
                     b.HasIndex("BookingId");
 
                     b.ToTable("Payments");
                 });
 
-            modelBuilder.Entity("TripEnjoy.Infrastructure.Entities.Rate", b =>
+            modelBuilder.Entity("TripEnjoy.Domain.Models.Rate", b =>
                 {
                     b.Property<int>("RateId")
                         .ValueGeneratedOnAdd()
@@ -641,7 +651,7 @@ namespace TripEnjoy.Infrastructure.Migrations
                     b.ToTable("Rates");
                 });
 
-            modelBuilder.Entity("TripEnjoy.Infrastructure.Entities.Room", b =>
+            modelBuilder.Entity("TripEnjoy.Domain.Models.Room", b =>
                 {
                     b.Property<int>("RoomId")
                         .ValueGeneratedOnAdd()
@@ -683,7 +693,7 @@ namespace TripEnjoy.Infrastructure.Migrations
                     b.ToTable("Rooms");
                 });
 
-            modelBuilder.Entity("TripEnjoy.Infrastructure.Entities.RoomImage", b =>
+            modelBuilder.Entity("TripEnjoy.Domain.Models.RoomImage", b =>
                 {
                     b.Property<int>("ImageId")
                         .ValueGeneratedOnAdd()
@@ -705,7 +715,7 @@ namespace TripEnjoy.Infrastructure.Migrations
                     b.ToTable("RoomImages");
                 });
 
-            modelBuilder.Entity("TripEnjoy.Infrastructure.Entities.RoomStatus", b =>
+            modelBuilder.Entity("TripEnjoy.Domain.Models.RoomStatus", b =>
                 {
                     b.Property<int>("RoomStatusId")
                         .ValueGeneratedOnAdd()
@@ -723,7 +733,7 @@ namespace TripEnjoy.Infrastructure.Migrations
                     b.ToTable("RoomStatuses");
                 });
 
-            modelBuilder.Entity("TripEnjoy.Infrastructure.Entities.RoomType", b =>
+            modelBuilder.Entity("TripEnjoy.Domain.Models.RoomType", b =>
                 {
                     b.Property<int>("RoomTypeId")
                         .ValueGeneratedOnAdd()
@@ -744,7 +754,39 @@ namespace TripEnjoy.Infrastructure.Migrations
                     b.ToTable("RoomTypes");
                 });
 
-            modelBuilder.Entity("TripEnjoy.Infrastructure.Entities.Voucher", b =>
+            modelBuilder.Entity("TripEnjoy.Domain.Models.TransactionHistory", b =>
+                {
+                    b.Property<int>("TransactionId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("TransactionId"));
+
+                    b.Property<decimal>("TransactionAmount")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<DateTime>("TransactionDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("TransactionDescription")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("TransactionType")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("WalletId")
+                        .HasColumnType("int");
+
+                    b.HasKey("TransactionId");
+
+                    b.HasIndex("WalletId");
+
+                    b.ToTable("TransactionHistories");
+                });
+
+            modelBuilder.Entity("TripEnjoy.Domain.Models.Voucher", b =>
                 {
                     b.Property<int>("VoucherId")
                         .ValueGeneratedOnAdd()
@@ -778,13 +820,13 @@ namespace TripEnjoy.Infrastructure.Migrations
                     b.ToTable("Vouchers");
                 });
 
-            modelBuilder.Entity("TripEnjoy.Infrastructure.Entities.VoucherUser", b =>
+            modelBuilder.Entity("TripEnjoy.Domain.Models.VoucherUser", b =>
                 {
                     b.Property<int>("VoucherId")
                         .HasColumnType("int")
                         .HasColumnOrder(0);
 
-                    b.Property<int>("AccountId")
+                    b.Property<int?>("AccountId")
                         .HasColumnType("int")
                         .HasColumnOrder(1);
 
@@ -797,6 +839,27 @@ namespace TripEnjoy.Infrastructure.Migrations
                     b.HasIndex("AccountId");
 
                     b.ToTable("VoucherUsers");
+                });
+
+            modelBuilder.Entity("TripEnjoy.Domain.Models.Wallet", b =>
+                {
+                    b.Property<int>("WalletId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("WalletId"));
+
+                    b.Property<int>("AccountId")
+                        .HasColumnType("int");
+
+                    b.Property<decimal>("WalletBalance")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.HasKey("WalletId");
+
+                    b.HasIndex("AccountId");
+
+                    b.ToTable("Wallets");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -850,7 +913,7 @@ namespace TripEnjoy.Infrastructure.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("TripEnjoy.Infrastructure.Entities.Account", b =>
+            modelBuilder.Entity("TripEnjoy.Domain.Models.Account", b =>
                 {
                     b.HasOne("Microsoft.AspNetCore.Identity.IdentityUser", "User")
                         .WithMany()
@@ -858,24 +921,30 @@ namespace TripEnjoy.Infrastructure.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("TripEnjoy.Domain.Models.Wallet", "Wallet")
+                        .WithMany()
+                        .HasForeignKey("WalletID");
+
                     b.Navigation("User");
+
+                    b.Navigation("Wallet");
                 });
 
-            modelBuilder.Entity("TripEnjoy.Infrastructure.Entities.Booking", b =>
+            modelBuilder.Entity("TripEnjoy.Domain.Models.Booking", b =>
                 {
-                    b.HasOne("TripEnjoy.Infrastructure.Entities.Account", "Account")
+                    b.HasOne("TripEnjoy.Domain.Models.Account", "Account")
                         .WithMany()
                         .HasForeignKey("AccountId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("TripEnjoy.Infrastructure.Entities.Room", "Room")
+                    b.HasOne("TripEnjoy.Domain.Models.Room", "Room")
                         .WithMany()
                         .HasForeignKey("RoomId")
                         .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
-                    b.HasOne("TripEnjoy.Infrastructure.Entities.Voucher", "Voucher")
+                    b.HasOne("TripEnjoy.Domain.Models.Voucher", "Voucher")
                         .WithMany()
                         .HasForeignKey("VoucherId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -888,15 +957,15 @@ namespace TripEnjoy.Infrastructure.Migrations
                     b.Navigation("Voucher");
                 });
 
-            modelBuilder.Entity("TripEnjoy.Infrastructure.Entities.Comment", b =>
+            modelBuilder.Entity("TripEnjoy.Domain.Models.Comment", b =>
                 {
-                    b.HasOne("TripEnjoy.Infrastructure.Entities.Account", "Account")
+                    b.HasOne("TripEnjoy.Domain.Models.Account", "Account")
                         .WithMany()
                         .HasForeignKey("AccountId")
                         .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
-                    b.HasOne("TripEnjoy.Infrastructure.Entities.Room", "Room")
+                    b.HasOne("TripEnjoy.Domain.Models.Room", "Room")
                         .WithMany()
                         .HasForeignKey("RoomId")
                         .OnDelete(DeleteBehavior.NoAction)
@@ -907,15 +976,15 @@ namespace TripEnjoy.Infrastructure.Migrations
                     b.Navigation("Room");
                 });
 
-            modelBuilder.Entity("TripEnjoy.Infrastructure.Entities.Conversation", b =>
+            modelBuilder.Entity("TripEnjoy.Domain.Models.Conversation", b =>
                 {
-                    b.HasOne("TripEnjoy.Infrastructure.Entities.Account", "Account1")
+                    b.HasOne("TripEnjoy.Domain.Models.Account", "Account1")
                         .WithMany()
                         .HasForeignKey("AccountId1")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.HasOne("TripEnjoy.Infrastructure.Entities.Account", "Account2")
+                    b.HasOne("TripEnjoy.Domain.Models.Account", "Account2")
                         .WithMany()
                         .HasForeignKey("AccountId2")
                         .OnDelete(DeleteBehavior.Restrict)
@@ -926,15 +995,15 @@ namespace TripEnjoy.Infrastructure.Migrations
                     b.Navigation("Account2");
                 });
 
-            modelBuilder.Entity("TripEnjoy.Infrastructure.Entities.Hotel", b =>
+            modelBuilder.Entity("TripEnjoy.Domain.Models.Hotel", b =>
                 {
-                    b.HasOne("TripEnjoy.Infrastructure.Entities.Account", "Account")
+                    b.HasOne("TripEnjoy.Domain.Models.Account", "Account")
                         .WithMany()
                         .HasForeignKey("AccountId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("TripEnjoy.Infrastructure.Entities.Category", "Category")
+                    b.HasOne("TripEnjoy.Domain.Models.Category", "Category")
                         .WithMany()
                         .HasForeignKey("CategoryId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -945,9 +1014,9 @@ namespace TripEnjoy.Infrastructure.Migrations
                     b.Navigation("Category");
                 });
 
-            modelBuilder.Entity("TripEnjoy.Infrastructure.Entities.HotelQuestions", b =>
+            modelBuilder.Entity("TripEnjoy.Domain.Models.HotelQuestions", b =>
                 {
-                    b.HasOne("TripEnjoy.Infrastructure.Entities.Hotel", "Hotel")
+                    b.HasOne("TripEnjoy.Domain.Models.Hotel", "Hotel")
                         .WithMany()
                         .HasForeignKey("HotelId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -956,9 +1025,9 @@ namespace TripEnjoy.Infrastructure.Migrations
                     b.Navigation("Hotel");
                 });
 
-            modelBuilder.Entity("TripEnjoy.Infrastructure.Entities.ImageHotel", b =>
+            modelBuilder.Entity("TripEnjoy.Domain.Models.ImageHotel", b =>
                 {
-                    b.HasOne("TripEnjoy.Infrastructure.Entities.Hotel", "Hotel")
+                    b.HasOne("TripEnjoy.Domain.Models.Hotel", "Hotel")
                         .WithMany()
                         .HasForeignKey("HotelId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -967,15 +1036,15 @@ namespace TripEnjoy.Infrastructure.Migrations
                     b.Navigation("Hotel");
                 });
 
-            modelBuilder.Entity("TripEnjoy.Infrastructure.Entities.Message", b =>
+            modelBuilder.Entity("TripEnjoy.Domain.Models.Message", b =>
                 {
-                    b.HasOne("TripEnjoy.Infrastructure.Entities.Conversation", "Conversation")
+                    b.HasOne("TripEnjoy.Domain.Models.Conversation", "Conversation")
                         .WithMany()
                         .HasForeignKey("ConversationId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("TripEnjoy.Infrastructure.Entities.Account", "Account")
+                    b.HasOne("TripEnjoy.Domain.Models.Account", "Account")
                         .WithMany()
                         .HasForeignKey("SenderId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -986,9 +1055,9 @@ namespace TripEnjoy.Infrastructure.Migrations
                     b.Navigation("Conversation");
                 });
 
-            modelBuilder.Entity("TripEnjoy.Infrastructure.Entities.Notification", b =>
+            modelBuilder.Entity("TripEnjoy.Domain.Models.Notification", b =>
                 {
-                    b.HasOne("TripEnjoy.Infrastructure.Entities.Account", "Account")
+                    b.HasOne("TripEnjoy.Domain.Models.Account", "Account")
                         .WithMany()
                         .HasForeignKey("AccountId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -997,26 +1066,34 @@ namespace TripEnjoy.Infrastructure.Migrations
                     b.Navigation("Account");
                 });
 
-            modelBuilder.Entity("TripEnjoy.Infrastructure.Entities.Payment", b =>
+            modelBuilder.Entity("TripEnjoy.Domain.Models.Payment", b =>
                 {
-                    b.HasOne("TripEnjoy.Infrastructure.Entities.Booking", "Booking")
+                    b.HasOne("TripEnjoy.Domain.Models.Account", "Account")
+                        .WithMany()
+                        .HasForeignKey("AccountId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("TripEnjoy.Domain.Models.Booking", "Booking")
                         .WithMany()
                         .HasForeignKey("BookingId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.Navigation("Account");
+
                     b.Navigation("Booking");
                 });
 
-            modelBuilder.Entity("TripEnjoy.Infrastructure.Entities.Rate", b =>
+            modelBuilder.Entity("TripEnjoy.Domain.Models.Rate", b =>
                 {
-                    b.HasOne("TripEnjoy.Infrastructure.Entities.Account", "Account")
+                    b.HasOne("TripEnjoy.Domain.Models.Account", "Account")
                         .WithMany()
                         .HasForeignKey("AccountId")
                         .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
-                    b.HasOne("TripEnjoy.Infrastructure.Entities.Room", "Room")
+                    b.HasOne("TripEnjoy.Domain.Models.Room", "Room")
                         .WithMany()
                         .HasForeignKey("RoomId")
                         .OnDelete(DeleteBehavior.NoAction)
@@ -1027,21 +1104,21 @@ namespace TripEnjoy.Infrastructure.Migrations
                     b.Navigation("Room");
                 });
 
-            modelBuilder.Entity("TripEnjoy.Infrastructure.Entities.Room", b =>
+            modelBuilder.Entity("TripEnjoy.Domain.Models.Room", b =>
                 {
-                    b.HasOne("TripEnjoy.Infrastructure.Entities.Hotel", "Hotel")
+                    b.HasOne("TripEnjoy.Domain.Models.Hotel", "Hotel")
                         .WithMany()
                         .HasForeignKey("HotelId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("TripEnjoy.Infrastructure.Entities.RoomStatus", "RoomStatus")
+                    b.HasOne("TripEnjoy.Domain.Models.RoomStatus", "RoomStatus")
                         .WithMany()
                         .HasForeignKey("RoomStatusID")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("TripEnjoy.Infrastructure.Entities.RoomType", "RoomType")
+                    b.HasOne("TripEnjoy.Domain.Models.RoomType", "RoomType")
                         .WithMany()
                         .HasForeignKey("RoomTypeId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -1054,9 +1131,9 @@ namespace TripEnjoy.Infrastructure.Migrations
                     b.Navigation("RoomType");
                 });
 
-            modelBuilder.Entity("TripEnjoy.Infrastructure.Entities.RoomImage", b =>
+            modelBuilder.Entity("TripEnjoy.Domain.Models.RoomImage", b =>
                 {
-                    b.HasOne("TripEnjoy.Infrastructure.Entities.Room", "Room")
+                    b.HasOne("TripEnjoy.Domain.Models.Room", "Room")
                         .WithMany()
                         .HasForeignKey("RoomId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -1065,15 +1142,26 @@ namespace TripEnjoy.Infrastructure.Migrations
                     b.Navigation("Room");
                 });
 
-            modelBuilder.Entity("TripEnjoy.Infrastructure.Entities.VoucherUser", b =>
+            modelBuilder.Entity("TripEnjoy.Domain.Models.TransactionHistory", b =>
                 {
-                    b.HasOne("TripEnjoy.Infrastructure.Entities.Account", "Account")
+                    b.HasOne("TripEnjoy.Domain.Models.Wallet", "Wallet")
+                        .WithMany()
+                        .HasForeignKey("WalletId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Wallet");
+                });
+
+            modelBuilder.Entity("TripEnjoy.Domain.Models.VoucherUser", b =>
+                {
+                    b.HasOne("TripEnjoy.Domain.Models.Account", "Account")
                         .WithMany()
                         .HasForeignKey("AccountId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("TripEnjoy.Infrastructure.Entities.Voucher", "Voucher")
+                    b.HasOne("TripEnjoy.Domain.Models.Voucher", "Voucher")
                         .WithMany()
                         .HasForeignKey("VoucherId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -1082,6 +1170,17 @@ namespace TripEnjoy.Infrastructure.Migrations
                     b.Navigation("Account");
 
                     b.Navigation("Voucher");
+                });
+
+            modelBuilder.Entity("TripEnjoy.Domain.Models.Wallet", b =>
+                {
+                    b.HasOne("TripEnjoy.Domain.Models.Account", "Account")
+                        .WithMany()
+                        .HasForeignKey("AccountId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Account");
                 });
 #pragma warning restore 612, 618
         }

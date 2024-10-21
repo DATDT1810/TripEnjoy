@@ -16,7 +16,7 @@ namespace TripEnjoy.Domain.Models
 
         [Key]
         [Column(Order = 1)]
-        public int AccountId { get; set; }
+        public int? AccountId { get; set; }
 
         public string VoucherStatus { get; set; }
 
