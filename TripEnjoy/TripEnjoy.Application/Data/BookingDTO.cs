@@ -13,6 +13,6 @@ namespace TripEnjoy.Application.Data
         public int RoomQuantity { get; set; }
         public DateTime CheckinDate { get; set; }
         public DateTime CheckoutDate { get; set; }
-        public decimal BookingTotalPrice { get; set; }
+     
     }
 }

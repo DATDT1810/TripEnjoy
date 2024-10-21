@@ -24,7 +24,7 @@ namespace TripEnjoy.Application.Helper
             {
                 _requestData.Add(key, value);
             }
-        }
+        }   
 
         public void AddResponseData(string key, string value)
         {

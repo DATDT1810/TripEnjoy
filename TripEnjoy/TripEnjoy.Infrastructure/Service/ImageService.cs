@@ -43,7 +43,6 @@ namespace TripEnjoy.Infrastructure.Service
                     PublicId = $"user/{email}"
                 };
                 uploadResult = await cloudinary.UploadAsync(uploadParams);
-
             }
             return uploadResult;
         }

@@ -20,7 +20,7 @@ namespace TripEnjoy.Presentation.Razor.Pages
             _httpClientFactory = httpClientFactory;
         }
 
-        public async Task<IActionResult> OnGetAsync()
+        public async Task<IActionResult> OnGet(string location = null)
         {
             // Call API to get the list of hotels
             var client = _httpClientFactory.CreateClient();
