@@ -9,6 +9,7 @@ using System.Windows;
 using System.Windows.Input;
 using TripEnjoy.Presentation.WPF.Views.Activity;
 using TripEnjoy.Presentation.WPF.Views.HotelManagement;
+using TripEnjoy.Presentation.WPF.Helper;
 
 namespace TripEnjoy.Presentation.WPF.ViewModels
 {
@@ -21,21 +22,25 @@ namespace TripEnjoy.Presentation.WPF.ViewModels
         public ICommand loadedWindowCommand { get; set; }
         public ICommand HotelManagementPageCommand { get; set; }
         public ICommand ActivityPageCommand { get; set; }
-        public DashboardViewModel()
+
+		private Page _activePage;
+		public Page ActivePage
+		{
+			get { return _activePage; }
+			set
+			{
+				_activePage = value;
+				OnPropertyChanged();
+			}
+		}
+
+		public DashboardViewModel()
         {
             loadedWindowCommand = new RelayCommand<Frame>((p) => { return true; }, (p) =>
             {
-                if (p != null)
-                {
-                    Debug.WriteLine("Frame is not null");
-                    p.Content = new ActivityPage();
-                }
-                else
-                {
-                    MessageBox.Show("Frame is null");
-                    Debug.WriteLine("Frame is null");
-                }
-            });
+				ActivePage = new ActivityPage();
+                
+			});
             CloseWindowCommand = new RelayCommand<UserControl>((p) => { return p == null ? false : true; }, (p) =>
             {
                 FrameworkElement window = GetWindowParent(p);
@@ -81,7 +86,7 @@ namespace TripEnjoy.Presentation.WPF.ViewModels
             });
 
             mouseMoveWindowCommand = new RelayCommand<UserControl>((p) => { return p == null ? false : true; }, (p) =>
-            {
+			{
                 FrameworkElement window = GetWindowParent(p);
                 var w = window as Window;
                 if (w != null)
@@ -92,30 +97,12 @@ namespace TripEnjoy.Presentation.WPF.ViewModels
 
             HotelManagementPageCommand = new RelayCommand<Frame>((p) => { return true; }, (p) =>
             {
-                if (p != null)
-                {
-                    Debug.WriteLine("Frame is not null");
-                    p.Content = new HotelManagementPage();
-                }
-                else
-                {
-                    MessageBox.Show("Frame is null");
-                    Debug.WriteLine("Frame is null");
-                }
-            });
+				ActivePage = new HotelManagementPage();
+			});
             ActivityPageCommand = new RelayCommand<Frame>((p) => { return true; }, (p) =>
             {
-                if (p != null)
-                {
-                    Debug.WriteLine("Frame is not null");
-                    p.Content = new ActivityPage();
-                }
-                else
-                {
-                    MessageBox.Show("Frame is null");
-                    Debug.WriteLine("Frame is null");
-                }
-            });
+				ActivePage = new ActivityPage();
+			});
         }
         FrameworkElement GetWindowParent(UserControl u)
         {

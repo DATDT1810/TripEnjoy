@@ -50,6 +50,7 @@ namespace TripEnjoy.Application.Services.ImageCloud
             {
                 return null;
             }
+
             var idWithVersion = imageUrl.Substring(uploadIndex + "/upload/".Length);
 
             var idWithoutExtension = idWithVersion.Split(new char[] { '/' })[1];
