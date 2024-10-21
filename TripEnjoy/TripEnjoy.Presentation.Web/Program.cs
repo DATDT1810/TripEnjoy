@@ -10,6 +10,7 @@ using TripEnjoy.Application.Interface.Booking_Room;
 using TripEnjoy.Application.Interface.Category;
 using TripEnjoy.Application.Interface.EmailService;
 using TripEnjoy.Application.Interface.Hotel;
+using TripEnjoy.Application.Interface.HotelImage;
 using TripEnjoy.Application.Interface.ImageCloud;
 using TripEnjoy.Application.Interface.ImageHotel;
 using TripEnjoy.Application.Interface.Payment;
@@ -21,6 +22,7 @@ using TripEnjoy.Application.Services;
 using TripEnjoy.Application.Services.Booking;
 using TripEnjoy.Application.Services.Category;
 using TripEnjoy.Application.Services.Email;
+using TripEnjoy.Application.Services.HotelImage;
 using TripEnjoy.Application.Services.ImageCloud;
 using TripEnjoy.Application.Services.ImageHotel;
 using TripEnjoy.Application.Services.Payment;
@@ -102,6 +104,10 @@ builder.Services.AddScoped<IRoomTypeService, RoomTypeService>();
 
 builder.Services.AddScoped<IRoomImageRepository, RoomImageRepository>();
 builder.Services.AddScoped<IRoomImageService, RoomImageService>();
+
+builder.Services.AddScoped<IHotelImageRepository, HotelImageRepository>();
+builder.Services.AddScoped<IHotelImageService, HotelImageService>();
+
 
 // Add services to the container.
 builder.Services.AddIdentity<IdentityUser, IdentityRole>(options => 
