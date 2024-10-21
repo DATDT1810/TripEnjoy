@@ -41,7 +41,7 @@ namespace TripEnjoy.Presentation.WPF.ViewModels
             remove { CommandManager.RequerySuggested -= value; }
         }
 
-        public bool CanExecute(object parameter)
+        public bool CanExecute(object? parameter)
         {
             try
             {
