@@ -17,7 +17,7 @@ namespace TripEnjoy.Infrastructure.DbContextFactory
             var basePath = Directory.GetCurrentDirectory();
             var configuration = new ConfigurationBuilder()
                 .SetBasePath(basePath)
-                .AddJsonFile(@"D:\FA24\PRN221\PRN221_Project\TripEnjoy\TripEnjoy\TripEnjoy.Presentation.Web\appsettings.json") // Đường dẫn đến appsettings.json
+                .AddJsonFile(@"E:\FPT\00_Ky_7\PRN221\TripEnjoy\TripEnjoy\TripEnjoy.Presentation.Web\appsettings.json") // Đường dẫn đến appsettings.json
                 .Build();
 
             var optionsBuilder = new DbContextOptionsBuilder<ApplicationDbContext>();
