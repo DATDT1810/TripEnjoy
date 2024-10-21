@@ -15,6 +15,7 @@ namespace TripEnjoy.Application.Services.ImageCloud
         private readonly IAccountRepository accountRepository;
         public ImageManagementServices(IImageService imageService, IAccountRepository accountRepository)
         {
+
             this.imageService = imageService;
             this.accountRepository = accountRepository;
         }
@@ -57,5 +58,6 @@ namespace TripEnjoy.Application.Services.ImageCloud
 
             return id;
         }
+
     }
 }

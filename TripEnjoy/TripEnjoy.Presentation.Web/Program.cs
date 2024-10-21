@@ -16,7 +16,6 @@ using TripEnjoy.Application.Interface.Payment;
 using TripEnjoy.Application.Interface.Room;
 using TripEnjoy.Application.Interface.RoomImage;
 using TripEnjoy.Application.Interface.RoomType;
-
 using TripEnjoy.Application.Interface.User;
 using TripEnjoy.Application.Services;
 using TripEnjoy.Application.Services.Booking;
@@ -65,8 +64,10 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
 builder.Services.Configure<CloudinarySetting>(builder.Configuration.GetSection("CloudinarySettings"));
 builder.Services.AddScoped<IImageService, ImageService>();
 builder.Services.AddScoped<ImageManagementServices>();
+
 builder.Services.AddScoped<IImageHotelManagementService, ImageHotelManagementService>();
 builder.Services.AddScoped<ImageManagementHotelServices>();
+
 // cấu hình smtp cho email
 builder.Services.Configure<MailSetting>(builder.Configuration.GetSection("EmailSettings"));
 // cấu hình auto mapper
@@ -101,7 +102,6 @@ builder.Services.AddScoped<IRoomTypeService, RoomTypeService>();
 
 builder.Services.AddScoped<IRoomImageRepository, RoomImageRepository>();
 builder.Services.AddScoped<IRoomImageService, RoomImageService>();
-
 
 // Add services to the container.
 builder.Services.AddIdentity<IdentityUser, IdentityRole>(options => 
