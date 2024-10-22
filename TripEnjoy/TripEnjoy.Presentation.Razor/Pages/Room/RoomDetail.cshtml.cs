@@ -27,7 +27,7 @@ namespace TripEnjoy.Presentation.Razor.Pages.Room
                 return NotFound();
             }
 
-            var client = _httpClientFactory.CreateClient();
+            var client = _httpClientFactory.CreateClient("DefaultClient");
             var response = await client.GetAsync($"https://localhost:7126/api/Room/{id}");
             if (response.IsSuccessStatusCode)
             {

@@ -1,25 +1,26 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using System.Net.Http.Headers;
+using TripEnjoy.Presentation.Razor.Services;
 
 namespace TripEnjoy.Presentation.Razor.Pages
 {
     public class LogoutModel : PageModel
     {
         private readonly IHttpClientFactory httpClientFactory;
+        private readonly TokenServices tokenServices;
 
-        public LogoutModel(IHttpClientFactory httpClientFactory)
+        public LogoutModel(IHttpClientFactory httpClientFactory, TokenServices tokenServices)
         {
             this.httpClientFactory = httpClientFactory;
+            this.tokenServices = tokenServices;
         }
         public async Task<IActionResult> OnGet()
         {
-            var accessToken = Request.Cookies["accessToken"];
-            if (accessToken != null)
-            {
+ 
                 var request = new HttpRequestMessage(HttpMethod.Post, "https://localhost:7126/api/Account/Logout");
-                request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
-                var client = httpClientFactory.CreateClient();
+               
+                var client = httpClientFactory.CreateClient("DefaultClient");
                 client.Timeout = TimeSpan.FromMinutes(2);
                 try
                 {
@@ -44,8 +45,7 @@ namespace TripEnjoy.Presentation.Razor.Pages
                     ModelState.AddModelError(string.Empty, ex.Message);
                     return RedirectToPage("Index");
                 }
-            }
-            return RedirectToPage("Index");
+           
         }
     }
 }

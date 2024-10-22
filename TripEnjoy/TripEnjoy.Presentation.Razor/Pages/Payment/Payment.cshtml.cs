@@ -18,7 +18,7 @@ namespace TripEnjoy.Presentation.Razor.Pages.Payment
             BookingId = Convert.ToInt32(Request.Query["bookingId"]);
             var request = new HttpRequestMessage(HttpMethod.Post, "https://localhost:7126/api/Payment/CreatePaymentUrl");
             request.Content = new StringContent(JsonConvert.SerializeObject(BookingId), Encoding.UTF8, "application/json");
-            var client = httpClient.CreateClient();
+            var client = httpClient.CreateClient("DefaultClient");
             client.Timeout = TimeSpan.FromMinutes(2);
             var response = await client.SendAsync(request);
             if (response.IsSuccessStatusCode)

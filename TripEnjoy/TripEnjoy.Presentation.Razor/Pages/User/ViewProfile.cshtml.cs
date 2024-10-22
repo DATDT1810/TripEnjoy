@@ -22,14 +22,8 @@ namespace TripEnjoy.Presentation.Razor.Pages.User
 
         public async Task<IActionResult> OnGetAsync()
         {
-            var token = Request.Cookies["accessToken"];
-            if (token == null)
-            {
-                return RedirectToPage("/Login");
-            }
-            var request = new HttpRequestMessage(HttpMethod.Get, "https://localhost:7126/api/User/GetUserProfile");
-            request.Headers.Add("Authorization", "Bearer " + token);
-            var client = httpClientFactory.CreateClient();
+            var request = new HttpRequestMessage(HttpMethod.Get, "https://localhost:7126/api/User/GetUserProfile");        
+            var client = httpClientFactory.CreateClient("DefaultClient");
             client.Timeout = TimeSpan.FromMinutes(2);
             var response = await client.SendAsync(request);
             if (response.IsSuccessStatusCode)
@@ -53,16 +47,10 @@ namespace TripEnjoy.Presentation.Razor.Pages.User
         {
 
             if (ModelState.IsValid)
-            {
-                var token = Request.Cookies["accessToken"];
-                if (token == null)
-                {
-                    return RedirectToPage("/Login");
-                }
+            {            
                 var request = new HttpRequestMessage(HttpMethod.Post, "https://localhost:7126/api/User/UpdateUserProfile");
-                request.Headers.Add("Authorization", "Bearer " + token);
                 request.Content = new StringContent(JsonConvert.SerializeObject(UserProfile), Encoding.UTF8, "application/json");
-                var client = httpClientFactory.CreateClient();
+                var client = httpClientFactory.CreateClient("DefaultClient");
                 client.Timeout = TimeSpan.FromMinutes(2);
                 var response = await client.SendAsync(request);
                 if (response.IsSuccessStatusCode)
@@ -88,12 +76,7 @@ namespace TripEnjoy.Presentation.Razor.Pages.User
                 ViewData["message"] = "No file uploaded.";
                 return Page();
             }
-            var token = Request.Cookies["accessToken"];
-            if (token == null)
-            {
-                return RedirectToPage("/Login");
-            }
-            using (var client = httpClientFactory.CreateClient())
+            using (var client = httpClientFactory.CreateClient("DefaultClient"))
             {
                 client.Timeout = TimeSpan.FromMinutes(2);
                 // Tạo đối tượng MultipartFormDataContent để chứa các tệp tin
@@ -109,9 +92,7 @@ namespace TripEnjoy.Presentation.Razor.Pages.User
                             form.Add(fileContent, "files", file.FileName); // Thêm tệp vào form
                         }
                     }
-
-                    // Thêm header xác thực vào yêu cầu
-                    client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+                 
 
                     // Gửi yêu cầu POST đến API
                     var response = await client.PostAsync("https://localhost:7126/api/User/UploadImageProfile", form);

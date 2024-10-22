@@ -5,8 +5,11 @@ namespace TripEnjoy.Presentation.Razor.Pages.Home
 {
     public class _404Model : PageModel
     {
-        public void OnGet()
+        public IActionResult OnGet()
         {
+            var temp = Request.Query["message"];
+            ViewData["message"] = temp;
+            return Page();
         }
     }
 }

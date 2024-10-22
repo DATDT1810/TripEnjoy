@@ -28,6 +28,8 @@ namespace TripEnjoy.Infrastructure.Helper
             CreateMap<Account, UserProfile>().ReverseMap();
             // Mapping Room
             CreateMap<Room, RoomDTO>().ReverseMap();
+            // mapping Transaction
+            CreateMap<TransactionHistory, TransactionDTO>().ReverseMap();
         }
     }
 }
