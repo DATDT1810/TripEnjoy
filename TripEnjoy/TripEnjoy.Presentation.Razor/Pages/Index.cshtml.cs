@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Newtonsoft.Json;
 using System.Text.Json;
@@ -12,8 +12,10 @@ namespace TripEnjoy.Presentation.Razor.Pages
         private readonly IHttpClientFactory _httpClientFactory;
         private readonly TokenServices _tokenServices;
         [BindProperty(SupportsGet = true)]
-        public IEnumerable<Hotel> Hotels { get; set; }
+        public IEnumerable<Hotel> Hotels { get; set; }   
 
+        [BindProperty(SupportsGet = true)]
+        public IEnumerable<HotelImages> HotelImages { get; set; }
         public IndexModel(IHttpClientFactory httpClientFactory , TokenServices tokenServices)
         {
             _httpClientFactory = httpClientFactory;
@@ -34,13 +36,17 @@ namespace TripEnjoy.Presentation.Razor.Pages
             if (response.IsSuccessStatusCode)
             {
                 string data = await response.Content.ReadAsStringAsync();
-                var option = new JsonSerializerOptions { PropertyNameCaseInsensitive = true };
                 Hotels = JsonConvert.DeserializeObject<List<Hotel>>(data);
             }
-            else
+
+            // Call API to get all hotel images
+            var imagesResponse = await client.GetAsync("https://localhost:7126/api/HotelImage");
+            if (imagesResponse.IsSuccessStatusCode)
             {
-                Hotels = new List<Hotel>();
+                string imagesData = await imagesResponse.Content.ReadAsStringAsync();
+                HotelImages = JsonConvert.DeserializeObject<List<HotelImages>>(imagesData);
             }
+
             return Page();
         }
     }
