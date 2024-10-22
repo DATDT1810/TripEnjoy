@@ -3,15 +3,15 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace TripEnjoy.Presentation.Razor.Pages.Payment
 {
-	public class SuccessModel : PageModel
-	{
-		[BindProperty(SupportsGet = true)]
-		public int BookingId { get; set; }
+    public class SuccessModel : PageModel
+    {
+      
 
-		public IActionResult OnGet()
-		{
-			BookingId = Convert.ToInt32(Request.Query["bookingId"]);
-			return Page();
-		}
-	}
+        public IActionResult OnGet()
+        {
+            var temp = Request.Query["message"];
+            ViewData["message"] = temp;
+            return Page();
+        }
+    }
 }

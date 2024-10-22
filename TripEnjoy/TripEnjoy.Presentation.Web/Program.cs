@@ -16,7 +16,9 @@ using TripEnjoy.Application.Interface.Payment;
 using TripEnjoy.Application.Interface.Room;
 using TripEnjoy.Application.Interface.RoomImage;
 using TripEnjoy.Application.Interface.RoomType;
+using TripEnjoy.Application.Interface.TransactionHistories;
 using TripEnjoy.Application.Interface.User;
+using TripEnjoy.Application.Interface.Wallet;
 using TripEnjoy.Application.Services;
 using TripEnjoy.Application.Services.Booking;
 using TripEnjoy.Application.Services.Category;
@@ -102,6 +104,9 @@ builder.Services.AddScoped<IRoomTypeService, RoomTypeService>();
 
 builder.Services.AddScoped<IRoomImageRepository, RoomImageRepository>();
 builder.Services.AddScoped<IRoomImageService, RoomImageService>();
+
+builder.Services.AddScoped<IWalletRepository, WalletRepository>();
+builder.Services.AddScoped<ITransactionHistoryRepository, TransactionHistoryRepository>();
 
 // Add services to the container.
 builder.Services.AddIdentity<IdentityUser, IdentityRole>(options => 

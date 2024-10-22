@@ -1,4 +1,4 @@
-﻿    @page
+﻿@page
 @model TripEnjoy.Presentation.Razor.Pages.Payment.SuccessModel
 @{
     Layout = "";
@@ -20,7 +20,10 @@
     </div>
 </div>
 
-
-
-
 <link href="https://fonts.googleapis.com/css?family=Kaushan+Script|Source+Sans+Pro" rel="stylesheet">
+<script>
+    if(@TempData["message"] != null)
+    {
+        alert(@TempData["message"]);
+    })
+</script>

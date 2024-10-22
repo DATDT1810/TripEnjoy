@@ -4,9 +4,6 @@ using System.Text.Json;
 namespace TripEnjoy.Presentation.Razor.Helper
 {
 
-    /* 
-     *  Quản lý thời gian sống của token
-     */
     public class JwtHelper
     {
         private const int timeStamp = 300; // 5 phút
@@ -16,31 +13,27 @@ namespace TripEnjoy.Presentation.Razor.Helper
             {
                 throw new ArgumentException("Token cannot be null or empty.", nameof(token));
             }
-
             try
             {
-             
                 var payload = JWT.Payload(token);
                 var tokenData = JsonSerializer.Deserialize<JwtPayload>(payload);
 
                 if (tokenData != null)
                 {
-                   
                     var expirationTime = DateTimeOffset.FromUnixTimeSeconds(tokenData.exp).DateTime;
                     var timeRemaining = expirationTime - DateTime.UtcNow;
 
-                    // có lớn hơn 5 phút hay không
-                    return timeRemaining.TotalSeconds >= timeStamp;
+                    return timeRemaining.TotalSeconds <= timeStamp;
                 }
             }
             catch (Exception ex)
             {
-               
                 throw new InvalidOperationException("Error processing token.", ex);
             }
 
             return true; 
         }
+
     }
     public class JwtPayload
     {

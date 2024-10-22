@@ -60,6 +60,10 @@ namespace TripEnjoy.Presentation.Razor.Services
 
         public async Task<TokenResponse> RefreshToken(RefreshToken refreshToken)
         {
+            if(refreshToken == null)
+            {
+                throw new Exception("Refresh token is null");
+            }
             var request = new HttpRequestMessage(HttpMethod.Post, "https://localhost:7126/api/Account/RefreshToken");
             request.Content = new StringContent(JsonConvert.SerializeObject(new { refreshToken }), Encoding.UTF8, "application/json");
             var client = httpClientFactory.CreateClient();

@@ -29,9 +29,12 @@ namespace TripEnjoy.Infrastructure.Repositories
                 throw new ArgumentNullException("transaction");
             }
             var transactionHistory = _mapper.Map<TransactionHistory>(transaction);
+            transactionHistory.TransactionAmount = transaction.Amount;
+            transactionHistory.TransactionDescription = transaction.Description; 
             transactionHistory.TransactionType = transaction.IsCredit ?
      $"+{transaction.Amount}đ" :
      $"-{transaction.Amount}đ";
+            
             await _context.TransactionHistories.AddAsync(transactionHistory);
             await _context.SaveChangesAsync();
 

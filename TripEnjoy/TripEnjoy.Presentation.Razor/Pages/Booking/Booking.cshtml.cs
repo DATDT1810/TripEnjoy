@@ -30,7 +30,7 @@ namespace TripEnjoy.Presentation.Razor.Pages.Booking
     };
             var request = new HttpRequestMessage(HttpMethod.Post, "https://localhost:7126/api/Booking/CreateBooking");
             request.Content = new StringContent(JsonConvert.SerializeObject(bookingViewModel), Encoding.UTF8, "application/json");
-            var client = httpClient.CreateClient();
+            var client = httpClient.CreateClient("DefaultClient");
             client.Timeout = TimeSpan.FromMinutes(2);
             var response = await client.SendAsync(request);
             if (response.IsSuccessStatusCode)

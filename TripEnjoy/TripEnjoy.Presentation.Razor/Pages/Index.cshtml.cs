@@ -28,7 +28,8 @@ namespace TripEnjoy.Presentation.Razor.Pages
                 ViewData["token"] = "User";
             }
             // Call API to get the list of hotels
-            var client = _httpClientFactory.CreateClient();
+            var client = _httpClientFactory.CreateClient("DefaultClient");
+            client.Timeout = TimeSpan.FromMinutes(2);
             var response = await client.GetAsync("https://localhost:7126/api/Hotel");
             if (response.IsSuccessStatusCode)
             {
