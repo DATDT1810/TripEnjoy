@@ -1,10 +1,279 @@
 ﻿@page
 @model TripEnjoy.Presentation.Razor.Pages.Booking.BookingModel
 @{
+    ViewData["Title"] = "Booking";
 }
 
-<form method="post">
-  
-    <button type="submit">Thanh toán</button>
-</form>
+<div class="container-xxl py-4">
+    <div class="container">
+        <!-- Booking steps section -->
+        <div class="text-center wow fadeInUp" data-wow-delay="0.1s">
+            <div class="stepper">
+                <div class="step active">
+                    <div class="circle">1</div>
+                    <p>Customer Information</p>
+                </div>
+                <div class="line"></div>
+                <div class="step">
+                    <div class="circle">2</div>
+                    <p>Payment Details</p>
+                </div>
+                <div class="line"></div>
+                <div class="step">
+                    <div class="circle">3</div>
+                    <p>Booking Confirmed!</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Main Booking and Hotel Info Section -->
+        <div class="row g-5">
+            <!-- Left side: Hotel and Room information -->
+            <div class="col-lg-5">
+                <div class="wow fadeInUp border-1" data-wow-delay="0.2s">
+                    @if (Model.Hotel != null)
+                    {
+                        var hotel = Model.Hotel;
+                        <div class="card mb-3">
+                            <div class="card-body">
+                                
+                                <h5 class="card-title">@hotel.HotelName</h5>
+                                <p class="card-text">
+                                    <i class="fas fa-map-marker-alt"></i>
+                                    @hotel.HotelAddress <br>
+                                    <i class="fas fa-wifi"></i> Free WiFi &emsp;
+                                    <i class="fas fa-car"></i> Airport Shuttle &emsp;
+                                    <i class="fas fa-utensils"></i> Restaurant
+                                </p>
+                            </div>
+                        </div>
+                    }
+                    else
+                    {
+                        <p>Loading hotel information...</p>
+                    }
+
+                    <!-- Room Details - Minimal (Check-in, Check-out, Total Stay) -->
+                    @if (Model.BookingViewModel != null)
+                    {
+                        <div class="card mb-3">
+                            <div class="card-body">
+                                <h6 class="card-subtitle mb-2 text-muted">Your Booking Details</h6>
+                                <p class="card-text">
+                                    <strong>Check-in:</strong> @Model.BookingViewModel.CheckinDate.ToString("dddd, dd MMMM yyyy") <br>
+                                    <strong>Check-out:</strong> @Model.BookingViewModel.CheckoutDate.ToString("dddd, dd MMMM yyyy") <br>
+                                    <strong>Total stay duration:</strong> @(Model.BookingViewModel.CheckoutDate - Model.BookingViewModel.CheckinDate).Days nights <br>
+                                    <hr />
+                                    <strong>You have selected:</strong> 1 phòng cho 2 người lớn <br>
+                                </p>
+                            </div>
+                        </div>
+
+                        <!-- Adding the Pricing Summary -->
+                        <div class="card mb-3">
+                            <div class="card-body">
+                                <h6 class="card-subtitle mb-2 text-muted">Pricing Summary</h6>
+                                <p class="card-text">
+                                    <strong>Original Price:</strong> VND @Model.BookingViewModel.BookingTotalPrice <br>
+                                    <strong>Early Booking Discount:</strong> - VND 668,100 <br>
+                                    <strong>Genius Discount:</strong> - VND 215,333 <br>
+                                    <strong>Total (including taxes and fees):</strong> VND  <br>
+                                </p>
+                            </div>
+                        </div>
+                    }
+                    else
+                    {
+                        <p>Loading room details...</p>
+                    }
+                </div>
+            </div>
+
+            <!-- Right side: Customer information form -->
+            <div class="col-lg-7">
+                <div class="wow fadeInUp" data-wow-delay="0.3s">
+                    <form method="post">
+                        <h4>Enter Your Details</h4>
+                        <div class="row g-3">
+                            <div class="col-md-6">
+                                <label for="firstName">Full Name *</label>
+                                <input type="text" class="form-control" id="firstName" asp-for="Account.AccountFullname">
+                            </div>
+                            <div class="col-md-6">
+                                <label for="email">Email Address *</label>
+                                <input type="email" class="form-control" id="email" value="@Model.Account.AccountEmail">
+                                <small>Booking confirmation will be sent to this email</small>
+                            </div>
+                            <div class="col-md-12">
+                                <label for="phone">Phone Number *</label>
+                                <input type="tel" class="form-control" id="phone" value="@Model.Account.AccountPhone">
+                                <small>This phone number can receive booking confirmation messages</small>
+                            </div>
+
+                            <div class="wow fadeInUp border-1" data-wow-delay="0.2s">
+                                @if (Model.RoomDetail != null)
+                                {
+                                    var room = Model.RoomDetail;
+                                    <div class="card mb-3">
+                                        <div class="card-body">
+                                            <h5 class="card-title">@room.RoomTitle</h5>
+                                            <p class="card-text">
+                                                heheheh <br>
+                                                @{
+                                                    string bedInfo = string.Empty;
+                                                    string bathInfo = string.Empty;
+                                                    int maxOccupancy = 1;  // Số người tối đa
+                                                    Dictionary<string, string> amenities = new Dictionary<string, string>();
+
+                                                    switch (Model.RoomDetail.RoomTypeId)
+                                                    {
+                                                        case 1:  // Standard Room
+                                                        case 9:
+                                                        case 10:
+                                                            bedInfo = "1 Single Bed";
+                                                            bathInfo = "1 Bath";
+                                                            maxOccupancy = 2;
+                                                            amenities = new Dictionary<string, string>
+                                            {
+                                            { "Free Wifi", "fa-wifi" },
+                                            { "TV", "fa-tv" },
+                                            { "Air Conditioning", "fa-fan" },
+                                            { "Safe", "fa-shield-alt" },
+                                            { "Private Bathroom", "fa-bath" },
+                                            { "Breakfast Included", "fa-coffee" },
+                                            { "Parking", "fa-parking" }
+                                            };
+                                                            break;
+
+                                                        case 2:  // Deluxe Room
+                                                            bedInfo = "1 King Bed";
+                                                            bathInfo = "1 Bath with Bathtub";
+                                                            maxOccupancy = 2;
+                                                            amenities = new Dictionary<string, string>
+                                            {
+                                            { "Free Wifi", "fa-wifi" },
+                                            { "Flat-screen TV", "fa-tv" },
+                                            { "Air Conditioning", "fa-fan" },
+                                            { "Mini-bar", "fa-wine-glass-alt" },
+                                            { "Balcony", "fa-door-open" },
+                                            { "Breakfast Included", "fa-coffee" },
+                                            { "Parking", "fa-parking" }
+                                            };
+                                                            break;
+
+                                                        case 3:  // Suite Room
+                                                            bedInfo = "1 King Bed";
+                                                            bathInfo = "1 Bath";
+                                                            maxOccupancy = 3;
+                                                            amenities = new Dictionary<string, string>
+                                            {
+                                            { "Free Wifi", "fa-wifi" },
+                                            { "TV", "fa-tv" },
+                                            { "Air Conditioning", "fa-fan" },
+                                            { "Village View", "fa-mountain" },
+                                            { "Breakfast Included", "fa-coffee" },
+                                            { "Parking", "fa-parking" }
+                                            };
+                                                            break;
+
+                                                        case 4:  // Family Room
+                                                            bedInfo = "2 Double Beds";
+                                                            bathInfo = "1 Bath with Bathtub";
+                                                            maxOccupancy = 4;
+                                                            amenities = new Dictionary<string, string>
+                                            {
+                                            { "Free Wifi", "fa-wifi" },
+                                            { "TV", "fa-tv" },
+                                            { "Air Conditioning", "fa-fan" },
+                                            { "Living Area", "fa-couch" },
+                                            { "Breakfast Included", "fa-coffee" },
+                                            { "Parking", "fa-parking" },
+                                            { "Laundry Service", "fa-tshirt" }
+                                            };
+                                                            break;
+
+                                                        case 5:  // Executive Room
+                                                            bedInfo = "1 King Bed";
+                                                            bathInfo = "1 Bath with Bathtub";
+                                                            maxOccupancy = 3;
+                                                            amenities = new Dictionary<string, string>
+                                            {
+                                            { "Free Wifi", "fa-wifi" },
+                                            { "Flat-screen TV", "fa-tv" },
+                                            { "Air Conditioning", "fa-fan" },
+                                            { "Mini-bar", "fa-wine-glass-alt" },
+                                            { "Work Desk", "fa-briefcase" },
+                                            { "Breakfast Included", "fa-coffee" },
+                                            { "Laundry Service", "fa-tshirt" },
+                                            { "Parking", "fa-parking" }
+                                            };
+                                                            break;
+
+                                                        case 6:  // Villa with Private Pool
+                                                            bedInfo = "2 King Beds";
+                                                            bathInfo = "2 Baths with Bathtub";
+                                                            maxOccupancy = 6;
+                                                            amenities = new Dictionary<string, string>
+                                            {
+                                            { "Free Wifi", "fa-wifi" },
+                                            { "Flat-screen TV", "fa-tv" },
+                                            { "Air Conditioning", "fa-fan" },
+                                            { "Private Pool", "fa-swimmer" },
+                                            { "Garden", "fa-tree" },
+                                            { "Breakfast Included", "fa-coffee" },
+                                            { "Parking", "fa-parking" },
+                                            { "Gym Access", "fa-dumbbell" }
+                                            };
+                                                            break;
+
+                                                        case 11:  // Suite Room with Village View
+                                                            bedInfo = "1 King Bed";
+                                                            bathInfo = "1 Bath";
+                                                            maxOccupancy = 3;
+                                                            amenities = new Dictionary<string, string>
+                                            {
+                                            { "Free Wifi", "fa-wifi" },
+                                            { "TV", "fa-tv" },
+                                            { "Air Conditioning", "fa-fan" },
+                                            { "Village View", "fa-mountain" },
+                                            { "Breakfast Included", "fa-coffee" },
+                                            { "Parking", "fa-parking" }
+                                            };
+                                                            break;
+                                                    }
+                                                }
+
+                                                @if (!string.IsNullOrEmpty(bedInfo))
+                                                {
+                                                    <small class="bg-light rounded py-1 px-3 m-1"><i class="fa fa-bed text-primary me-2"></i>@bedInfo</small>
+                                                    <small class="bg-light rounded py-1 px-3 m-1"><i class="fa fa-bath text-primary me-2"></i>@bathInfo</small>
+                                                    <small class="bg-light rounded py-1 px-3 m-1" title="Occupancy  "><i class="fa fa-user text-primary me-2"></i>@maxOccupancy Max Occupancy</small>
+                                                }
+
+                                                @foreach (var amenity in amenities)
+                                                {
+                                                    <small class="bg-light rounded py-1 px-3 m-1 amenity-spacing">
+                                                        <i class="fa @amenity.Value text-primary me-2"></i>@amenity.Key
+                                                    </small>
+                                                }
+                                            </p>
+                                        </div>
+                                    </div>
+                                }
+                                else
+                                {
+                                    <p>Loading hotel information...</p>
+                                }
+                            </div>
+                            <div class="col-md-12">
+                                <button class="btn btn-primary w-100 py-2 continue" type="submit">Confirm and Continue</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<link rel="stylesheet" href="~/css/Booking.css" asp-append-version="true" />
 

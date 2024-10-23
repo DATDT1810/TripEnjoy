@@ -8,10 +8,12 @@ using TripEnjoy.Application.Data;
 using TripEnjoy.Application.Interface;
 using TripEnjoy.Application.Interface.Booking_Room;
 using TripEnjoy.Application.Interface.Category;
+using TripEnjoy.Application.Interface.Comment;
 using TripEnjoy.Application.Interface.EmailService;
 using TripEnjoy.Application.Interface.Hotel;
 using TripEnjoy.Application.Interface.ImageCloud;
 using TripEnjoy.Application.Interface.Payment;
+using TripEnjoy.Application.Interface.Rate;
 using TripEnjoy.Application.Interface.Room;
 using TripEnjoy.Application.Interface.RoomImage;
 using TripEnjoy.Application.Interface.RoomType;
@@ -19,9 +21,11 @@ using TripEnjoy.Application.Interface.User;
 using TripEnjoy.Application.Services;
 using TripEnjoy.Application.Services.Booking;
 using TripEnjoy.Application.Services.Category;
+using TripEnjoy.Application.Services.Comment;
 using TripEnjoy.Application.Services.Email;
 using TripEnjoy.Application.Services.ImageCloud;
 using TripEnjoy.Application.Services.Payment;
+using TripEnjoy.Application.Services.Rate;
 using TripEnjoy.Application.Services.Room;
 using TripEnjoy.Application.Services.RoomImage;
 using TripEnjoy.Application.Services.RoomType;
@@ -94,6 +98,11 @@ builder.Services.AddScoped<IRoomTypeService, RoomTypeService>();
 builder.Services.AddScoped<IRoomImageRepository, RoomImageRepository>();
 builder.Services.AddScoped<IRoomImageService, RoomImageService>();
 
+builder.Services.AddScoped<IRateRepository, RateRepository>();
+builder.Services.AddScoped<IRateService, RateService>();
+
+builder.Services.AddScoped<ICommentRepository, CommentRepository>();
+builder.Services.AddScoped<ICommentService, CommentService>();
 // Add services to the container.
 builder.Services.AddIdentity<IdentityUser, IdentityRole>(options => 
 {

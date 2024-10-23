@@ -21,7 +21,16 @@
                     <div class="room-item rounded">
                         <div class="position-relative">
                             <img class="img-fluid" src="img/room-1.jpg" alt="Hotel Image">
-                            <small class="position-absolute start-0 top-100 translate-middle-y bg-warning text-white rounded py-1 px-3 ms-4"><i class="fa fa-solid fa-hotel"></i> Hotel</small>
+                            <small class="position-absolute start-0 top-100 translate-middle-y bg-warning text-white rounded py-1 px-3 ms-4"><i class="fa fa-solid fa-hotel"></i>
+                                @if (hotel.Category != null && !string.IsNullOrEmpty(hotel.Category.CategoryName))
+                                {
+                                    @hotel.Category.CategoryName
+                                }
+                                else
+                                {
+                                    @:Unknown Category
+                                }
+                            </small>
                         </div>
                         <div class="p-4 mt-2">
                             <h5 class="mb-0">@hotel.HotelName</h5>
@@ -62,7 +71,16 @@
                         <div class="room-item rounded">
                             <div class="position-relative">
                                 <img class="img-fluid" src="img/room-1.jpg" alt="Hotel Image">
-                                <small class="position-absolute start-0 top-100 translate-middle-y bg-warning text-white rounded py-1 px-3 ms-4"><i class="fa fa-solid fa-hotel"></i> Hotel</small>
+                                <small class="position-absolute start-0 top-100 translate-middle-y bg-warning text-white rounded py-1 px-3 ms-4"><i class="fa fa-solid fa-hotel"></i>
+                                    @if (hotel.Category != null && !string.IsNullOrEmpty(hotel.Category.CategoryName))
+                                    {
+                                        @hotel.Category.CategoryName
+                                    }
+                                    else
+                                    {
+                                        @:Unknown Category
+                                    }
+                                </small>
                             </div>
                             <div class="p-4 mt-2">
                                 <h5 class="mb-0">@hotel.HotelName</h5>

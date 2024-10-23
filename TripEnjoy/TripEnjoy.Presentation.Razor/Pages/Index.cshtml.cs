@@ -37,6 +37,21 @@ namespace TripEnjoy.Presentation.Razor.Pages
             {
                 Hotels = new List<Hotel>();
             }
+
+            // Call API to get the list of categories
+            var categoryResponse = await client.GetAsync("https://localhost:7126/api/Category");
+
+            if (categoryResponse.IsSuccessStatusCode)
+            {
+                string categoryData = await categoryResponse.Content.ReadAsStringAsync();
+                var categories = JsonConvert.DeserializeObject<List<Category>>(categoryData);
+
+                // Map the category names to the hotels based on CategoryId
+                foreach (var hotel in Hotels)
+                {
+                    hotel.Category = categories.FirstOrDefault(c => c.CategoryId == hotel.CategoryId);
+                }
+            }
             return Page();
         }
     }

@@ -1,0 +1,85 @@
+﻿.stepper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 30px;
+}
+
+.step {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.circle {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background-color: #e0e0e0;
+    color: #333;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 1.2em;
+    font-weight: bold;
+}
+
+.step.active .circle {
+    background-color: #007bff;
+    color: white;
+}
+
+.line {
+    width: 50px;
+    height: 2px;
+    background-color: #e0e0e0;
+}
+
+.step.active + .line {
+    background-color: #007bff;
+}
+
+.card {
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    margin-bottom: 20px;
+}
+
+.card-body h5 {
+    font-size: 1.25rem;
+    margin-bottom: 10px;
+}
+
+.card-body p {
+    font-size: 1rem;
+    line-height: 1.5;
+}
+
+.form-check {
+    margin-top: 10px;
+}
+
+.form-check-label {
+    font-size: 0.9rem;
+}
+
+.continue {
+    background-color: #007bff;
+    border-color: #007bff;
+}
+
+.continue:hover {
+    background-color: #0056b3;
+    border-color: #0056b3;
+}
+
+.form-control {
+    padding: 10px;
+    font-size: 0.9rem;
+}
+
+.amenity-spacing {
+    margin-right: 10px; 
+    margin-bottom: 10px; 
+}
