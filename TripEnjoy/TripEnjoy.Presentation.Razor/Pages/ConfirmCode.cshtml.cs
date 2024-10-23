@@ -34,7 +34,7 @@ namespace TripEnjoy.Presentation.Razor.Pages
                 Email = Email
             };
             request.Content = new StringContent(JsonConvert.SerializeObject(content), Encoding.UTF8, "application/json");
-            var client = _clientFactory.CreateClient();
+            var client = _clientFactory.CreateClient("DefaultClient");
             var response = await client.SendAsync(request);
             if(response.IsSuccessStatusCode)
             {
@@ -55,7 +55,7 @@ namespace TripEnjoy.Presentation.Razor.Pages
             };
             var request = new HttpRequestMessage(HttpMethod.Post, "https://localhost:7126/api/Account/ResetPassword");
             request.Content = new StringContent(JsonConvert.SerializeObject(changePassword), Encoding.UTF8, "application/json");
-            var client = _clientFactory.CreateClient();
+            var client = _clientFactory.CreateClient("DefaultClient");
             client.Timeout = TimeSpan.FromMinutes(2);
             var response = await client.SendAsync(request);
             if (response.IsSuccessStatusCode)

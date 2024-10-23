@@ -66,9 +66,9 @@ namespace TripEnjoy.Presentation.Web.Controllers
         [Route("RefreshToken")]
         public async Task<IActionResult> RefreshToken([FromBody] TokenRefreshDTO tokenRefreshDTO)
         {
-            if (tokenRefreshDTO.refreshToken != null)
+            if (tokenRefreshDTO != null)
             {
-                var tokens = await _accountService.RefreshToken(tokenRefreshDTO.refreshToken);
+                var tokens = await _accountService.RefreshToken(tokenRefreshDTO);
                 if (tokens != null)
                 {
                     return Ok(tokens);

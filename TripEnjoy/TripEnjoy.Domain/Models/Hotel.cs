@@ -36,11 +36,11 @@ namespace TripEnjoy.Domain.Models
 
         public int AccountId { get; set; }
         [ForeignKey("AccountId")]                    // account_id là khóa ngoại trỏ đến bảng Account
-        public virtual Account Account { get; set; }       // Điều này thiết lập quan hệ 1-n với bảng Account
+        public virtual Account? Account { get; set; }       // Điều này thiết lập quan hệ 1-n với bảng Account
         public int CategoryId { get; set; }
        
         [ForeignKey("CategoryId")]                   // category_id là khóa ngoại trỏ đến bảng Category
-        public virtual Category Category { get; set; }     // Điều này thiết lập quan hệ 1-n với bảng Category
+        public virtual Category? Category { get; set; }     // Điều này thiết lập quan hệ 1-n với bảng Category
 
         public Hotel()
         {
@@ -60,6 +60,25 @@ namespace TripEnjoy.Domain.Models
 			HotelTimeEnd = hotelTimeEnd;
 			AccountId = accountId;
 			CategoryId = categoryId;
+		}
+		public Hotel(string hotelName, string hotelAddress, string hotelPhone, string hotelDescription, bool isDeleted, string hotelStatus, DateTime hotelTimeStart, DateTime hotelTimeEnd, int accountId, int categoryId)
+		{
+			HotelName = hotelName;
+			HotelAddress = hotelAddress;
+			HotelPhone = hotelPhone;
+			HotelDescription = hotelDescription;
+			IsDeleted = isDeleted;
+			HotelStatus = hotelStatus;
+			HotelTimeStart = hotelTimeStart;
+			HotelTimeEnd = hotelTimeEnd;
+			AccountId = accountId;
+			CategoryId = categoryId;
+		}
+
+		public override string? ToString()
+		{
+			return "Id: " +HotelId + "\r\nHotelName" + this.HotelName +"\r\n address: "+ this.HotelAddress+ "\r\n phone: " + this.HotelPhone+ "\r\n Description: " + this.HotelDescription+ "\r\n IsDeleted: " + this.IsDeleted+ "\r\n Status: " + this.HotelStatus
+				+ "\r\n Start: " + this.HotelTimeStart+ "\r\n End: " + this.HotelTimeEnd+ "\r\n Account" + this.AccountId+ "\r\n categoryid" + this.CategoryId + "\r\n account: "+ Account ;
 		}
 	}
 }

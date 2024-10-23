@@ -8,7 +8,7 @@ namespace TripEnjoy.Application.Data
 {
     public class TokenResponseDTO
     {
-        public string AccessToken { get; set; } 
-        public string RefreshToken { get; set; }
+        public string? AccessToken { get; set; } 
+        public TokenRefreshDTO? RefreshToken { get; set; }
     }
 }

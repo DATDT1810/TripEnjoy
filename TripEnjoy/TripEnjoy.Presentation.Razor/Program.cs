@@ -1,5 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.Google;
+using TripEnjoy.Presentation.Razor.Helper;
+using TripEnjoy.Presentation.Razor.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -15,7 +17,11 @@ builder.Services.AddCors(options =>
 });
 // Add services to the container.
 builder.Services.AddRazorPages();
+builder.Services.AddSingleton<TokenServices>();
+builder.Services.AddTransient<TokenHandler>();
 builder.Services.AddHttpClient();
+builder.Services.AddHttpClient("DefaultClient").AddHttpMessageHandler<TokenHandler>();
+builder.Services.AddHttpContextAccessor();
 builder.Services.AddAuthentication(options =>
 {
     options.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme;

@@ -34,6 +34,8 @@ namespace TripEnjoy.Infrastructure.Helper
             CreateMap<Comment, CommentDTO>().ReverseMap();
             // Mapping Commnet Response
             CreateMap<Comment, CommentResponseDTO>().ReverseMap();
+            // mapping Transaction
+            CreateMap<TransactionHistory, TransactionDTO>().ReverseMap();
         }
     }
 }
