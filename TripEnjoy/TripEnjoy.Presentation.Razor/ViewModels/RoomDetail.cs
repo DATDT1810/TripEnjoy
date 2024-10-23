@@ -10,5 +10,7 @@
         public int RoomStatusID { get; set; }
         public decimal RoomPrice { get; set; }
         public string? RoomDescription { get; set; }
+        public int RateValue { get; set; }
+        public string CommentContent { get; set; }
     }
 }
