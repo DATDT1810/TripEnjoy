@@ -65,7 +65,7 @@
                     Panel.ZIndex="0">
                     <Image
                         ClipToBounds="True"
-                        Source="/Assets/Images/bg.png"
+                        Source="https://www.majesticsaigon.com/wp-content/uploads/sites/258/2022/10/hotel_majestic_home-2200x1200.jpg"
                         Stretch="UniformToFill" />
                 </Grid>
                 <Grid Grid.Row="1" Grid.Column="0">

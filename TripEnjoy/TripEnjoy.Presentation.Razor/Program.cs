@@ -31,7 +31,6 @@ builder.Services.AddAuthentication(options =>
 {
     options.ClientId = builder.Configuration.GetSection("GoogleAuthSetting").GetValue<string>("ClientId");
     options.ClientSecret = builder.Configuration.GetSection("GoogleAuthSetting").GetValue<string>("ClientSecret");
- 
 });
 
 
