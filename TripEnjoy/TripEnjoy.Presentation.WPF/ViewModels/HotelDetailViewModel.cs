@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Controls;
-using TripEnjoy.Domain.Models;
+using TripEnjoy.Presentation.WPF.Models;
 using TripEnjoy.Presentation.WPF.Views.HotelManagement;
 
 namespace TripEnjoy.Presentation.WPF.ViewModels

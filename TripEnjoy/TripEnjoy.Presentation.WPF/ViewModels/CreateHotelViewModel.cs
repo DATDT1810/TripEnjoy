@@ -8,7 +8,6 @@ using System.Text.Json;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
-using TripEnjoy.Domain.Models;
 using TripEnjoy.Presentation.WPF.Helper;
 using TripEnjoy.Presentation.WPF.Models;
 
