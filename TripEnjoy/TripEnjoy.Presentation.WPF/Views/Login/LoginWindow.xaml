@@ -34,9 +34,7 @@
         </i:EventTrigger>
     </i:Interaction.Triggers>
 
-    <Window.DataContext>
-        <vm:LoginViewModel />
-    </Window.DataContext>
+    
     <Window.Resources>
         <converter:EmptyStringToVisibilityConverter x:Key="EmptyStringToVisibilityConverter" />
         <converter:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
@@ -190,4 +188,5 @@
             </Grid>
         </materialDesign:Card>
     </Grid>
+
 </Window>

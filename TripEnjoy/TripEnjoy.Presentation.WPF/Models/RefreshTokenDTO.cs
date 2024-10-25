@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 
 namespace TripEnjoy.Presentation.WPF.Models
 {
-    public class TokenResponse
+    public class RefreshTokenDTO
     {
-        public string? accessToken { get; set; }
-        public RefreshTokenDTO? refreshToken { get; set; }
+        public string? RefreshToken { get; set; }
+        public DateTime Expiration { get; set; }
     }
 }

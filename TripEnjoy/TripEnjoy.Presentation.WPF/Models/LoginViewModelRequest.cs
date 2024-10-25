@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 
 namespace TripEnjoy.Presentation.WPF.Models
 {
-    public class TokenResponse
+    public class LoginViewModelRequest
     {
-        public string? accessToken { get; set; }
-        public RefreshTokenDTO? refreshToken { get; set; }
+        public string? Email { get; set; }
+        public string? Password { get; set; }
     }
 }

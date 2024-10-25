@@ -10,19 +10,22 @@ using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
+using System.Windows.Navigation;
 using System.Windows.Shapes;
-using TripEnjoy.Presentation.WPF.ViewModels;
+using TripEnjoy.Presentation.WPF.ViewModels.Admin;
 
-namespace TripEnjoy.Presentation.WPF.Views.Login
+namespace TripEnjoy.Presentation.WPF.Views.Admin
 {
     /// <summary>
-    /// Interaction logic for LoginWindow.xaml
+    /// Interaction logic for HomePage.xaml
     /// </summary>
-    public partial class LoginWindow : Window
+    public partial class HomePage : Page
     {
-        public LoginWindow()
+        public HomePage()
         {
             InitializeComponent();
+            AccountListViewModel accountListViewModel = new AccountListViewModel();
+            DataContext = accountListViewModel;
         }
     }
 }

@@ -26,9 +26,6 @@
         
         Title="CreateHotelWindow" Height="450" Width="800"
         Name="_CreateHotelWindow" WindowStartupLocation="CenterScreen">
-    <Window.DataContext>
-        <vm:CreateHotelViewModel/>
-    </Window.DataContext>
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="auto"/>

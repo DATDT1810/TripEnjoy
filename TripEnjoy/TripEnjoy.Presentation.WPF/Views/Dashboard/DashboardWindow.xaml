@@ -32,9 +32,7 @@
             <i:InvokeCommandAction Command="{Binding loadedWindowCommand}" CommandParameter="{Binding ElementName=_mainContent}"/>
         </i:EventTrigger>
     </i:Interaction.Triggers>
-    <Window.DataContext>
-        <vm:DashboardViewModel/>
-    </Window.DataContext>
+  
     <Grid>
         <Grid>
             <Grid.ColumnDefinitions>

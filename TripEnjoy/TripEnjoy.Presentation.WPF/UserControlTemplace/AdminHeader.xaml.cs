@@ -10,17 +10,17 @@ using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
+using System.Windows.Navigation;
 using System.Windows.Shapes;
-using TripEnjoy.Presentation.WPF.ViewModels;
 
-namespace TripEnjoy.Presentation.WPF.Views.Login
+namespace TripEnjoy.Presentation.WPF.UserControlTemplace
 {
     /// <summary>
-    /// Interaction logic for LoginWindow.xaml
+    /// Interaction logic for AdminHeader.xaml
     /// </summary>
-    public partial class LoginWindow : Window
+    public partial class AdminHeader : UserControl
     {
-        public LoginWindow()
+        public AdminHeader()
         {
             InitializeComponent();
         }

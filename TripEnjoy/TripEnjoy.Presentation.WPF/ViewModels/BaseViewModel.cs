@@ -19,20 +19,16 @@ namespace TripEnjoy.Presentation.WPF.ViewModels
         }
     }
 
-    class RelayCommand<T> : ICommand
+    public class RelayCommand<T> : ICommand
     {
 
         private readonly Predicate<T> _canExecute;
         private readonly Action<T> _execute;
 
-        public RelayCommand(Predicate<T> canExecute, Action<T> execute)
+        public RelayCommand(Action<T> execute, Predicate<T> canExecute = null)
         {
-            if (execute == null)
-            {
-                throw new ArgumentNullException("Execute");
-            }
-            this._canExecute = canExecute;
-            this._execute = execute;
+            _execute = execute ?? throw new ArgumentNullException(nameof(execute));
+            _canExecute = canExecute;
         }
 
         public event EventHandler CanExecuteChanged
