@@ -5,6 +5,7 @@ using Newtonsoft.Json;
 using System.Net;
 using System.Security.Claims;
 using System.Text;
+using TripEnjoy.Presentation.Razor.Services;
 using TripEnjoy.Presentation.Razor.ViewModels;
 
 namespace TripEnjoy.Presentation.Razor.Pages
@@ -12,10 +13,12 @@ namespace TripEnjoy.Presentation.Razor.Pages
     public class LoginGoogleModel : PageModel
     {
         private readonly IHttpClientFactory _httpClientFactory;
+        private readonly TokenServices _tokenServices;
 
-        public LoginGoogleModel(IHttpClientFactory httpClientFactory)
+        public LoginGoogleModel(IHttpClientFactory httpClientFactory, TokenServices tokenServices)
         {
             _httpClientFactory = httpClientFactory;
+            _tokenServices = tokenServices;
         }
 
         public async Task<IActionResult> OnGet()
@@ -35,21 +38,13 @@ namespace TripEnjoy.Presentation.Razor.Pages
             if (googleUserEmail != null)
             {
                 var token = await AuthenticateWithApi(googleUserEmail);
-                var cookieOptions = new CookieOptions
+                if (token?.AccessToken != null && token?.RefreshToken != null)
                 {
-                    HttpOnly = true,
-                    Secure = true,
-                    Expires = DateTime.UtcNow.AddMinutes(30),
-                    SameSite = SameSiteMode.Lax,
-                };
-                Response.Cookies.Append("accessToken", token.AccessToken, cookieOptions);
-                Response.Cookies.Append("refreshToken", token.RefreshToken, cookieOptions);
-
-                await Task.Delay(500);
-               
-               
+                    await _tokenServices.SetTokens(token.AccessToken, token.RefreshToken);
+                }
             }
 
+            await Task.Delay(1000);
             return RedirectToPage("/Index");
         }
 
@@ -57,7 +52,7 @@ namespace TripEnjoy.Presentation.Razor.Pages
         {
             // Gửi yêu cầu tới API để xác thực
             var request = new HttpRequestMessage(HttpMethod.Post, "https://localhost:7126/api/Account/LoginGoogle");
-            request.Content = new StringContent(JsonConvert.SerializeObject(new {email = googleEmail }), Encoding.UTF8, "application/json");
+            request.Content = new StringContent(JsonConvert.SerializeObject(new { email = googleEmail }), Encoding.UTF8, "application/json");
             var client = _httpClientFactory.CreateClient();
             client.Timeout = TimeSpan.FromMinutes(2);
             try

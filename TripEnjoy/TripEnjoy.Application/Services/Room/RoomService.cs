@@ -46,5 +46,10 @@ namespace TripEnjoy.Application.Services.Room
         {
             return await _roomRepository.UpdateRoomAsync(roomId, room);
         }
+
+        public async Task<IEnumerable<Domain.Models.Room>> GetRelatedRoomsByRoomTypeIdAsync(int roomTypeId, int hotelId)
+        {
+            return await _roomRepository.GetRelatedRoomsByRoomTypeIdAsync(roomTypeId, hotelId);
+        }
     }
 }

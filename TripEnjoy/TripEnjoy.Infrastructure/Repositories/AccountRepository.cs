@@ -100,8 +100,9 @@ namespace TripEnjoy.Infrastructure.Repositories
             var accessToken = new JwtSecurityTokenHandler().WriteToken(token);
             var refreshToken = GenerateRefreshToken();
 
-            await userManager.SetAuthenticationTokenAsync(identityUser, "TripEnjoy", "RefreshToken", refreshToken);
-
+            await userManager.SetAuthenticationTokenAsync(identityUser, "TripEnjoy", "RefreshToken", refreshToken.RefreshToken);
+        
+           
             return new TokenResponseDTO
             {
                 AccessToken = accessToken,
@@ -110,15 +111,23 @@ namespace TripEnjoy.Infrastructure.Repositories
 
         }
 
-        public string GenerateRefreshToken()
+        public TokenRefreshDTO GenerateRefreshToken()
         {
             var randomNumber = new byte[32];
             using (var rng = RandomNumberGenerator.Create())
             {
                 rng.GetBytes(randomNumber);
-                return Convert.ToBase64String(randomNumber).Replace('+', '-')
+                var token = Convert.ToBase64String(randomNumber).Replace('+', '-')
                 .Replace('/', '_')
                 .Replace("=", "");
+
+                var expiration = DateTime.UtcNow.AddDays(3);
+
+                return new TokenRefreshDTO()
+                {
+                    RefreshToken = token,
+                    Expiration = expiration
+                };
             }
         }
 
@@ -198,17 +207,25 @@ namespace TripEnjoy.Infrastructure.Repositories
             throw new InvalidOperationException("User registration failed");
         }
 
-        public async Task<TokenResponseDTO> RefreshToken(string refreshToken)
+        public async Task<TokenResponseDTO> RefreshToken(TokenRefreshDTO refreshToken)
         {
-            var user = userManager.Users.SingleOrDefault(u =>
-             userManager.GetAuthenticationTokenAsync(u, "TripEnjoy", "RefreshToken")
-             .Result == refreshToken);
-            if (user != null)
+            var userList = await userManager.Users.ToListAsync(); // Lấy tất cả người dùng từ database
+
+            var user = userList.SingleOrDefault(u =>
+                userManager.GetAuthenticationTokenAsync(u, "TripEnjoy", "RefreshToken").Result == refreshToken.RefreshToken);
+
+            if (user == null)
             {
-                var tokens = await GenerateAccessToken(user);
-                return tokens;
+                throw new UnauthorizedAccessException("Invalid refresh token.");
             }
-            throw new UnauthorizedAccessException("Invalid refresh token");
+        
+            if (refreshToken.Expiration < DateTime.UtcNow)
+            {
+                await userManager.RemoveAuthenticationTokenAsync(user, "TripEnjoy", "RefreshToken");
+                throw new UnauthorizedAccessException("Refresh token expired.");
+            }
+            var tokens = await GenerateAccessToken(user);
+            return tokens;
         }
 
         public async Task<bool> Logout(string email)
@@ -437,5 +454,24 @@ namespace TripEnjoy.Infrastructure.Repositories
 			}
 			return account;
 		}
-	}
+
+        public async Task<Account> GetAccountByRoomID(int roomId)
+        {
+           if(roomId == 0)
+            {
+                throw new Exception("Room ID is invalid");
+            }
+            var account = await _context.Rooms
+        .Include(r => r.Hotel) // Tải thông tin Hotel từ Room
+        .Include(r => r.Hotel.Account) // Tải thông tin Account từ Hotel
+        .Where(r => r.RoomId == roomId) // Lọc theo roomId
+        .Select(r => r.Hotel.Account) // Lấy Account từ Hotel
+        .FirstOrDefaultAsync(); // Lấy Account đầu tiên hoặc null nếu không tìm thấy
+            if (account == null)
+            {
+                throw new Exception($"Account with ID {roomId} not found.");
+            }
+            return account;
+        }
+    }
 }

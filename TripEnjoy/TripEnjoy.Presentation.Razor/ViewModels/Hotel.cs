@@ -11,5 +11,7 @@
         public string HotelStatus { get; set; }
         public DateTime HotelTimeStart { get; set; }
         public DateTime HotelTimeEnd { get; set; }
+        public int CategoryId { get; set; }
+        public Category Category { get; set; }
     }
 }

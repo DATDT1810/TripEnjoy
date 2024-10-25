@@ -17,11 +17,21 @@
         {
             @foreach (var hotel in Model.Hotels.Where(h => h.HotelAddress.Contains("VietNam", StringComparison.OrdinalIgnoreCase)))
             {
+                var hotelImage = Model.HotelImages.FirstOrDefault(img => img.HotelId == hotel.HotelId);
                 <a asp-page="" class="room-item rounded d-block text-decoration-none">
                     <div class="room-item rounded">
                         <div class="position-relative">
-                            <img class="img-fluid" src="img/room-1.jpg" alt="Hotel Image">
-                            <small class="position-absolute start-0 top-100 translate-middle-y bg-warning text-white rounded py-1 px-3 ms-4"><i class="fa fa-solid fa-hotel"></i> Hotel</small>
+                            <img class="img-fluid" src="@hotelImage.ImageUrl" alt="Hotel Image">
+                            <small class="position-absolute start-0 top-100 translate-middle-y bg-warning text-white rounded py-1 px-3 ms-4"><i class="fa fa-solid fa-hotel"></i>
+                                @if (hotel.Category != null && !string.IsNullOrEmpty(hotel.Category.CategoryName))
+                                {
+                                    @hotel.Category.CategoryName
+                                }
+                                else
+                                {
+                                    @:Unknown Category
+                                }
+                            </small>
                         </div>
                         <div class="p-4 mt-2">
                             <h5 class="mb-0">@hotel.HotelName</h5>
@@ -35,7 +45,9 @@
                                 </div>
                             </div>
                             <div class="d-flex mb-3">
-                                <small class="border-end me-3 pe-3"><i class="fa-solid fa-location-dot text-warning me-2"></i>@hotel.HotelAddress</small>
+                                <small class="border-end me-3 pe-3">
+                                    <i class="fa-solid fa-location-dot text-warning me-2"></i>@hotel.HotelAddress
+                                </small>
                             </div>
                             <p class="text-body mb-3">@hotel.HotelDescription</p>
                         </div>
@@ -58,11 +70,21 @@
             {
                 @foreach (var hotel in Model.Hotels.Where(h => !h.HotelAddress.Contains("VietNam", StringComparison.OrdinalIgnoreCase)))
                 {
+                    var hotelImage = Model.HotelImages.FirstOrDefault(img => img.HotelId == hotel.HotelId);
                     <a asp-page="" class="room-item rounded d-block text-decoration-none">
                         <div class="room-item rounded">
                             <div class="position-relative">
-                                <img class="img-fluid" src="img/room-1.jpg" alt="Hotel Image">
-                                <small class="position-absolute start-0 top-100 translate-middle-y bg-warning text-white rounded py-1 px-3 ms-4"><i class="fa fa-solid fa-hotel"></i> Hotel</small>
+                               <img class="img-fluid" src="@hotelImage.ImageUrl" alt="Hotel Image">
+                                <small class="position-absolute start-0 top-100 translate-middle-y bg-warning text-white rounded py-1 px-3 ms-4"><i class="fa fa-solid fa-hotel"></i>
+                                    @if (hotel.Category != null && !string.IsNullOrEmpty(hotel.Category.CategoryName))
+                                    {
+                                        @hotel.Category.CategoryName
+                                    }
+                                    else
+                                    {
+                                        @:Unknown Category
+                                    }
+                                </small>
                             </div>
                             <div class="p-4 mt-2">
                                 <h5 class="mb-0">@hotel.HotelName</h5>
@@ -85,6 +107,8 @@
                 }
             }
         </div>
+
+
     </div>
 </div>
 
@@ -100,8 +124,8 @@
                     Aliqu diam amet diam et eos. Clita erat ipsum et lorem et sit,
                     sed stet lorem sit clita duo justo magna dolore erat amet
                 </p>
-                <a href class="btn btn-primary py-md-3 px-md-5 me-3">Our Rooms</a>
-                <a href class="btn btn-light py-md-3 px-md-5">Book A Room</a>
+                <a href="" class="btn btn-primary py-md-3 px-md-5 me-3">Our Rooms</a>
+                <a href="" class="btn btn-light py-md-3 px-md-5">Book A Room</a>
             </div>
         </div>
         <div class="col-md-6">
@@ -288,3 +312,17 @@
         </div>
     </div>
 </div>
+
+@section Scripts{
+    <script>
+        document.querySelectorAll('a.room-item .text-body.mb-3').forEach(function (p) {
+            let fullText = p.textContent;
+            let words = fullText.split(' ');
+
+            if (words.length > 6) {
+                let shortText = words.slice(0, 6).join(' ') + '...';
+                p.textContent = shortText;
+            }
+        });
+    </script>
+}

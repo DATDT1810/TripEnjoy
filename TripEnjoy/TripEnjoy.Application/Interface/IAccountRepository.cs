@@ -13,7 +13,7 @@ namespace TripEnjoy.Application.Interface
     public interface IAccountRepository
     {
         Task<TokenResponseDTO> Login(AccountDTO account);
-        Task<TokenResponseDTO> RefreshToken(string refreshToken);
+        Task<TokenResponseDTO> RefreshToken(TokenRefreshDTO refreshToken);
         Task<IdentityUser> Register(AccountDTO account);
         Task<bool> Logout(string email);
         Task<TokenResponseDTO> LoginGoogle(string email); 
@@ -31,5 +31,6 @@ namespace TripEnjoy.Application.Interface
         Task<TripEnjoy.Domain.Models.Account> UpdateAccountLevelAsync(string UId);
 
         Task<Account> GetAccountById(int accountId);
-	}
+        Task<Account> GetAccountByRoomID(int roomId);
+    }
 }
