@@ -1,5 +1,4 @@
-﻿using Org.BouncyCastle.Asn1.Ocsp;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
@@ -10,7 +9,6 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
-using TripEnjoy.Domain.Models;
 using TripEnjoy.Presentation.WPF.Views.Dashboard;
 using TripEnjoy.Presentation.WPF.Views.HotelManagement;
 
