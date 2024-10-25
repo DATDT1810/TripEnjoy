@@ -78,5 +78,12 @@ namespace TripEnjoy.Infrastructure.Repositories
             await _context.SaveChangesAsync();
             return room;
         }
+
+        public async Task<IEnumerable<Room>> GetRelatedRoomsByRoomTypeIdAsync(int roomTypeId, int hotelId)
+        {
+            return await _context.Rooms
+                         .Where(r => r.RoomTypeId == roomTypeId && r.HotelId == hotelId && r.RoomStatus.RoomStatusName == "Available")
+                         .ToListAsync();
+        }
     }
 }

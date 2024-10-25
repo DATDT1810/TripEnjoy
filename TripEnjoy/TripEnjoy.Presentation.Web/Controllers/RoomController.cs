@@ -29,10 +29,10 @@ namespace TripEnjoy.Presentation.Web.Controllers
         }
 
         // Get room details by room ID
-        [HttpGet("{id}", Name = "GetRoomById")]
-        public async Task<IActionResult> GetRoomById(int id)
+        [HttpGet("{roomId}", Name = "GetRoomById")]
+        public async Task<IActionResult> GetRoomById(int roomId)
         {
-            var room = await _roomService.GetRoomDetailByIdAsync(id);
+            var room = await _roomService.GetRoomDetailByIdAsync(roomId);
             if (room == null)
             {
                 return NotFound();
@@ -93,5 +93,19 @@ namespace TripEnjoy.Presentation.Web.Controllers
 
             return NoContent(); // Return 204 No Content if deletion was successful
         }
+
+        [HttpGet("related/{roomTypeId}/{hotelId}")]
+        public async Task<IActionResult> GetRelatedRooms(int roomTypeId, int hotelId)
+        {
+            var relatedRooms = await _roomService.GetRelatedRoomsByRoomTypeIdAsync(roomTypeId, hotelId);
+            if (relatedRooms == null || !relatedRooms.Any())
+            {
+                return NotFound("No related rooms found.");
+            }
+
+            return Ok(relatedRooms);
+        }
+
+
     }
 }

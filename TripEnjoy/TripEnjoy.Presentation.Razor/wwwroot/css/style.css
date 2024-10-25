@@ -432,7 +432,7 @@
     color: #dc3545;
 }
 
-.hidden {
+.hidden {   
     display: none;
 }
     
@@ -442,7 +442,12 @@
     box-shadow: 0 0 45px rgba(0, 0, 0, .08);
     margin: 0 2px 30px 2px;
     border-radius: 15px;
-    height: 400px;
+    height: 420px;
+}
+
+.room-item img{
+    width: 200px;
+    height: 200px;
 }
 
 .nav-pills .nav-item .active {

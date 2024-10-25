@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Newtonsoft.Json;
+using System.Security.Claims;
 using System.Text;
 using TripEnjoy.Presentation.Razor.Services;
 using TripEnjoy.Presentation.Razor.ViewModels;

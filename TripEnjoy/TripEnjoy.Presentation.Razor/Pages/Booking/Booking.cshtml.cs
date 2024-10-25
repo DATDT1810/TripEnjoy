@@ -1,43 +1,94 @@
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Newtonsoft.Json;
+using System.Net.Http;
+using System.Security.Claims;
 using System.Text;
+using System.Threading.Tasks;
 using TripEnjoy.Presentation.Razor.ViewModels;
 
 namespace TripEnjoy.Presentation.Razor.Pages.Booking
 {
     public class BookingModel : PageModel
     {
-        private readonly IHttpClientFactory httpClient;
+        private readonly IHttpClientFactory _httpClientFactory;
+
         public BookingModel(IHttpClientFactory httpClient)
         {
-            this.httpClient = httpClient;
+            _httpClientFactory = httpClient;
         }
-        public void OnGet()
+
+        [BindProperty(SupportsGet = true)]
+        public Hotel Hotel { get; set; }
+
+        [BindProperty(SupportsGet = true)]
+        public RoomDetail RoomDetail { get; set; }
+
+        [BindProperty(SupportsGet = true)]
+        public BookingViewModel BookingViewModel { get; set; }
+
+        [BindProperty(SupportsGet = true)]
+        public Account Account { get; set; }
+
+        public async Task<IActionResult> OnGet(int id)
         {
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+            // Call API to get the room details
+            var client = _httpClientFactory.CreateClient();
+            var roomResponse = await client.GetAsync($"https://localhost:7126/api/Room/{id}");
+            if (roomResponse.IsSuccessStatusCode)
+            {
+                string roomData = await roomResponse.Content.ReadAsStringAsync();
+                RoomDetail = JsonConvert.DeserializeObject<RoomDetail>(roomData);
+            }
+
+            // If RoomDetail exists, use its HotelId to get the correct Hotel
+            if (RoomDetail != null)
+            {
+                var hotelResponse = await client.GetAsync($"https://localhost:7126/api/Hotel/{RoomDetail.HotelId}");
+                if (hotelResponse.IsSuccessStatusCode)
+                {
+                    string hotelData = await hotelResponse.Content.ReadAsStringAsync();
+                    Hotel = JsonConvert.DeserializeObject<Hotel>(hotelData);
+                }
+            }
+
+            // Call API to get account details, assuming API returns a JSON array
+            var accountResponse = await client.GetAsync($"https://localhost:7126/api/Account/{userId}");
+            if (accountResponse.IsSuccessStatusCode)
+            {
+                string accountData = await accountResponse.Content.ReadAsStringAsync();
+                try
+                {
+                    Account = JsonConvert.DeserializeObject<Account>(accountData);
+                }
+                catch (JsonSerializationException)
+                {
+                    var accounts = JsonConvert.DeserializeObject<List<Account>>(accountData);
+                    if (accounts != null && accounts.Count > 0)
+                    {
+                        Account = accounts[0]; 
+                    }
+                }
+            }
+
+            return Page();
         }
 
         public async Task<IActionResult> OnPost()
         {
-            BookingViewModel bookingViewModel = new BookingViewModel
-            {
-                RoomId = 2,          
-                AccountId =  1,
-                RoomQuantity = 2,
-                CheckinDate = DateTime.Now,
-                CheckoutDate = DateTime.Now.AddDays(3),           
-               
-    };
             var request = new HttpRequestMessage(HttpMethod.Post, "https://localhost:7126/api/Booking/CreateBooking");
-            request.Content = new StringContent(JsonConvert.SerializeObject(bookingViewModel), Encoding.UTF8, "application/json");
-            var client = httpClient.CreateClient("DefaultClient");
+            request.Content = new StringContent(JsonConvert.SerializeObject(BookingViewModel), Encoding.UTF8, "application/json");
+            var client = _httpClientFactory.CreateClient("DefaultClient");
             client.Timeout = TimeSpan.FromMinutes(2);
             var response = await client.SendAsync(request);
             if (response.IsSuccessStatusCode)
             {
                 var bookingId = await response.Content.ReadAsStringAsync();
-                return RedirectToPage("/Payment/Payment",  new {bookingId =  bookingId});
+                return RedirectToPage("/Payment/Payment", new { bookingId });
             }
+
             return Page();
         }
     }

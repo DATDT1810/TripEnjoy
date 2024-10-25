@@ -29,10 +29,7 @@ namespace TripEnjoy.Infrastructure.Repositories
 
         public async Task<Booking> CreateBookingAsync(Booking booking)
         {
-            // Bắt đầu transaction để đảm bảo tính toàn vẹn dữ liệu
-            //using (var transaction = await _context.Database.BeginTransactionAsync())  // Chú ý await ở đây
-            //{
-            // Validation tính khả dụng của phòng
+ 
             var room = await _context.Rooms.Include(r => r.Hotel)
                 .FirstOrDefaultAsync(r => r.RoomId == booking.RoomId);
 
@@ -98,9 +95,6 @@ namespace TripEnjoy.Infrastructure.Repositories
 
             //  await _context.SaveChangesAsync();
 
-            // Commit transaction nếu tất cả đều thành công
-            //await transaction.CommitAsync();
-            //}
             return booking;
         }
 

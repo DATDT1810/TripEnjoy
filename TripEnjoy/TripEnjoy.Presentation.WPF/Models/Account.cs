@@ -1,19 +1,24 @@
+
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System;
+using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace TripEnjoy.Presentation.WPF.Models
 {
-   public class Account
+    public class Account
     {
         public int AccountId { get; set; }  // account_id là khóa chính tự tăng
 
+     
         public string AccountUsername { get; set; }  // account_username
 
- 
         public string AccountPassword { get; set; }  // account_password
 
         public int AccountRole { get; set; }  // account_role

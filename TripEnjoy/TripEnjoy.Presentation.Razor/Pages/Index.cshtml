@@ -1,4 +1,4 @@
-@page
+﻿@page
 @model IndexModel
 @{
     ViewData["Title"] = "Home page";
@@ -17,12 +17,21 @@
         {
             @foreach (var hotel in Model.Hotels.Where(h => h.HotelAddress.Contains("VietNam", StringComparison.OrdinalIgnoreCase)))
             {
-                var hotelImage = Model.HotelImages?.FirstOrDefault(img => img.HotelId == hotel.HotelId);
+                var hotelImage = Model.HotelImages.FirstOrDefault(img => img.HotelId == hotel.HotelId);
                 <a asp-page="" class="room-item rounded d-block text-decoration-none">
                     <div class="room-item rounded">
                         <div class="position-relative">
                             <img class="img-fluid" src="@hotelImage.ImageUrl" alt="Hotel Image">
-                            <small class="position-absolute start-0 top-100 translate-middle-y bg-warning text-white rounded py-1 px-3 ms-4"><i class="fa fa-solid fa-hotel"></i> Hotel</small>
+                            <small class="position-absolute start-0 top-100 translate-middle-y bg-warning text-white rounded py-1 px-3 ms-4"><i class="fa fa-solid fa-hotel"></i>
+                                @if (hotel.Category != null && !string.IsNullOrEmpty(hotel.Category.CategoryName))
+                                {
+                                    @hotel.Category.CategoryName
+                                }
+                                else
+                                {
+                                    @:Unknown Category
+                                }
+                            </small>
                         </div>
                         <div class="p-4 mt-2">
                             <h5 class="mb-0">@hotel.HotelName</h5>
@@ -61,11 +70,21 @@
             {
                 @foreach (var hotel in Model.Hotels.Where(h => !h.HotelAddress.Contains("VietNam", StringComparison.OrdinalIgnoreCase)))
                 {
+                    var hotelImage = Model.HotelImages.FirstOrDefault(img => img.HotelId == hotel.HotelId);
                     <a asp-page="" class="room-item rounded d-block text-decoration-none">
                         <div class="room-item rounded">
                             <div class="position-relative">
-                                <img class="img-fluid" src="img/room-1.jpg" alt="Hotel Image">
-                                <small class="position-absolute start-0 top-100 translate-middle-y bg-warning text-white rounded py-1 px-3 ms-4"><i class="fa fa-solid fa-hotel"></i> Hotel</small>
+                               <img class="img-fluid" src="@hotelImage.ImageUrl" alt="Hotel Image">
+                                <small class="position-absolute start-0 top-100 translate-middle-y bg-warning text-white rounded py-1 px-3 ms-4"><i class="fa fa-solid fa-hotel"></i>
+                                    @if (hotel.Category != null && !string.IsNullOrEmpty(hotel.Category.CategoryName))
+                                    {
+                                        @hotel.Category.CategoryName
+                                    }
+                                    else
+                                    {
+                                        @:Unknown Category
+                                    }
+                                </small>
                             </div>
                             <div class="p-4 mt-2">
                                 <h5 class="mb-0">@hotel.HotelName</h5>
@@ -293,3 +312,17 @@
         </div>
     </div>
 </div>
+
+@section Scripts{
+    <script>
+        document.querySelectorAll('a.room-item .text-body.mb-3').forEach(function (p) {
+            let fullText = p.textContent;
+            let words = fullText.split(' ');
+
+            if (words.length > 6) {
+                let shortText = words.slice(0, 6).join(' ') + '...';
+                p.textContent = shortText;
+            }
+        });
+    </script>
+}

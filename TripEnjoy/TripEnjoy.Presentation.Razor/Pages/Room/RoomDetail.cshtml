@@ -41,44 +41,135 @@
                         <span class="visually-hidden">Next</span>
                     </button>
                 </div>
-                <div class="d-flex align-items-center mb-4">
-                    <h1 class="mb-0">@Model.RoomDetail.RoomTitle</h1>
-                    <div class="ps-3">
-                        <small class="fa fa-star text-primary"></small>
-                        <small class="fa fa-star text-primary"></small>
-                        <small class="fa fa-star text-primary"></small>
-                        <small class="fa fa-star text-primary"></small>
-                        <small class="fa fa-star text-primary"></small>
-                    </div>
+                <h1 class="mb-0">@Model.RoomDetail.RoomTitle</h1>
+                <div class="ps-0 mb-2">
+                    <small class="fa fa-star text-primary"></small>
+                    <small class="fa fa-star text-primary"></small>
+                    <small class="fa fa-star text-primary"></small>
+                    <small class="fa fa-star text-primary"></small>
+                    <small class="fa fa-star text-primary"></small>
                 </div>
                 <div class="d-flex flex-wrap pb-4 m-n1">
                     @{
                         string bedInfo = string.Empty;
                         string bathInfo = string.Empty;
+                        int maxOccupancy = 1;  // Số người tối đa
+                        Dictionary<string, string> amenities = new Dictionary<string, string>();
+
                         switch (Model.RoomDetail.RoomTypeId)
                         {
-                            case 1:
+                            case 1:  // Standard Room
                             case 9:
                             case 10:
-                                bedInfo = "Single Bed";
+                                bedInfo = "1 Single Bed";
                                 bathInfo = "1 Bath";
+                                maxOccupancy = 2;
+                                amenities = new Dictionary<string, string>
+                    {
+                    { "Free Wifi", "fa-wifi" },
+                    { "TV", "fa-tv" },
+                    { "Air Conditioning", "fa-fan" },
+                    { "Safe", "fa-shield-alt" },
+                    { "Private Bathroom", "fa-bath" },
+                    { "Breakfast Included", "fa-coffee" },
+                    { "Parking", "fa-parking" }
+                    };
                                 break;
-                            case 2:
-                                bedInfo = "1 Double Bed";
+
+                            case 2:  // Deluxe Room
+                                bedInfo = "1 King Bed";
+                                bathInfo = "1 Bath with Bathtub";
+                                maxOccupancy = 2;
+                                amenities = new Dictionary<string, string>
+                    {
+                    { "Free Wifi", "fa-wifi" },
+                    { "Flat-screen TV", "fa-tv" },
+                    { "Air Conditioning", "fa-fan" },
+                    { "Mini-bar", "fa-wine-glass-alt" },
+                    { "Balcony", "fa-door-open" },
+                    { "Breakfast Included", "fa-coffee" },
+                    { "Parking", "fa-parking" }
+                    };
+                                break;
+
+                            case 3:  // Suite Room
+                                bedInfo = "1 King Bed";
                                 bathInfo = "1 Bath";
+                                maxOccupancy = 3;
+                                amenities = new Dictionary<string, string>
+                    {
+                    { "Free Wifi", "fa-wifi" },
+                    { "TV", "fa-tv" },
+                    { "Air Conditioning", "fa-fan" },
+                    { "Village View", "fa-mountain" },
+                    { "Breakfast Included", "fa-coffee" },
+                    { "Parking", "fa-parking" }
+                    };
                                 break;
-                            case 4:
-                                bedInfo = "2 Beds";
-                                bathInfo = "1 Bath";
-                                break;
-                            case 6:
-                                bedInfo = "3 Beds";
-                                bathInfo = "1 Bath";
-                                break;
-                            case 8:
-                            case 11:
+
+                            case 4:  // Family Room
                                 bedInfo = "2 Double Beds";
+                                bathInfo = "1 Bath with Bathtub";
+                                maxOccupancy = 4;
+                                amenities = new Dictionary<string, string>
+                    {
+                    { "Free Wifi", "fa-wifi" },
+                    { "TV", "fa-tv" },
+                    { "Air Conditioning", "fa-fan" },
+                    { "Living Area", "fa-couch" },
+                    { "Breakfast Included", "fa-coffee" },
+                    { "Parking", "fa-parking" },
+                    { "Laundry Service", "fa-tshirt" }
+                    };
+                                break;
+
+                            case 5:  // Executive Room
+                                bedInfo = "1 King Bed";
+                                bathInfo = "1 Bath with Bathtub";
+                                maxOccupancy = 3;
+                                amenities = new Dictionary<string, string>
+                    {
+                    { "Free Wifi", "fa-wifi" },
+                    { "Flat-screen TV", "fa-tv" },
+                    { "Air Conditioning", "fa-fan" },
+                    { "Mini-bar", "fa-wine-glass-alt" },
+                    { "Work Desk", "fa-briefcase" },
+                    { "Breakfast Included", "fa-coffee" },
+                    { "Laundry Service", "fa-tshirt" },
+                    { "Parking", "fa-parking" }
+                    };
+                                break;
+
+                            case 6:  // Villa with Private Pool
+                                bedInfo = "2 King Beds";
+                                bathInfo = "2 Baths with Bathtub";
+                                maxOccupancy = 6;
+                                amenities = new Dictionary<string, string>
+                    {
+                    { "Free Wifi", "fa-wifi" },
+                    { "Flat-screen TV", "fa-tv" },
+                    { "Air Conditioning", "fa-fan" },
+                    { "Private Pool", "fa-swimmer" },
+                    { "Garden", "fa-tree" },
+                    { "Breakfast Included", "fa-coffee" },
+                    { "Parking", "fa-parking" },
+                    { "Gym Access", "fa-dumbbell" }
+                    };
+                                break;
+
+                            case 11:  // Suite Room with Village View
+                                bedInfo = "1 King Bed";
                                 bathInfo = "1 Bath";
+                                maxOccupancy = 3;
+                                amenities = new Dictionary<string, string>
+                    {
+                    { "Free Wifi", "fa-wifi" },
+                    { "TV", "fa-tv" },
+                    { "Air Conditioning", "fa-fan" },
+                    { "Village View", "fa-mountain" },
+                    { "Breakfast Included", "fa-coffee" },
+                    { "Parking", "fa-parking" }
+                    };
                                 break;
                         }
                     }
@@ -87,16 +178,15 @@
                     {
                         <small class="bg-light rounded py-1 px-3 m-1"><i class="fa fa-bed text-primary me-2"></i>@bedInfo</small>
                         <small class="bg-light rounded py-1 px-3 m-1"><i class="fa fa-bath text-primary me-2"></i>@bathInfo</small>
+                        <small class="bg-light rounded py-1 px-3 m-1" title="Occupancy  "><i class="fa fa-user text-primary me-2"></i>@maxOccupancy Max Occupancy</small>
                     }
 
-
-                    <small class="bg-light rounded py-1 px-3 m-1"><i class="fa fa-wifi text-primary me-2"></i>Free Wifi</small>
-                    <small class="bg-light rounded py-1 px-3 m-1"><i class="fa fa-tv text-primary me-2"></i>TV</small>
-                    <small class="bg-light rounded py-1 px-3 m-1"><i class="fa fa-fan text-primary me-2"></i>AC</small>
-                    <small class="bg-light rounded py-1 px-3 m-1"><i class="fa fa-user-cog text-primary me-2"></i>Laundry</small>
-                    <small class="bg-light rounded py-1 px-3 m-1"><i class="fa fa-utensils text-primary me-2"></i>Dinner</small>
-                    <small class="bg-light rounded py-1 px-3 m-1"><i class="fa fa-solid fa-headset text-primary me-2"></i>24-Hour Front Desk</small>
-                    <small class="bg-light rounded py-1 px-3 m-1"><i class="fa fa-thin fa-square-parking text-primary me-2"></i>Parking</small>
+                    @foreach (var amenity in amenities)
+                    {
+                        <small class="bg-light rounded py-1 px-3 m-1">
+                            <i class="fa @amenity.Value text-primary me-2"></i>@amenity.Key
+                        </small>
+                    }
 
                 </div>
                 <p class="mb-5">
@@ -125,7 +215,7 @@
                         <li class="nav-item">
                             <a class="d-flex align-items-center py-3" data-bs-toggle="pill" href="#tab-4">
                                 <i class="fa fa-star text-primary me-2"></i>
-                                <h6 class="mb-0">Reviews(3)</h6>
+                                <h6 class="mb-0">Reviews (@Model.Rates.Count())</h6>
                             </a>
                         </li>
                     </ul>
@@ -221,85 +311,79 @@
                         </div>
                         <div id="tab-4" class="tab-pane fade show p-0">
                             <div class="mb-4">
-                                <h4 class="mb-4">3 Reviews</h4>
-                                <div class="d-flex mb-4">
-                                    <img src="img/user.jpg" class="img-fluid rounded" style="width: 45px; height: 45px;">
-                                    <div class="ps-3">
-                                        <h6>John Doe <small class="text-body fw-normal fst-italic">01 Jan 2045</small></h6>
-                                        <div class="mb-2">
-                                            <small class="fa fa-star text-primary"></small>
-                                            <small class="fa fa-star text-primary"></small>
-                                            <small class="fa fa-star text-primary"></small>
-                                            <small class="fa fa-star text-primary"></small>
-                                            <small class="fa fa-star text-primary"></small>
+                                <h4 class="mb-4">@Model.Rates.Count() Reviews</h4>
+                                @foreach (var comment in Model.Comments.Where(c => c.CommentLevel == 1))
+                                {
+                                    <div class="d-flex mb-4">
+                                        <img src="" class="img-fluid rounded" style="width: 45px; height: 45px;">
+                                        <div class="ps-3">
+                                            <h6>Anonymous Customer <small class="text-body fw-normal fst-italic">@comment.CommentDate.ToString("dd MMM yyyy")</small></h6>
+                                            <div class="rating mb-2">
+                                                @for (int i = 0; i < 5; i++)
+                                                {
+                                                    <small class="fa fa-star text-primary"></small>
+                                                }
+                                            </div>
+                                            <p class="mb-2">@comment.CommentContent</p>
+
+                                            <!-- Phần hiển thị các phản hồi -->
+                                            <div class="cmt-replies mt-3">
+                                                @foreach (var reply in Model.Comments.Where(c => c.CommentReply == comment.CommentId.ToString()))
+                                                {
+                                                    <div class="d-flex mt-3">
+                                                        <img src="" class="img-fluid rounded" style="width: 35px; height: 35px;">
+                                                        <div class="ps-3">
+                                                            <h6>Anonymous Customer <small class="text-body fw-normal fst-italic">@reply.CommentDate.ToString("dd MMM yyyy")</small></h6>
+                                                            <p class="mb-2">@reply.CommentContent</p>
+                                                        </div>
+                                                    </div>
+                                                }
+                                            </div>
+
+                                            <!-- Hiển thị nút Reply -->
+                                            <div class="cmt-action">
+                                                <div class="cmt-reply">
+                                                    <a href="javascript:void(0);" class="btn-reply" role="button"
+                                                       data-comment-id="@comment.CommentId">Reply</a>
+                                                </div>
+                                            </div>
+
+
+                                            <!-- Form để nhập phản hồi -->
+                                            <div class="reply-form mt-3" id="reply-form-@comment.CommentId" style="display:none;">
+                                                <textarea id="reply-content-@comment.CommentId" class="form-control" rows="3" placeholder="Add a reply..."></textarea>
+                                                <button type="button" class="btn btn-primary btn-submit-reply mt-2" data-comment-id="@comment.CommentId">Submit Reply</button>
+                                            </div>
                                         </div>
-                                        <p class="mb-2">
-                                            Diam amet duo labore stet elitr invidunt ea clita ipsum voluptua, tempor labore
-                                            accusam ipsum et no at. Kasd diam tempor rebum magna dolores sed eirmod
-                                        </p>
-                                        <a href><i class="fa fa-reply me-2"></i> Reply</a>
                                     </div>
-                                </div>
-                                <div class="d-flex mb-4">
-                                    <img src="img/user.jpg" class="img-fluid rounded" style="width: 45px; height: 45px;">
-                                    <div class="ps-3">
-                                        <h6>John Doe <small class="text-body fw-normal fst-italic">01 Jan 2045</small></h6>
-                                        <div class="mb-2">
-                                            <small class="fa fa-star text-primary"></small>
-                                            <small class="fa fa-star text-primary"></small>
-                                            <small class="fa fa-star text-primary"></small>
-                                            <small class="fa fa-star text-primary"></small>
-                                            <small class="fa fa-star text-primary"></small>
-                                        </div>
-                                        <p class="mb-2">
-                                            Diam amet duo labore stet elitr invidunt ea clita ipsum voluptua, tempor labore
-                                            accusam ipsum et no at. Kasd diam tempor rebum magna dolores sed eirmod
-                                        </p>
-                                        <a href><i class="fa fa-reply me-2"></i> Reply</a>
-                                    </div>
-                                </div>
-                                <div class="d-flex ms-5 mb-4">
-                                    <img src="img/user.jpg" class="img-fluid rounded" style="width: 45px; height: 45px;">
-                                    <div class="ps-3">
-                                        <h6>John Doe <small class="text-body fw-normal fst-italic">01 Jan 2045</small></h6>
-                                        <div class="mb-2">
-                                            <small class="fa fa-star text-primary"></small>
-                                            <small class="fa fa-star text-primary"></small>
-                                            <small class="fa fa-star text-primary"></small>
-                                            <small class="fa fa-star text-primary"></small>
-                                            <small class="fa fa-star text-primary"></small>
-                                        </div>
-                                        <p class="mb-2">
-                                            Diam amet duo labore stet elitr invidunt ea clita ipsum voluptua, tempor labore
-                                            accusam ipsum et no at. Kasd diam tempor rebum magna dolores sed eirmod
-                                        </p>
-                                        <a href><i class="fa fa-reply me-2"></i> Reply</a>
-                                    </div>
-                                </div>
+                                }
+
                             </div>
+
+                            <script>
+                                var roomId = @Model.RoomDetail.RoomId;
+                            </script>
+
                             <div class="bg-light p-4 p-md-5">
                                 <h4 class="mb-4">Leave A Review</h4>
-                                <form>
+                                <form id="review-form" method="post">
                                     <div class="row g-3">
                                         <div class="col-12 d-flex align-items-center">
                                             <h6 class="mb-0 me-2">Rate Me:</h6>
-                                            <div id="halfstarsReview" class="fs-3 me-2"></div>
-                                            <input type="text" value readonly id="halfstarsInput" class="border-0 bg-transparent" style="width: 30px;">
-                                        </div>
-                                        <div class="col-12 col-sm-6">
-                                            <input type="text" class="form-control bg-white border-0" placeholder="Your Name" style="height: 55px;">
-                                        </div>
-                                        <div class="col-12 col-sm-6">
-                                            <input type="email" class="form-control bg-white border-0" placeholder="Your Email" style="height: 55px;">
-                                        </div>
-                                        <div class="col-12">
-                                            <input type="text" class="form-control bg-white border-0" placeholder="Website" style="height: 55px;">
+                                            <div id="stars" class="fs-3 me-2">
+                                                <i class="fa fa-star star" data-value="1"></i>
+                                                <i class="fa fa-star star" data-value="2"></i>
+                                                <i class="fa fa-star star" data-value="3"></i>
+                                                <i class="fa fa-star star" data-value="4"></i>
+                                                <i class="fa fa-star star" data-value="5"></i>
+                                            </div>
+                                            <input type="hidden" id="rate-value" value="0">
                                         </div>
                                         <div class="col-12">
-<textarea class="form-control bg-white border-0" rows="5" placeholder="Comment"></textarea>
+                                            <textarea class="form-control bg-white border-0" id="comment-content" rows="5" placeholder="Comment"></textarea>
                                         </div>
                                         <div class="col-12">
-                                            <button class="btn btn-primary w-100 py-3" type="submit">Leave Your Review</button>
+                                            <button id="submit-review" class="btn btn-primary w-100 py-3" type="button">Leave Your Review</button>
                                         </div>
                                     </div>
                                 </form>
@@ -308,7 +392,6 @@
                     </div>
                 </div>
             </div>
-
 
             <div class="col-lg-4">
 
@@ -353,7 +436,7 @@
                             </select>
                         </div>
                         <div class="col-12">
-                            <button class="btn btn-primary py-3 w-100">Book Now</button>
+                            <a class="btn btn-primary py-3 w-100" asp-page="/Booking/Booking" asp-route-id="@Model.RoomDetail.RoomId">Book Now</a>
                         </div>
                     </div>
                 </div>
@@ -406,99 +489,176 @@
             <h1 class="mb-5">Explore More <span class="text-primary text-uppercase">Rooms</span></h1>
         </div>
         <div class="row g-4">
-            <div class="col-lg-4 col-md-6 wow fadeInUp" data-wow-delay="0.1s">
-                <div class="room-item rounded">
-                    <div class="position-relative">
-                        <img class="img-fluid" src="img/room-1.jpg" alt>
-                        <small class="position-absolute start-0 top-100 translate-middle-y bg-primary text-white rounded py-1 px-3 ms-4">$100/Night</small>
-                    </div>
-                    <div class="p-4 mt-2">
-                        <div class="d-flex justify-content-between mb-3">
-                            <h5 class="mb-0">Junior Suite</h5>
-                            <div class="ps-2">
-                                <small class="fa fa-star text-primary"></small>
-                                <small class="fa fa-star text-primary"></small>
-                                <small class="fa fa-star text-primary"></small>
-                                <small class="fa fa-star text-primary"></small>
-                                <small class="fa fa-star text-primary"></small>
+            @if (Model.RelatedRooms != null && Model.RelatedRooms.Any())
+            {
+                foreach (var relatedRoom in Model.RelatedRooms)
+                {
+                    <div class="col-lg-4 col-md-6 wow fadeInUp" data-wow-delay="0.1s">
+                        <div class="room-item rounded">
+                            <div class="position-relative">
+                                <img class="img-fluid" src="" alt>
+                                <small class="position-absolute start-0 top-100 translate-middle-y bg-primary text-white rounded py-1 px-3 ms-4">
+                                    @relatedRoom.RoomPrice.ToString("#,##0 VND")/Night
+                                </small>
+                            </div>
+                            <div class="p-4 mt-2">
+                                <h5 class="mb-0">@relatedRoom.RoomTitle</h5>
+                                <div class="d-flex justify-content-between mb-3">
+                                    <div class="ps-0">
+                                        <small class="fa fa-star text-warning"></small>
+                                        <small class="fa fa-star text-warning"></small>
+                                        <small class="fa fa-star text-warning"></small>
+                                        <small class="fa fa-star text-warning"></small>
+                                        <small class="fa fa-star text-warning"></small>
+                                    </div>
+                                </div>
+                                <div class="d-flex mb-3">
+                                    <small class="border-end me-3 pe-3"><i class="fa fa-bed text-primary me-2"></i>@bedInfo</small>
+                                    <small class="border-end me-3 pe-3"><i class="fa fa-bath text-primary me-2"></i>@bathInfo</small>
+                                    <small><i class="fa fa-wifi text-primary me-2"></i>Wifi</small>
+                                </div>
+                                <p class="text-body mb-3">@relatedRoom.RoomDescription</p>
+                                <div class="d-flex justify-content-between">
+                                    <a class="btn btn-sm btn-primary rounded py-2 px-4" asp-page="/Room/RoomDetail" asp-route-id="@relatedRoom.RoomId">View Detail</a>
+                                    <a class="btn btn-sm btn-dark rounded py-2 px-4" href="/Booking?roomId=@relatedRoom.RoomId">Book Now</a>
+                                </div>
                             </div>
                         </div>
-                        <div class="d-flex mb-3">
-                            <small class="border-end me-3 pe-3"><i class="fa fa-bed text-primary me-2"></i>3 Bed</small>
-                            <small class="border-end me-3 pe-3"><i class="fa fa-bath text-primary me-2"></i>2 Bath</small>
-                            <small><i class="fa fa-wifi text-primary me-2"></i>Wifi</small>
-                        </div>
-                        <p class="text-body mb-3">Erat ipsum justo amet duo et elitr dolor, est duo duo eos lorem sed diam stet diam sed stet lorem.</p>
-                        <div class="d-flex justify-content-between">
-                            <a class="btn btn-sm btn-primary rounded py-2 px-4" href>View Detail</a>
-                            <a class="btn btn-sm btn-dark rounded py-2 px-4" href>Book Now</a>
-                        </div>
                     </div>
-                </div>
-            </div>
-            <div class="col-lg-4 col-md-6 wow fadeInUp" data-wow-delay="0.3s">
-                <div class="room-item rounded">
-                    <div class="position-relative">
-                        <img class="img-fluid" src="img/room-2.jpg" alt>
-                        <small class="position-absolute start-0 top-100 translate-middle-y bg-primary text-white rounded py-1 px-3 ms-4">$100/Night</small>
-                    </div>
-                    <div class="p-4 mt-2">
-                        <div class="d-flex justify-content-between mb-3">
-                            <h5 class="mb-0">Executive Suite</h5>
-                            <div class="ps-2">
-                                <small class="fa fa-star text-primary"></small>
-                                <small class="fa fa-star text-primary"></small>
-                                <small class="fa fa-star text-primary"></small>
-                                <small class="fa fa-star text-primary"></small>
-                                <small class="fa fa-star text-primary"></small>
-                            </div>
-                        </div>
-                        <div class="d-flex mb-3">
-                            <small class="border-end me-3 pe-3"><i class="fa fa-bed text-primary me-2"></i>3 Bed</small>
-                            <small class="border-end me-3 pe-3"><i class="fa fa-bath text-primary me-2"></i>2 Bath</small>
-                            <small><i class="fa fa-wifi text-primary me-2"></i>Wifi</small>
-                        </div>
-                        <p class="text-body mb-3">Erat ipsum justo amet duo et elitr dolor, est duo duo eos lorem sed diam stet diam sed stet lorem.</p>
-                        <div class="d-flex justify-content-between">
-                            <a class="btn btn-sm btn-primary rounded py-2 px-4" href>View Detail</a>
-                            <a class="btn btn-sm btn-dark rounded py-2 px-4" href>Book Now</a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="col-lg-4 col-md-6 wow fadeInUp" data-wow-delay="0.6s">
-                <div class="room-item rounded">
-                    <div class="position-relative">
-                        <img class="img-fluid" src="img/room-3.jpg" alt>
-                        <small class="position-absolute start-0 top-100 translate-middle-y bg-primary text-white rounded py-1 px-3 ms-4">$100/Night</small>
-                    </div>
-                    <div class="p-4 mt-2">
-                        <div class="d-flex justify-content-between mb-3">
-                            <h5 class="mb-0">Super Deluxe</h5>
-                            <div class="ps-2">
-                                <small class="fa fa-star text-primary"></small>
-                                <small class="fa fa-star text-primary"></small>
-                                <small class="fa fa-star text-primary"></small>
-                                <small class="fa fa-star text-primary"></small>
-                                <small class="fa fa-star text-primary"></small>
-                            </div>
-                        </div>
-                        <div class="d-flex mb-3">
-                            <small class="border-end me-3 pe-3"><i class="fa fa-bed text-primary me-2"></i>3 Bed</small>
-                            <small class="border-end me-3 pe-3"><i class="fa fa-bath text-primary me-2"></i>2 Bath</small>
-                            <small><i class="fa fa-wifi text-primary me-2"></i>Wifi</small>
-                        </div>
-                        <p class="text-body mb-3">Erat ipsum justo amet duo et elitr dolor, est duo duo eos lorem sed diam stet diam sed stet lorem.</p>
-                        <div class="d-flex justify-content-between">
-                            <a class="btn btn-sm btn-primary rounded py-2 px-4" href>View Detail</a>
-                            <a class="btn btn-sm btn-dark rounded py-2 px-4" href>Book Now</a>
-                        </div>
-                    </div>
-                </div>
-            </div>
+                }
+            }
+            else
+            {
+                <p class="text-center">No related rooms found.</p>
+            }
             <div class="col-12 text-center wow fadeInUp" data-wow-delay="0.9s">
                 <a href class="btn btn-primary py-3 px-5">Explore All Rooms</a>
             </div>
         </div>
     </div>
 </div>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            // Toggle reply form
+            $(document).on('click', '.btn-reply', function (e) {
+                e.preventDefault();
+                var commentId = $(this).data('comment-id');
+
+                if (commentId === 0) {
+                    alert("No comment associated with this reply.");
+                    return;
+                }
+
+                $('#reply-form-' + commentId).toggle();
+            });
+
+
+            // Handle reply submission
+            $(document).on('click', '.btn-submit-reply', function () {
+                var commentId = $(this).data('comment-id');
+                var replyContent = $('#reply-content-' + commentId).val();
+
+                if (replyContent === "") {
+                    alert("Please enter a reply.");
+                    return;
+                }
+
+                console.log("Submitting reply for commentId: " + commentId);
+
+                $.ajax({
+                    url: '@Url.Page("/Room/RoomDetail", new { handler = "Reply" })',  // Tạo URL gọi tới phương thức OnPostReply
+                    type: 'POST',
+                    contentType: 'application/json',
+                    data: JSON.stringify({
+                        RoomId: @Model.RoomDetail.RoomId,  // Lấy RoomId từ Model
+                        CommentId: commentId,
+                        ReplyContent: replyContent
+                    }),
+                    success: function (response) {
+                        if (response.success) {
+                            alert(response.message);
+                            location.reload();  // Tải lại trang sau khi gửi phản hồi thành công
+                        } else {
+                            alert(response.message);
+                        }
+                    },
+                    error: function (error) {
+                        console.error("Error submitting reply:", error);
+                        alert("Failed to submit the reply.");
+                    }
+                });
+            });
+        });
+
+
+        $(document).ready(function () {
+            var rateValue = 0;
+
+            // Khi click vào các ngôi sao để đánh giá
+            $('#stars i').on('click', function () {
+                rateValue = $(this).data('value');
+                $('#rate-value').val(rateValue);
+
+                // Highlight các sao được chọn
+                $('#stars i').each(function (index) {
+                    if (index < rateValue) {
+                        $(this).addClass('text-warning');
+                    } else {
+                        $(this).removeClass('text-warning');
+                    }
+                });
+            });
+
+            // Xử lý submit review
+            $('#submit-review').on('click', function (e) {
+                e.preventDefault();
+
+                var commentContent = $('#comment-content').val();
+                var roomId = $('#room-id').val(); // Thay bằng RoomId thực tế của phòng bạn
+                var rateValue = $('#rate-value').val();
+
+                // Kiểm tra dữ liệu trước khi gửi
+                if (!rateValue || rateValue < 1 || rateValue > 5) {
+                    alert("Please select a valid rate between 1 and 5.");
+                    return;
+                }
+
+                if (commentContent.trim() === "") {
+                    alert("Please enter a comment.");
+                    return;
+                }
+
+                // Gửi đánh giá và bình luận qua AJAX
+                $.ajax({
+                    url: '@Url.Page("/Room/RoomDetail", new { handler = "RateAndComment" })', // Đường dẫn đến phương thức OnPostRateAndComment
+                    type: 'POST',
+                    contentType: 'application/json',
+                    data: JSON.stringify({
+                        RoomId: roomId,
+                        RateValue: rateValue,
+                        CommentContent: commentContent,
+                        ReviewDate: new Date().toISOString() // Ngày hiện tại
+                    }),
+                    success: function (response) {
+                        if (response.success) {
+                            alert(response.message);
+                            location.reload(); // Tải lại trang để cập nhật danh sách đánh giá
+                        } else {
+                            alert(response.message);
+                        }
+                    },
+                    error: function (error) {
+                        console.error("Error submitting review:", error);
+                        alert("Failed to submit the review. Please try again.");
+                    }
+                });
+            });
+        });
+
+    </script>
+}
+
