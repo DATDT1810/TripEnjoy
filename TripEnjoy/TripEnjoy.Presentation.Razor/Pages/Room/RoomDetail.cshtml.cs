@@ -21,7 +21,7 @@ namespace TripEnjoy.Presentation.Razor.Pages.Room
         public IEnumerable<RoomDetail> RelatedRooms { get; set; }
 
         [BindProperty(SupportsGet = true)]
-        public IEnumerable<Rate> Rates { get; set; }  // Thêm thuộc tính để lưu trữ danh sách đánh giá
+        public IEnumerable<Rate> Rates { get; set; } 
 
         [BindProperty(SupportsGet = true)]
         public IEnumerable<Comment> Comments { get; set; }

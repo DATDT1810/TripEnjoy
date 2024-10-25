@@ -442,10 +442,12 @@
     box-shadow: 0 0 45px rgba(0, 0, 0, .08);
     margin: 0 2px 30px 2px;
     border-radius: 15px;
-    height: 420px;
+}
+.room-item .room-item_hotel {
+     height: 400px;
 }
 
-.room-item img{
+.room-item img {
     width: 200px;
     height: 200px;
 }
@@ -458,6 +460,48 @@
    padding: 15px !important;
 }
 
+/*List room*/
+.text-gray{
+    color: gainsboro;
+}
+
+.gallery {
+    display: flex;
+    gap: 10px;
+}
+
+.thumbnail {
+    width: 200px;
+    cursor: pointer;
+    border-radius: 8px;
+    transition: transform 0.3s;
+}
+
+    .thumbnail:hover {
+        transform: scale(1.05);
+    }
+
+.overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.8);
+    display: none;
+    justify-content: center;
+    align-items: center;
+}
+
+    .overlay img {
+        max-width: 90%;
+        max-height: 90%;
+        border-radius: 8px;
+    }
+
+    .overlay:active {
+        display: none;
+    }
 
 /* owl-prev */
 .owl-carousel .owl-nav {

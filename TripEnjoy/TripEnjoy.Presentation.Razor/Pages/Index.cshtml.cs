@@ -45,6 +45,10 @@ namespace TripEnjoy.Presentation.Razor.Pages
             {
                 string imagesData = await imagesResponse.Content.ReadAsStringAsync();
                 HotelImages = JsonConvert.DeserializeObject<List<HotelImages>>(imagesData);
+                foreach (var hotel in Hotels)
+                {
+                    hotel.HotelImages = HotelImages.FirstOrDefault(img => img.HotelId == hotel.HotelId);
+                }
             }
 
             // Call API to get the list of categories

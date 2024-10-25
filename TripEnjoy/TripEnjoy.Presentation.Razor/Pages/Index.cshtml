@@ -17,11 +17,10 @@
         {
             @foreach (var hotel in Model.Hotels.Where(h => h.HotelAddress.Contains("VietNam", StringComparison.OrdinalIgnoreCase)))
             {
-                var hotelImage = Model.HotelImages.FirstOrDefault(img => img.HotelId == hotel.HotelId);
-                <a asp-page="" class="room-item rounded d-block text-decoration-none">
-                    <div class="room-item rounded">
+                <a asp-page="/Room/RoomList" asp-route-hotelId="@hotel.HotelId" class="room-item rounded d-block text-decoration-none">
+                    <div class="room-item rounded room-item_hotel">
                         <div class="position-relative">
-                            <img class="img-fluid" src="@hotelImage.ImageUrl" alt="Hotel Image">
+                            <img class="img-fluid" src="@hotel.HotelImages.ImageUrl" alt="Hotel Image">
                             <small class="position-absolute start-0 top-100 translate-middle-y bg-warning text-white rounded py-1 px-3 ms-4"><i class="fa fa-solid fa-hotel"></i>
                                 @if (hotel.Category != null && !string.IsNullOrEmpty(hotel.Category.CategoryName))
                                 {
@@ -30,20 +29,12 @@
                                 else
                                 {
                                     @:Unknown Category
-                                }
+                                }                                   
                             </small>
                         </div>
                         <div class="p-4 mt-2">
-                            <h5 class="mb-0">@hotel.HotelName</h5>
-                            <div class="d-flex justify-content-between mb-3">
-                                <div class="ps-0">
-                                    <small class="fa fa-star text-warning"></small>
-                                    <small class="fa fa-star text-warning"></small>
-                                    <small class="fa fa-star text-warning"></small>
-                                    <small class="fa fa-star text-warning"></small>
-                                    <small class="fa fa-star text-warning"></small>
-                                </div>
-                            </div>
+                            <h5 class="mb-3">@hotel.HotelName</h5>
+                            
                             <div class="d-flex mb-3">
                                 <small class="border-end me-3 pe-3">
                                     <i class="fa-solid fa-location-dot text-warning me-2"></i>@hotel.HotelAddress
@@ -70,11 +61,11 @@
             {
                 @foreach (var hotel in Model.Hotels.Where(h => !h.HotelAddress.Contains("VietNam", StringComparison.OrdinalIgnoreCase)))
                 {
-                    var hotelImage = Model.HotelImages.FirstOrDefault(img => img.HotelId == hotel.HotelId);
-                    <a asp-page="" class="room-item rounded d-block text-decoration-none">
-                        <div class="room-item rounded">
+                    
+                    <a asp-page="/Room/RoomList" asp-route-hotelId="@hotel.HotelId" class="room-item rounded d-block text-decoration-none">
+                        <div class="room-item rounded room-item_hotel">
                             <div class="position-relative">
-                               <img class="img-fluid" src="@hotelImage.ImageUrl" alt="Hotel Image">
+                               <img class="img-fluid" src="@hotel.HotelImages.ImageUrl" alt="Hotel Image">
                                 <small class="position-absolute start-0 top-100 translate-middle-y bg-warning text-white rounded py-1 px-3 ms-4"><i class="fa fa-solid fa-hotel"></i>
                                     @if (hotel.Category != null && !string.IsNullOrEmpty(hotel.Category.CategoryName))
                                     {
@@ -87,16 +78,7 @@
                                 </small>
                             </div>
                             <div class="p-4 mt-2">
-                                <h5 class="mb-0">@hotel.HotelName</h5>
-                                <div class="d-flex justify-content-between mb-3">
-                                    <div class="ps-0">
-                                        <small class="fa fa-star text-warning"></small>
-                                        <small class="fa fa-star text-warning"></small>
-                                        <small class="fa fa-star text-warning"></small>
-                                        <small class="fa fa-star text-warning"></small>
-                                        <small class="fa fa-star text-warning"></small>
-                                    </div>
-                                </div>
+                                <h5 class="mb-3">@hotel.HotelName</h5>
                                 <div class="d-flex mb-3">
                                     <small class="border-end me-3 pe-3"><i class="fa-solid fa-location-dot text-warning me-2"></i>@hotel.HotelAddress</small>
                                 </div>
@@ -107,8 +89,6 @@
                 }
             }
         </div>
-
-
     </div>
 </div>
 
@@ -320,7 +300,7 @@
             let words = fullText.split(' ');
 
             if (words.length > 6) {
-                let shortText = words.slice(0, 6).join(' ') + '...';
+                let shortText = words.slice(0, 6).join(' ') + ' ...';
                 p.textContent = shortText;
             }
         });

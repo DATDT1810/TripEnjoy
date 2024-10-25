@@ -24,10 +24,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\TripEnjoy.Presentation.Web\TripEnjoy.Presentation.Web.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
     <Resource Include="Assets\Images\bg.png" />
     <Resource Include="Assets\Images\Hotel.jpg" />
   </ItemGroup>

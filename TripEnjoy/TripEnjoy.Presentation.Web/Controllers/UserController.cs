@@ -58,12 +58,13 @@ namespace TripEnjoy.Presentation.Web.Controllers
             return BadRequest("Invalid data");
         }
 
-        [Authorize]
+        //[Authorize]
         [HttpPost]
         [Route("UploadImageProfile")]
         public async Task<IActionResult> UploadImageProfile(List<IFormFile> files)
         {
-            var email = User.FindFirstValue(ClaimTypes.Email);
+            //var email = User.FindFirstValue(ClaimTypes.Email);
+            var email = "datdtce171751@fpt.edu.vn";
             if (email == null)
             {
                 return Unauthorized("Invalid token");
