@@ -63,7 +63,7 @@ namespace TripEnjoy.Presentation.Razor.Helper
                         return redirectResponse;
                     }
                 }
-                catch (Exception ex)
+                catch (Exception)
                 {
                     var loginUrl = "/Login";
                     var redirectResponse = new HttpResponseMessage(HttpStatusCode.Redirect);

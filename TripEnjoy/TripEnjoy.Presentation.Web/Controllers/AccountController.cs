@@ -219,15 +219,16 @@ namespace TripEnjoy.Presentation.Web.Controllers
         }
 
 
-		[Authorize]
-		[HttpPut("UpgradeLevel/{UId}")]
-        public async Task<IActionResult> UpdateAccountLevel(string UId)
+
+        [Authorize(Roles = "Admin")]
+        [HttpPut("UpgradeLevel/{id}")]
+        public async Task<IActionResult> UpdateAccountLevel(int id)
         {
-            if (UId == null)
+            if (id == 0)
             {
                 return Unauthorized("User not authenticated");
             }
-            var account = await _accountService.UpdateAccountLevelAsync(UId);
+            var account = await _accountService.UpdateAccountLevelAsync(id);
             if (account != null)
             {
                 return Ok("Account has been upgraded to premium");
@@ -235,5 +236,83 @@ namespace TripEnjoy.Presentation.Web.Controllers
             return BadRequest("Failed to upgrade account");
         }
 
+        [Authorize(Roles = "Admin")]
+        [HttpPut("RejectUpdateAccountLevel/{id}")]
+        public async Task<IActionResult> RejectUpdateAccountLevel(int id)
+        {
+            if (id == 0)
+            {
+                return Unauthorized("User not authenticated");
+            }
+            var account = await _accountService.RejectUpdateAccountLevelAsync(id);
+            if (account != null)
+            {
+                return Ok("Account has been rejected to upgrade to premium");
+            }
+            return BadRequest("Failed to reject upgrade account");
+        }
+
+
+        [Authorize(Roles = "Admin")]
+        [HttpPut]
+        [Route("LockAccount/{id}")]
+        public async Task<IActionResult> LockAccount(int id)
+        {
+            if (id == 0)
+            {
+                return Unauthorized("User not authenticated");
+            }
+            var account = await _accountService.DeleteAccountAsync(id);
+            if (account != null)
+            {
+                return Ok(account);
+            }
+            return BadRequest("Failed to lock account");
+        }
+
+        [Authorize(Roles = "Admin")]
+        [HttpPut]
+        [Route("RestoreAccount/{id}")]
+        public async Task<IActionResult> RestoreAccount(int id)
+        {
+            if (id == 0)
+            {
+                return Unauthorized("User not authenticated");
+            }
+            var account = await _accountService.RestoreAccount(id);
+            if (account != null)
+            {
+                return Ok(account);
+            }
+            return BadRequest("Failed to restore account");
+        }
+
+        // Partner yêu cầu
+        [Authorize]
+        [HttpPost]
+        [Route("RequestBecamePartner")]
+        public async Task<IActionResult> RequestBecamePartner()
+        {
+            var email = User.FindFirstValue(ClaimTypes.Email);
+            if (email == null)
+            {
+                return Unauthorized("User not authenticated");
+            }
+            var result = await _accountService.RequestBecamePartner(email);
+            return Ok(result);
+        }
+
+        [Authorize(Roles = "Admin")]
+        [HttpGet]
+        [Route("GetAccountNeedToBecamePartner")]
+        public async Task<IActionResult> GetAccountNeedToBecamePartner()
+        {
+            var result = await _accountService.GetAccountNeedToBecamePartner();
+            if (result == null)
+            {
+                return NotFound();
+            }
+            return Ok(result);
+        }
     }
 }
