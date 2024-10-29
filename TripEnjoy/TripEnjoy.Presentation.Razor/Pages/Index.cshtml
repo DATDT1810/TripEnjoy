@@ -4,7 +4,88 @@
     ViewData["Title"] = "Home page";
 }
 
+<div class="container-fluid booking pb-5 wow fadeIn" data-wow-delay="0.1s">
+    <div class="container">
+        @if (!ViewData.ModelState.IsValid)
+        {
+            <div class="alert alert-danger">
+                <ul>
+                    @foreach (var error in ViewData.ModelState.Values.SelectMany(v => v.Errors))
+                    {
+                        <li>@error.ErrorMessage</li>
+                    }
+                </ul>
+            </div>
+        }
+        <form method="post">
+            <div class="bg-white shadow" style="padding: 35px;">
+                <div class="mb-4">
+                    <div class="d-flex flex-wrap gap-2">
+                        @if (Model.ListCategory != null && Model.ListCategory.Any())
+                        {
+                            var firstCategoryId = Model.ListCategory.First().CategoryId;
+                            @foreach (var category in Model.ListCategory)
+                            {
+                                var isSelected = category.CategoryId == firstCategoryId ? "selected" : "";
+                                <div class="category-oval @isSelected" onclick="selectedCategory(this, '@category.CategoryId')">@category.CategoryName</div>
+                            }
+                        }
+                    </div>
+                </div>
+                <input type="hidden" id="CategoryId" name="categoryId" value="" />
+                <div class="row">
+                    <div class="col-md-10">
+                        <div class="row g-0">
+                            <div class="col-md-4 p-0">
+                                <div class="autocomplete">
+                                    <input id="myInput" type="text" name="hotelAddress" placeholder="Country">
+                                </div>
+                            </div>
+                            <div class="col-md-4 p-0">
+                                <div class="calendar">
+                                    <input id="dateInput" name="dateBooking" type="text" placeholder="YYYY-MM-DD" readonly />
+                                </div>
+                                <div id="calendarContainer" class="calendar-container">
+                                    <div id="currentMonthCalendar" class="calendarCurrentMonth"></div>
+                                    <div id="nextMonthCalendar" class="calendarNextMonth"></div>
+                                </div>
+                            </div>
+                            <div class="col-md-4 p-0">
+                                <div class="room-type">
+                                    <input id="roomtypeInput" name="roomtypeInput" type="text" value="1 người lớn, 0 trẻ em, 1 phòng" readonly />
+                                </div>
+                                <div id="roomtypeContainer" class="roomtype-container">
+                                    <div class="roomtypeAdult">
+                                        <p>Người lớn</p>
+                                        <button id="decreaseAdultButton" type="button">-</button>
+                                        <input type="number" id="adultCount" value="1" min="1" max="30" readonly />
+                                        <button id="increaseAdultButton" type="button">+</button>
+                                    </div>
+                                    <div id="roomtypeChildrent" class="roomtypeChildrent">
+                                        <p>Trẻ em</p>
+                                        <button id="decreaseChildrentButton" type="button">-</button>
+                                        <input type="number" id="childrentCount" value="0" min="0" max="6" readonly />
+                                        <button id="increaseChildrentButton" type="button">+</button>
+                                    </div>
+                                    <div id="numberOfRoom" class="numberOfRoom">
+                                        <p>Số lượng phòng</p>
+                                        <button id="decreaseNumberOfRoomButton" type="button">-</button>
+                                        <input type="number" id="numberOfRoomCount" value="1" min="1" max="8" readonly />
+                                        <button id="increaseNumberOfRoomButton" type="button">+</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-2">
+                        <button type="submit" class="btn btn-warning text-white w-100">Find Rooms</button>
+                    </div>
 
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
 <!-- Vietnam Hotels Section -->
 <div class="container mt-4">
     <div class="text-center wow fadeInUp" data-wow-delay="0.1s">
@@ -323,6 +404,305 @@
                 let shortText = words.slice(0, 6).join(' ') + '...';
                 p.textContent = shortText;
             }
+        });
+        document.addEventListener("DOMContentLoaded", function () {
+            var firstCategoryId = '@(Model.ListCategory != null && Model.ListCategory.Any() ? Model.ListCategory.First().CategoryId : "0")';
+            selectedCategory(document.querySelector('.category-oval'), firstCategoryId);
+            // Lấy thông tin khách sạn từ server và lưu vào biến hotelInfo
+            var hotelInfo = @Html.Raw(ViewData["HotelInfo"]);
+
+            // Hàm autocomplete nhận 2 tham số: trường nhập liệu và mảng các giá trị gợi ý
+            function autocomplete(inp, arr) {
+                var currentFocus; // Biến lưu chỉ số của gợi ý hiện tại (đang được chọn)
+
+                // Khi người dùng nhập vào trường inp
+                inp.addEventListener("input", function (e) {
+                    var a, b, i, val = this.value; // Tạo biến cho danh sách gợi ý và giá trị người dùng nhập
+                    closeAllLists(); // Đóng tất cả danh sách gợi ý đang mở trước đó
+                    if (!val) { return false; } // Nếu không có giá trị, thoát khỏi hàm
+                    currentFocus = -1; // Đặt chỉ số gợi ý hiện tại về -1
+
+                    // Tạo một thẻ DIV để chứa các gợi ý
+                    a = document.createElement("DIV");
+                    a.setAttribute("id", this.id + "autocomplete-list"); // Thiết lập ID cho DIV
+                    a.setAttribute("class", "autocomplete-items"); // Thiết lập class cho DIV
+
+                    // Thêm DIV này vào làm phần tử con của trường nhập liệu
+                    this.parentNode.appendChild(a);
+
+                    // Duyệt qua các giá trị trong mảng arr
+                    for (i = 0; i < arr.length; i++) {
+                        var matchIndex = arr[i].toUpperCase().indexOf(val.toUpperCase());
+                        if (matchIndex > -1) {
+                            // Tạo một thẻ DIV cho mỗi phần tử khớp
+                            b = document.createElement("DIV");
+                            const beforeMatch = arr[i].substr(0, matchIndex);
+                            const matchText = arr[i].substr(matchIndex, val.length);
+                            const afterMatch = arr[i].substr(matchIndex + val.length);
+                            // Làm nổi bật phần chữ trùng khớp
+                            b.innerHTML = beforeMatch + "<strong>" + matchText + "</strong>" + afterMatch;
+                            // Thêm một trường input ẩn để lưu giá trị của phần tử hiện tại
+                            b.innerHTML += "<input type='hidden' value='" + arr[i] + "'>";
+
+                            // Khi người dùng click vào gợi ý
+                            b.addEventListener("click", function (e) {
+                                // Đưa giá trị của gợi ý vào trường nhập liệu
+                                inp.value = this.getElementsByTagName("input")[0].value;
+                                // Đóng tất cả danh sách gợi ý
+                                closeAllLists();
+                            });
+                            // Thêm thẻ DIV này vào danh sách gợi ý
+                            a.appendChild(b);
+                        }
+                    }
+                });
+
+                // Khi người dùng nhấn phím trong trường nhập liệu
+                inp.addEventListener("keydown", function (e) {
+                    var x = document.getElementById(this.id + "autocomplete-list");
+                    if (x) x = x.getElementsByTagName("div");
+                    if (e.keyCode == 40) { // Nếu nhấn phím mũi tên xuống
+                        currentFocus++; // Tăng chỉ số của gợi ý hiện tại
+                        addActive(x); // Làm nổi bật gợi ý hiện tại
+                    } else if (e.keyCode == 38) { // Nếu nhấn phím mũi tên lên
+                        currentFocus--; // Giảm chỉ số của gợi ý hiện tại
+                        addActive(x); // Làm nổi bật gợi ý hiện tại
+                    } else if (e.keyCode == 13) { // Nếu nhấn phím Enter
+                        e.preventDefault(); // Ngăn không cho form bị submit
+                        if (currentFocus > -1) { // Nếu có gợi ý nào đang được chọn
+                            if (x) x[currentFocus].click(); // Kích hoạt click vào gợi ý đó
+                        }
+                    }
+                });
+
+                // Hàm thêm class "active" cho gợi ý hiện tại
+                function addActive(x) {
+                    if (!x) return false; // Nếu không có gợi ý, thoát khỏi hàm
+                    removeActive(x); // Xóa class "active" khỏi tất cả các gợi ý
+                    if (currentFocus >= x.length) currentFocus = 0; // Nếu vượt quá, quay lại đầu
+                    if (currentFocus < 0) currentFocus = (x.length - 1); // Nếu dưới mức, quay lại cuối
+                    x[currentFocus].classList.add("autocomplete-active"); // Thêm class "active"
+                }
+
+                // Hàm xóa class "active" khỏi tất cả các gợi ý
+                function removeActive(x) {
+                    for (var i = 0; i < x.length; i++) {
+                        x[i].classList.remove("autocomplete-active");
+                    }
+                }
+
+                // Hàm đóng tất cả các danh sách gợi ý, trừ danh sách được chỉ định
+                function closeAllLists(elmnt) {
+                    var x = document.getElementsByClassName("autocomplete-items");
+                    for (var i = 0; i < x.length; i++) {
+                        if (elmnt != x[i] && elmnt != inp) {
+                            x[i].parentNode.removeChild(x[i]);
+                        }
+                    }
+                }
+
+                // Khi người dùng click vào bất kỳ đâu trên tài liệu, đóng tất cả các danh sách gợi ý
+                document.addEventListener("click", function (e) {
+                    closeAllLists(e.target);
+                });
+            }
+
+            // Gọi hàm autocomplete với trường nhập liệu có ID "myInput" và mảng hotelInfo để khởi tạo tính năng
+            autocomplete(document.getElementById("myInput"), hotelInfo);
+
+
+            //lấy ngày hiện tại
+            const today = new Date();
+            const day = String(today.getDate()).padStart(2, '0'); //trả về ngày và chuyển thành chuỗi, sau đó thêm 0 vào đằng trước ngày nếu ngày đó có 1 chữ số
+            const month = String(today.getMonth() + 1).padStart(2, '0');//trả về tháng và chuyển thành chuỗi, sau đó thêm 0 vào đằng trước tháng nếu tháng đó có 1 chữ số
+            //cộng 1 là vì trả về giá trị từ 0 đến 11 nên +1 cho đúng tháng hiện tại
+            const year = today.getFullYear();//trả về năm hiện tại
+            const tomorrow = new Date(today);
+            tomorrow.setDate(today.getDay() + 1);
+            const nextDay = String(today.getDate() + 1).padStart(2, '0');
+            const nextMonth = String(tomorrow.getMonth() + 1).padStart(2, '0');
+            const nextYear = tomorrow.getFullYear();
+            const formatDate = `${year}-${month}-${day} to ${nextYear}-${nextMonth}-${nextDay}`;
+            const dateInput = document.getElementById('dateInput');
+            if (dateInput) {
+                dateInput.value = formatDate;
+            }
+
+
+            //Khung search ngày booking
+            //hiển thị lịch
+            const calendarContainer = document.getElementById('calendarContainer');
+            // Lấy phần tử lịch của tháng hiện tại và gán vào biến currentMonthCalendar
+            const currentMonthCalendar = document.getElementById('currentMonthCalendar');
+
+            // Lấy phần tử lịch của tháng sau và gán vào biến nextMonthCalendar
+            const nextMonthCalendar = document.getElementById('nextMonthCalendar');
+            // Biến để lưu trữ độ lệch tháng (dùng để di chuyển qua lại giữa các tháng)
+            let currentMonthOffset = 0;
+
+            let selectedDates = [];
+
+            dateInput.addEventListener('click', () => {
+                calendarContainer.style.display = 'block';
+                displayCalendars();
+            });
+
+            function displayCalendars() {
+                const currentDate = new Date();
+                const firstMonthDate = new Date(currentDate.getFullYear(), currentDate.getMonth() + currentMonthOffset, 1);
+                const secondMonthDate = new Date(currentDate.getFullYear(), currentDate.getMonth() + currentMonthOffset + 1, 1);
+                currentMonthCalendar.innerHTML = generateCalendar(firstMonthDate, 'current');
+                nextMonthCalendar.innerHTML = generateCalendar(secondMonthDate, 'next');
+
+                const prevButton = document.querySelector('.prev-month');
+                if (currentMonthOffset === 0) {
+                    prevButton.disabled = true;
+                    prevButton.style.opacity = '0.5';
+                } else {
+                    prevButton.disabled = false;
+                    prevButton.style.opacity = '1';
+                }
+            }
+            function generateCalendar(date, calendarType) {
+                const month = date.getMonth();
+                const year = date.getFullYear();
+                const today = new Date();
+                today.setHours(0, 0, 0, 0);// Đặt thời gian của today về 00:00:00 để so sánh chỉ ngày
+                const isCurrentMonth = today.getFullYear() === year && today.getMonth() === month;
+                const daysInMonth = new Date(year, month + 1, 0).getDate();
+                let calendarHtml = `
+                            <div class="calendar-header">
+                                <h5>${date.toLocaleString('default', { month: 'long' })} ${year}</h5>
+                                <div class="calendar-button">
+                                    <button class="prev-month" data-calendar="${calendarType}">&lt;</button>
+                                    <button class="next-month" data-calendar="${calendarType}">&gt;</button>
+                                </div>
+                            </div>
+                            <table><tr>`;
+                const daysOfWeek = ['Su', 'Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa'];
+
+                daysOfWeek.forEach(day => {
+                    calendarHtml += `<th>${day}</th>`;
+                });
+                calendarHtml += `</tr><tr>`;
+
+
+                const firstDay = new Date(year, month, 1).getDay();
+
+                for (let i = 0; i < firstDay; i++) {
+                    calendarHtml += `</td><td>`;
+                }
+                for (let day = 1; day <= daysInMonth; day++) {
+                    const fullDate = new Date(year, month, day);
+
+                    const isDisable = isCurrentMonth && fullDate < today;
+                    const dayClass = isDisable ? 'calendar-day disabled-day' : 'calendar-day';
+                    calendarHtml += `<td class="${dayClass}" data-date="${year}-${month + 1}-${day}">${day}</td>`;
+                    if ((firstDay + day - 1) % 7 == 6) {
+                        calendarHtml += `</tr><tr>`;
+                    }
+                }
+                calendarHtml += `</tr></table>`;
+                return calendarHtml;
+            }
+
+            function updateMonthOffset(offset) {
+                currentMonthOffset += offset;
+                displayCalendars();
+            }
+
+            document.addEventListener('click', function (event) {
+                if (!calendarContainer.contains(event.target) && event.target !== dateInput) {
+                    if (selectedDates.length !== 2) {
+                        selectedDates = [];
+                    }
+                    calendarContainer.style.display = 'none';
+                }
+                if (event.target.classList.contains('prev-month')) {
+                    updateMonthOffset(-1);
+                }
+                else if (event.target.classList.contains('next-month')) {
+                    updateMonthOffset(1);
+                }
+                if (event.target.classList.contains('calendar-day')) {
+                    const selectedDate = event.target.getAttribute('data-date');// Lấy giá trị ngày được chọn
+                    if (selectedDates.length < 2) {
+                        selectedDates.push(selectedDate);// Thêm ngày vào danh sách nếu chưa đủ 2 ngày
+                        event.target.classList.add('selected');
+                    } else {
+                        selectedDates = [selectedDate];// Nếu đã chọn 2 ngày, chọn lại từ đầu
+                        event.target.classList.add('selected');
+                    }
+                    if (selectedDates.length === 2) {
+                        document.querySelectorAll('.calendar-day').forEach(day => { //lấy tất cả các phần tử calendar-day
+                            if (selectedDates.includes(day.getAttribute('data-date'))) { //thuộc tính data-date trong mảng selectedDates
+                                day.classList.add('selected');
+                            }
+                        })
+                        setTimeout(() => {
+                            dateInput.value = `${selectedDates[0]} - ${selectedDates[1]}`;// Cập nhật giá trị input
+                            calendarContainer.style.display = 'none';// Ẩn lịch
+                        }, 200);
+
+                    }
+                }
+            });
+
+            displayCalendars();
+
+            const roomtypeInput = document.getElementById('roomtypeInput');
+            const roomtypeContainer = document.getElementById('roomtypeContainer');
+
+            roomtypeInput.addEventListener('click', () => {
+                roomtypeContainer.style.display = 'block';
+            });
+            document.addEventListener('click', (event) => {
+                if (!roomtypeInput.contains(event.target) && !roomtypeContainer.contains(event.target)) {
+                    roomtypeContainer.style.display = 'none';
+                }
+            });
+
+            const adultCountInput = document.getElementById("adultCount");
+            const childrentCountInput = document.getElementById("childrentCount");
+            const numberOfRoomCountInput = document.getElementById("numberOfRoomCount");
+            const decreaseAdultButton = document.getElementById("decreaseAdultButton");
+            const increaseAdultButton = document.getElementById("increaseAdultButton");
+            const decreaseChildrentButton = document.getElementById("decreaseChildrentButton");
+            const increaseChildrentButton = document.getElementById("increaseChildrentButton");
+            const decreaseNumberOfRoomButton = document.getElementById("decreaseNumberOfRoomButton");
+            const increaseNumberOfRoomButton = document.getElementById("increaseNumberOfRoomButton");
+
+            function updateRoomTypeSummary() {
+                const adults = adultCountInput.value;
+                const childrents = childrentCountInput.value;
+                const numberOfRoom = numberOfRoomCountInput.value;
+                roomtypeInput.value = `${adults} người lớn, ${childrents} trẻ em, ${numberOfRoom} phòng`;
+            }
+
+
+            function increaseCounter(counter, maxValue) {
+                let currentValue = parseInt(counter.value);
+                if (currentValue < maxValue) {
+                    counter.value = currentValue + 1;
+                    updateRoomTypeSummary();
+                }
+            }
+            function decreaseCounter(counter, minValue) {
+                let currentValue = parseInt(counter.value);
+                if (currentValue > minValue) {
+                    counter.value = currentValue - 1;
+                    updateRoomTypeSummary();
+                }
+            }
+
+            document.getElementById("decreaseAdultButton").addEventListener("click", () => decreaseCounter(adultCountInput, 1));
+            document.getElementById("increaseAdultButton").addEventListener("click", () => increaseCounter(adultCountInput, 30));
+            document.getElementById("decreaseChildrentButton").addEventListener("click", () => decreaseCounter(childrentCountInput, 0));
+            document.getElementById("increaseChildrentButton").addEventListener("click", () => increaseCounter(childrentCountInput, 6));
+            document.getElementById("decreaseNumberOfRoomButton").addEventListener("click", () => decreaseCounter(numberOfRoomCountInput, 1));
+            document.getElementById("increaseNumberOfRoomButton").addEventListener("click", () => increaseCounter(numberOfRoomCountInput, 8));
+
+
         });
     </script>
 }

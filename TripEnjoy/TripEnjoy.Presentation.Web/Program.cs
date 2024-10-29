@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
+using System.Text.Json.Serialization;
 using TripEnjoy.Application.Data;
 using TripEnjoy.Application.Interface;
 using TripEnjoy.Application.Interface.Booking_Room;
@@ -19,6 +20,7 @@ using TripEnjoy.Application.Interface.Rate;
 using TripEnjoy.Application.Interface.Room;
 using TripEnjoy.Application.Interface.RoomImage;
 using TripEnjoy.Application.Interface.RoomType;
+using TripEnjoy.Application.Interface.SearchHotel;
 using TripEnjoy.Application.Interface.TransactionHistories;
 using TripEnjoy.Application.Interface.User;
 using TripEnjoy.Application.Interface.Wallet;
@@ -35,6 +37,7 @@ using TripEnjoy.Application.Services.Rate;
 using TripEnjoy.Application.Services.Room;
 using TripEnjoy.Application.Services.RoomImage;
 using TripEnjoy.Application.Services.RoomType;
+using TripEnjoy.Application.Services.SearchHotel;
 using TripEnjoy.Application.Services.User;
 using TripEnjoy.Infrastructure.Entities;
 using TripEnjoy.Infrastructure.Helper;
@@ -63,6 +66,8 @@ builder.Services.AddSession(options =>
     options.Cookie.HttpOnly = true; // Bảo mật cookie
     options.Cookie.IsEssential = true; // Chấp nhận sử dụng cookie ngay cả khi không được phép
 });
+builder.Services.AddControllersWithViews()
+            .AddJsonOptions(x => x.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles);
 // cấu hình database connection
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
 {
@@ -110,6 +115,9 @@ builder.Services.AddScoped<IRoomTypeService, RoomTypeService>();
 
 builder.Services.AddScoped<IRoomImageRepository, RoomImageRepository>();
 builder.Services.AddScoped<IRoomImageService, RoomImageService>();
+
+builder.Services.AddScoped<ISearchHotelRepository, SearchHotelRepository>();
+builder.Services.AddScoped<ISearchHotelService, SearchHotelService>();
 
 builder.Services.AddScoped<IRateRepository, RateRepository>();
 builder.Services.AddScoped<IRateService, RateService>();

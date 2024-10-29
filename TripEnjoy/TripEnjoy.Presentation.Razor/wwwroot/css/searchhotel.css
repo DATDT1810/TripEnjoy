@@ -1,0 +1,153 @@
+﻿.category-oval {
+    background-color: #f8f9fa;
+    border: 1px solid #ddd;
+    padding: 10px 20px;
+    border-radius: 50px;
+    font-size: 14px;
+    color: #333;
+    display: inline-block;
+    cursor: pointer;
+    transition: background-color 0.3s, color 0.3s;
+}
+
+.category-oval:hover {
+    background-color: #ffc107;
+    color: white;
+}
+.category-selected {
+    background-color: #ffc107;
+    color: white;
+}
+.d-flex {
+    display: flex;
+}
+
+.flex-wrap {
+    flex-wrap: wrap;
+}
+
+.autocomplete input {
+    width: 100%;
+    height: 39px;
+}
+.calendar input{
+    width: 100%;
+    height: 39px;
+}
+.room-type input {
+    width: 100%;
+    height: 39px;
+}
+.calendar-container {
+    display: none;
+    background: white;
+    position: absolute;
+    border: 1px solid black;
+    padding: 10px;
+}
+
+.calendarCurrentMonth {
+    display: inline-block;
+    margin: 0px 15px 0px 0px;
+}
+.calendarNextMonth {
+    display: inline-block;
+}
+.calendarCurrentMonth th, .calendarNextMonth  th{
+    padding: 10px;
+}
+.calendarCurrentMonth td, .calendarNextMonth td {
+    padding: 12px;
+}
+.calendar-header{
+    display: flex;
+    justify-items: center;
+    justify-content:space-between;
+}
+.calendar-button button{
+    border: none;
+    cursor: pointer;
+    background: white;
+}
+.calendar-button button:focus{
+    outline: none;
+}
+.calendar-day.selected {
+    background-color: #4caf50; 
+    color: white; 
+}
+.disabled-day {
+    color: #d3d3d3;
+    pointer-events: none;
+}
+.roomtype-container {
+    display: none;
+    background: white;
+    position: absolute;
+    border: 1px solid black;
+    padding: 10px;
+}
+.hoteladdress{
+    font-size: 15px;
+    color: darkgray;
+}
+.body-list-hotel{
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+}
+
+.sort-price-input {
+    display: flex;
+    justify-content: space-between; /* Align icon to the right */
+    align-items: center;
+    border-radius: 10px;
+    border: 1px solid #DCDCDC;
+    height: 30px;
+    width: 200px;
+    padding: 0 10px; 
+    cursor: pointer;
+}
+
+.sort-box b {
+    padding-right: 5px;
+}
+
+.sort-price-body {
+    display: none; 
+    position: absolute;
+    z-index: 10;
+    background: #fff;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    padding: 10px;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2); 
+    width: 200px; 
+    margin-top: 5px; 
+}
+
+.sort-filter {
+    padding: 8px;
+    cursor: pointer;
+}
+
+    .sort-filter:hover {
+        background-color: #f0f0f0;
+    }
+
+.sort-price-button {
+    border: none;
+    background: none;
+    border-radius: 5px;
+    color: cornflowerblue;
+    margin-left: 5px;
+}
+.sort-content{
+    display: flex;
+    margin-bottom: 10px;
+}
+@media (max-width: 767px) {
+    .calendarCurrentMonth {
+    margin: 0 10px; 
+}
+}
