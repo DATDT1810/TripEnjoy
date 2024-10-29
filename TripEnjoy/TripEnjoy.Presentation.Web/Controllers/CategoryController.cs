@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using TripEnjoy.Application.Interface.Category;
 using TripEnjoy.Domain.Models;
@@ -34,6 +35,7 @@ namespace TripEnjoy.Presentation.Web.Controllers
             return Ok(category);
         }
 
+        [Authorize(Roles = "Admin")]
         [HttpPost]
         public async Task<IActionResult> AddCategory([FromBody] Category category)
         {
@@ -45,6 +47,7 @@ namespace TripEnjoy.Presentation.Web.Controllers
             return CreatedAtRoute("GetCategoryById", new { id = category.CategoryId }, category);
         }
 
+        [Authorize(Roles = "Admin")]
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdateCategory(int id, [FromBody] Category category)
         {
@@ -62,6 +65,7 @@ namespace TripEnjoy.Presentation.Web.Controllers
             return CreatedAtRoute("GetCategoryById", new { id = category.CategoryId }, category);
         }
 
+        [Authorize(Roles = "Admin")]
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteCategory(int id)
         {
@@ -71,7 +75,7 @@ namespace TripEnjoy.Presentation.Web.Controllers
                 return NotFound();
             }
             await _categoryService.DeleteCategoryAsync(id);
-            return NoContent();
+            return Ok();
         }
     }
 }

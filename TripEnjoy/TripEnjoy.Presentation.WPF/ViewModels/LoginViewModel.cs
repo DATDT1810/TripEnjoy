@@ -16,6 +16,9 @@ using System.Net;
 using TripEnjoy.Presentation.WPF.Helper;
 using TripEnjoy.Presentation.WPF.Models;
 using System.ComponentModel.DataAnnotations;
+using TripEnjoy.Presentation.WPF.Views.Admin;
+using Newtonsoft.Json;
+using System.IdentityModel.Tokens.Jwt;
 
 
 
@@ -58,6 +61,7 @@ namespace TripEnjoy.Presentation.WPF.ViewModels
         }
 		public LoginViewModel()
         {
+            _= checkedLogin();
             this.IsLoading = true;
             client = new HttpClient();
             var contentType = new MediaTypeWithQualityHeaderValue("application/json");
@@ -123,6 +127,40 @@ namespace TripEnjoy.Presentation.WPF.ViewModels
             });
             this.IsLoading = false;
         }
+
+        private async Task checkedLogin()
+        {
+            var token = TokenHelper.LoadToken();
+            if (token != null)
+            {
+                var expirationTime = GetTokenExpiration(token.accessToken);
+                var remainingTime = expirationTime - DateTime.UtcNow;
+
+                if (remainingTime.TotalMinutes > 5)
+                {
+                    var currentWindow = Application.Current.MainWindow;
+                    var dashboardWindow = new AdminDashBoardWindow();
+                    dashboardWindow.Show();
+                    currentWindow?.Close();
+                    return; // Thoát khỏi checkedLogin nếu người dùng đã đăng nhập
+                }
+            }
+
+            IsLoading = false;
+        }
+
+        private DateTime GetTokenExpiration(string accessToken)
+        {
+            var handler = new JwtSecurityTokenHandler();
+            var jsonToken = handler.ReadToken(accessToken) as JwtSecurityToken;
+
+            if (jsonToken == null || !jsonToken.Payload.ContainsKey("exp"))
+                throw new InvalidOperationException("Token does not contain an expiration claim");
+
+            var exp = Convert.ToInt64(jsonToken.Payload["exp"]);
+            return DateTimeOffset.FromUnixTimeSeconds(exp).UtcDateTime;
+        }
+
         FrameworkElement GetWindowParent(UserControl u)
         {
             FrameworkElement parent = u;
@@ -146,17 +184,20 @@ namespace TripEnjoy.Presentation.WPF.ViewModels
                 email = this.Username.Trim(),
                 password = this.Password.Trim(),
             };
-            String data = JsonSerializer.Serialize(accountDTO);
+            String data = JsonConvert.SerializeObject(accountDTO);
             var content = new StringContent(data, System.Text.Encoding.UTF8, "application/json");
-            HttpResponseMessage response = await client.PostAsync(api+ "/Login", content);
+            var response = await client.PostAsync(api+ "/Login", content);
             if (response.IsSuccessStatusCode) // nhận phản hồi về sau khi gửi dữ liệu đi
             {
-				var responseData = response.Content.ReadAsStringAsync().Result; // take token
-                TokenResponse? tokenResponse = JsonSerializer.Deserialize<TokenResponse>(responseData);
-                CookieStorage.Instance.Append("accessToken", tokenResponse.accessToken);
-                CookieStorage.Instance.Append("refreshToken", tokenResponse.refreshToken);
-
-				DashboardWindow dashboardWindow = new DashboardWindow();
+                var responseData = await response.Content.ReadAsStringAsync(); // take token
+                var tokenResponse = JsonConvert.DeserializeObject<TokenResponse>(responseData);
+                if(tokenResponse == null)
+                {
+                   throw new Exception("Token is null");
+                }
+                TokenHelper.SaveToken(tokenResponse);
+                
+                var dashboardWindow = new AdminDashBoardWindow();
                 dashboardWindow.Show();
                 p.Close();
 			}
