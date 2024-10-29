@@ -12,11 +12,9 @@ namespace TripEnjoy.Domain.Models
     {
         [Key]
         public int CategoryId { get; set; }        // category_id
-
         [Required]
         [StringLength(50)]                         // category_name - nvarchar(50)
         public string CategoryName { get; set; }
         public bool CategoryStatus { get; set; }   // category_Status - bit
-     
     }
 }

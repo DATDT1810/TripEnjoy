@@ -1,0 +1,83 @@
+﻿<Window x:Class="TripEnjoy.Presentation.WPF.Views.Admin.AdminDashBoardWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:TripEnjoy.Presentation.WPF.Views.Admin"
+        mc:Ignorable="d"
+        Title="AdminDashBoardWindow" Height="600" Width="1200">
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="2*"/>
+            <ColumnDefinition Width="8*"/>
+        </Grid.ColumnDefinitions>
+        <Grid Background="AntiqueWhite">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="1*"></RowDefinition>
+                <RowDefinition Height="8*"></RowDefinition>
+                <RowDefinition Height="1*" ></RowDefinition>
+            </Grid.RowDefinitions>
+
+            <StackPanel HorizontalAlignment="Center">
+                <TextBlock VerticalAlignment="Center" HorizontalAlignment="Center">Admin</TextBlock>
+            </StackPanel>
+            <Grid Grid.Row="1">
+                <Grid.RowDefinitions>
+                    <RowDefinition></RowDefinition>
+                    <RowDefinition></RowDefinition>
+                    <RowDefinition></RowDefinition>
+                    <RowDefinition></RowDefinition>
+                    <RowDefinition></RowDefinition>
+                    <RowDefinition></RowDefinition>
+                    <RowDefinition></RowDefinition>
+                    
+                </Grid.RowDefinitions>
+                <Button Grid.Row="0" Content="Account" Height="50" Width="200"
+        HorizontalAlignment="Center" VerticalAlignment="Center"
+        Command="{Binding TabSelectedCommand}"
+        CommandParameter="Home"></Button>
+
+
+                <Button Grid.Row="1" Content="Partner Confirm" Height="50" Width="200"
+                    HorizontalAlignment="Center" VerticalAlignment="Center"
+                    Command="{Binding TabSelectedCommand}"
+                    CommandParameter="Partner"></Button>
+
+                <Button Grid.Row="2" Content="Booking List" Height="50" Width="200"
+                    HorizontalAlignment="Center" VerticalAlignment="Center"
+                    Command="{Binding TabSelectedCommand}"
+                    CommandParameter="Booking"></Button>
+
+                <Button Grid.Row="3" Content="Category" Height="50" Width="200"
+                    HorizontalAlignment="Center" VerticalAlignment="Center"
+                    Command="{Binding TabSelectedCommand}"
+                    CommandParameter="Category"></Button>
+                <Button Grid.Row="4" Content="Voucher" Height="50" Width="200"
+         HorizontalAlignment="Center" VerticalAlignment="Center"
+         Command="{Binding TabSelectedCommand}"
+         CommandParameter="ManageBookings"></Button>
+                <Button Grid.Row="5" Content="Confirm Hotel" Height="50" Width="200"
+         HorizontalAlignment="Center" VerticalAlignment="Center"
+         Command="{Binding TabSelectedCommand}"
+         CommandParameter="ManageBookings"></Button>
+                <Button Grid.Row="6" Content="Hotel " Height="50" Width="200"
+         HorizontalAlignment="Center" VerticalAlignment="Center"
+         Command="{Binding TabSelectedCommand}"
+         CommandParameter="ManageBookings"></Button>
+                
+            </Grid>
+        </Grid>
+
+        <Grid Grid.Column="1" >
+            <Grid.RowDefinitions>
+                <RowDefinition Height="1*"></RowDefinition>
+                <RowDefinition Height="9*"></RowDefinition>
+            </Grid.RowDefinitions>
+            <StackPanel  Height="auto" VerticalAlignment="Center" >
+                <TextBlock HorizontalAlignment="Center" FontSize="24" Height="auto">Admin</TextBlock>
+            </StackPanel>
+            <!-- Frame sẽ dùng để hiển thị các trang tương ứng -->
+            <Frame Grid.Row="1" Name="MainFrame"></Frame>
+        </Grid>
+    </Grid>
+</Window>

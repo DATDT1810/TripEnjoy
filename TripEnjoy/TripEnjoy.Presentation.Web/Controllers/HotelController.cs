@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using TripEnjoy.Application.Interface.Hotel;
@@ -36,6 +37,7 @@ namespace TripEnjoy.Presentation.Web.Controllers
 			}
 			return Ok(hotel);
 		}
+		[Authorize(Roles = "Partner")]
 		//check
 		[HttpPost]
 		public async Task<IActionResult> AddHotel(Hotel hotel)
@@ -47,7 +49,7 @@ namespace TripEnjoy.Presentation.Web.Controllers
 			await this._hotelService.AddHotelAsync(hotel);
 			return CreatedAtRoute("GetHotel", new { id = hotel.HotelId }, hotel);
 		}
-
+		[Authorize(Roles = "Partner")]
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdateHotel(int id, Hotel hotel)
         {
@@ -63,7 +65,7 @@ namespace TripEnjoy.Presentation.Web.Controllers
             await this._hotelService.UpdateHotelAsync(hotel);
             return CreatedAtRoute("GetHotel", new { id = hotel.HotelId }, hotel);
         }
-
+		[Authorize(Roles = "Partner")]
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteHotel(int id)
         {

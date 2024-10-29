@@ -1,0 +1,74 @@
+﻿<Window x:Class="TripEnjoy.Presentation.WPF.Views.Admin.BookingDetailsWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:TripEnjoy.Presentation.WPF.Views.Admin"
+        mc:Ignorable="d"
+        Title="BookingDetailsWindow" Height="350" Width="600"
+        WindowStartupLocation="CenterScreen" 
+ResizeMode="NoResize">
+    <Grid>
+        <StackPanel>
+            <!-- Tiêu đề -->
+            <TextBlock Padding="10,0,0,0" Text="Booking Details" FontSize="24" FontWeight="Bold" 
+                    Foreground="#4A90E2" HorizontalAlignment="Center" Margin="0,0,0,20"/>
+
+            <!-- Grid chứa thông tin tài khoản -->
+            <Grid Margin="0,5">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+
+                <!-- Username -->
+                <TextBlock Padding="20,0,0,0" Text="BookingId:" FontWeight="Bold" Grid.Row="0" Grid.Column="0" Margin="0,5"/>
+                <TextBlock Padding="20,0,0,0" Text="{Binding BookingId }" Grid.Row="0" Grid.Column="1" Margin="20,5"/>
+
+                <!-- Fullname -->
+                <TextBlock Padding="20,0,0,0" Text="AccountId:" FontWeight="Bold" Grid.Row="1" Grid.Column="0" Margin="0,5"/>
+                <TextBlock Padding="20,0,0,0" Text="{Binding AccountId}" Grid.Row="1" Grid.Column="1" Margin="20,5"/>
+    
+                <!-- Email -->
+                <TextBlock Padding="20,0,0,0" Text="CheckIn" FontWeight="Bold" Grid.Row="2" Grid.Column="0" Margin="0,5"/>
+                <TextBlock Padding="20,0,0,0" Text="{Binding CheckinDate}" Grid.Row="2" Grid.Column="1" Margin="20,5"/>
+
+                <!-- Phone -->
+                <TextBlock Padding="20,0,0,0" Text="Checkout:" FontWeight="Bold" Grid.Row="3" Grid.Column="0" Margin="0,5"/>
+                <TextBlock Padding="20,0,0,0" Text="{Binding CheckoutDate}" Grid.Row="3" Grid.Column="1" Margin="20,5"/>
+
+                <!-- Role -->
+
+
+                <!-- Status -->
+                <TextBlock Padding="20,0,0,0" Text="Status:" FontWeight="Bold" Grid.Row="5" Grid.Column="0" Margin="0,5"/>
+                <TextBlock Padding="20,0,0,0" Text="{Binding BookingStatus }" Grid.Row="5" Grid.Column="1" Margin="20,5"/>
+                <TextBlock Padding="20,0,0,0" Text="RoomQuanity:" FontWeight="Bold" Grid.Row="6" Grid.Column="0" Margin="0,5"/>
+                <TextBlock Padding="20,0,0,0" Text="{Binding RoomQuantity }" Grid.Row="6" Grid.Column="1" Margin="20,5"/>
+
+
+                <TextBlock Padding="20,0,0,0" Text="RoomId:" FontWeight="Bold" Grid.Row="7" Grid.Column="0" Margin="0,5"/>
+                <TextBlock Padding="20,0,0,0" Text="{Binding RoomId }" Grid.Row="7" Grid.Column="1" Margin="20,5"/>
+
+                <TextBlock Padding="20,0,0,0" Text="VoucherId:" FontWeight="Bold" Grid.Row="8" Grid.Column="0" Margin="0,5"/>
+                <TextBlock Padding="20,0,0,0" Text="{Binding VoucherId }" Grid.Row="8" Grid.Column="1" Margin="20,5"/>
+                <TextBlock Padding="20,0,0,0" Text="BookingTotalPrice:" FontWeight="Bold" Grid.Row="9" Grid.Column="0" Margin="0,5"/>
+                <TextBlock Padding="20,0,0,0" Text="{Binding BookingTotalPrice }" Grid.Row="9" Grid.Column="1" Margin="20,5"/>
+            </Grid>
+
+        </StackPanel>
+    </Grid>
+</Window>

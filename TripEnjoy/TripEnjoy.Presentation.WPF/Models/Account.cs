@@ -49,15 +49,6 @@ namespace TripEnjoy.Presentation.WPF.Models
 
         [MaxLength(255)]
         public string AccountImage { get; set; }  // account_image
-
-        // Thêm UserId để kết nối với bảng AspNetUsers
-        [Required]
-        public string UserId { get; set; }  // Đây là khóa ngoại trỏ đến bảng AspNetUsers
-
-        [ForeignKey("UserId")]
-        public virtual IdentityUser User { get; set; }  // Liên kết với bảng AspNetUsers
-
-        [ForeignKey("WalletID")]
-        public virtual Wallet Wallet { get; set; } //  liên kết voi bảng Wallet
+   
     }
 }
