@@ -15,6 +15,7 @@ builder.Services.AddCors(options =>
                    .AllowAnyHeader(); // Cho phép tất cả các tiêu đề
         });
 });
+
 // Add services to the container.
 builder.Services.AddRazorPages();
 builder.Services.AddSingleton<TokenServices>();
@@ -33,14 +34,13 @@ builder.Services.AddAuthentication(options =>
     options.ClientSecret = builder.Configuration.GetSection("GoogleAuthSetting").GetValue<string>("ClientSecret");
 });
 
-
 var app = builder.Build();
-app.UseCors("AllowAllOrigins");
+app.UseCors("AllowAll");
+
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
 {
     app.UseExceptionHandler("/Error");
-    // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
     app.UseHsts();
 }
 
@@ -49,8 +49,12 @@ app.UseStaticFiles();
 
 app.UseRouting();
 
+app.UseAuthentication(); // Thêm dòng này để kích hoạt Authentication
 app.UseAuthorization();
 
-app.MapRazorPages();
+app.UseEndpoints(endpoints =>  // Thêm Endpoint Mapping cho Razor Pages
+{
+    endpoints.MapRazorPages();
+});
 
 app.Run();

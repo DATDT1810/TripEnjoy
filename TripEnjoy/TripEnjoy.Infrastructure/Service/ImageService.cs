@@ -40,7 +40,7 @@ namespace TripEnjoy.Infrastructure.Service
                 var uploadParams = new ImageUploadParams
                 {
                     File = new FileDescription(file.FileName, stream),
-                    PublicId = $"user/{email}"
+                    //PublicId = $"user/{email}"
                 };
                 uploadResult = await cloudinary.UploadAsync(uploadParams);
             }

@@ -75,26 +75,6 @@ namespace TripEnjoy.Infrastructure.Repositories
             _context.Bookings.Add(booking);
             await _context.SaveChangesAsync();  // Lưu thông tin booking trước
 
-            // Tính toán số tiền chia cho chủ khách sạn và admin
-            //decimal ownerShare = totalPrice * 0.70M;  // 70% cho chủ khách sạn
-            //decimal adminShare = totalPrice * 0.30M;  // 30% cho admin
-
-            // Tìm tài khoản admin
-            //var adminAccount = await _context.Accounts.FirstOrDefaultAsync(a => a.UserId == "f0bc4674-df5e-43e3-97a9-a280be3400de");
-            //if (adminAccount == null)
-            //{
-            //    throw new Exception("Admin account not found.");
-            //}
-
-            // Cập nhật số dư tài khoản của chủ khách sạn và admin
-            //hotelOwner.AccountBalance += ownerShare;
-            //adminAccount.AccountBalance += adminShare;
-
-            //_context.Accounts.Update(hotelOwner);
-            //_context.Accounts.Update(adminAccount);
-
-            //  await _context.SaveChangesAsync();
-
             return booking;
         }
 

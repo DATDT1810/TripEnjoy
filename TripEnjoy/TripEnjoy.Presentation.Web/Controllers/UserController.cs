@@ -58,7 +58,7 @@ namespace TripEnjoy.Presentation.Web.Controllers
             return BadRequest("Invalid data");
         }
 
-        [Authorize]
+        //[Authorize]
         [HttpPost]
         [Route("UploadImageProfile")]
         public async Task<IActionResult> UploadImageProfile(List<IFormFile> files)

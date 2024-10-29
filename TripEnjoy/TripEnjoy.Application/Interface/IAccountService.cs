@@ -24,6 +24,7 @@ namespace TripEnjoy.Application.Interface
         Task<IEnumerable<TripEnjoy.Domain.Models.Account>> GetAllAccountsAsync();
         Task<TripEnjoy.Domain.Models.Account> GetAccountByIdAsync(string userId);
         Task<TripEnjoy.Domain.Models.Account> AddAccountAsync(Account account);
+        Task<Account> GetAccountByEmail(string email);
         Task<TripEnjoy.Domain.Models.Account> UpdateAccountLevelAsync(int id);
         Task<TripEnjoy.Domain.Models.Account> DeleteAccountAsync(int id);
         Task<TripEnjoy.Domain.Models.Account> RestoreAccount(int id);

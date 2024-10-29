@@ -22,17 +22,17 @@ namespace TripEnjoy.Application.Services.ImageCloud
         public async Task<string> UploadImage(IFormFile file, string email)
         {
             var imageResult = await imageService.UploadImage(file, email);
-            if (imageResult != null)
-            {
-                var userProfile = await accountRepository.GetUserProfile(email);
-                await imageService.DeleteImage(ExtractImageIdFromUrl(userProfile.AccountImage));
-                userProfile.AccountImage = imageResult.SecureUrl.ToString();
-                await accountRepository.UpdateUserProfile(userProfile);
-            }
-            else
-            {
-                throw new Exception($"User profile not found for email: {email}");
-            }
+            //if (imageResult != null)
+            //{
+            //    var userProfile = await accountRepository.GetUserProfile(email);
+            //    await imageService.DeleteImage(ExtractImageIdFromUrl(userProfile.AccountImage));
+            //    userProfile.AccountImage = imageResult.SecureUrl.ToString();
+            //    await accountRepository.UpdateUserProfile(userProfile);
+            //}
+            //else
+            //{
+            //    throw new Exception($"User profile not found for email: {email}");
+            //}
             return imageResult.SecureUrl.ToString();
         }
 

@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Google.Apis.Drive.v3.Data;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Identity.Client;
@@ -54,14 +55,13 @@ namespace TripEnjoy.Presentation.Web.Controllers
         {
             // Get user information
             ClaimsPrincipal claims = this.User;
-            //var userID = "1ccb72fd-a14e-48ee-a4d6-496977e0cf5a";
-            var userID = claims.FindFirst(ClaimTypes.NameIdentifier).Value;
-            if (userID == null)
+            var email = claims.FindFirst(ClaimTypes.Email)?.Value;
+            if (email == null)
             {
                 return Unauthorized("User is not authenticated.");
             }
 
-            var account = await _accountService.GetAccountByIdAsync(userID);
+            var account = await _accountService.GetAccountByEmail(email);
             if (account == null)
             {
                 return NotFound("Account not found.");
@@ -100,19 +100,19 @@ namespace TripEnjoy.Presentation.Web.Controllers
         {
             // Get user information
             ClaimsPrincipal claims = this.User;
-            var userID = claims.FindFirst(ClaimTypes.NameIdentifier).Value;
-            if (userID == null)
+            var email = claims.FindFirst(ClaimTypes.Email)?.Value;
+            if (email == null)
             {
                 return Unauthorized("User is not authenticated.");
             }
 
-            var account = await _accountService.GetAccountByIdAsync(userID);
+            var account = await _accountService.GetAccountByEmail(email);
             if (account == null)
             {
                 return NotFound("Account not found.");
             }
             int accountId = account.AccountId;
-            CommentDTO comment = new CommentDTO
+            CommentDTO replyComment = new CommentDTO
             {
                 CommentLevel = 2, // Main comment
                 CommentContent = obj.Content,
@@ -123,17 +123,10 @@ namespace TripEnjoy.Presentation.Web.Controllers
             };
 
             // mapper
-            var commentModel = _mapper.Map<TripEnjoy.Domain.Models.Comment>(comment);
+            var commentModel = _mapper.Map<TripEnjoy.Domain.Models.Comment>(replyComment);
             commentModel = await _commentService.CreateCommentAsync(commentModel);
 
-            // Update comment count in the related room
-            var room = await _roomService.GetRoomDetailByIdAsync(obj.RoomId);
-            if (room == null)
-            {
-                return NotFound("Room not found.");
-            }
-
-            return Ok(new { RoomID = obj.RoomId, Comment = comment });
+            return Ok(new { Comment = replyComment });
         }
     }
 }

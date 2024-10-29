@@ -195,6 +195,18 @@ namespace TripEnjoy.Presentation.Web.Controllers
             return Ok(account);
         }
 
+        [HttpGet("user/{email}", Name = "GetAccountByEmail")]
+        public async Task<IActionResult> GetAccountByEmail(string email)
+        {
+
+            var account = await _accountService.GetAccountByIdAsync(email);
+            if (account == null)
+            {
+                return NotFound();
+            }
+            return Ok(account);
+        }
+
         [HttpPost]
         public async Task<IActionResult> AddAccount([FromBody] TripEnjoy.Domain.Models.Account account)
         {
@@ -205,6 +217,7 @@ namespace TripEnjoy.Presentation.Web.Controllers
             await _accountService.AddAccountAsync(account);
             return CreatedAtRoute(nameof(GetAccountById), new { id = account.UserId }, account);
         }
+
 
 
         [Authorize(Roles = "Admin")]
