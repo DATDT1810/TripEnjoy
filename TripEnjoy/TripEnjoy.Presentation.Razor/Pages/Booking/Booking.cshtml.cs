@@ -28,14 +28,14 @@ namespace TripEnjoy.Presentation.Razor.Pages.Booking
         public BookingViewModel BookingViewModel { get; set; }
 
         [BindProperty(SupportsGet = true)]
-        public Account Account { get; set; }
+        public UserProfile UserProfile { get; set; }
 
         public async Task<IActionResult> OnGet(int id)
         {
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
 
             // Call API to get the room details
-            var client = _httpClientFactory.CreateClient();
+            var client = _httpClientFactory.CreateClient("DefaultClient");
             var roomResponse = await client.GetAsync($"https://localhost:7126/api/Room/{id}");
             if (roomResponse.IsSuccessStatusCode)
             {
@@ -55,22 +55,12 @@ namespace TripEnjoy.Presentation.Razor.Pages.Booking
             }
 
             // Call API to get account details, assuming API returns a JSON array
-            var accountResponse = await client.GetAsync($"https://localhost:7126/api/Account/{userId}");
+            var accountResponse = await client.GetAsync("https://localhost:7126/api/User/GetUserProfile");
             if (accountResponse.IsSuccessStatusCode)
             {
                 string accountData = await accountResponse.Content.ReadAsStringAsync();
-                try
-                {
-                    Account = JsonConvert.DeserializeObject<Account>(accountData);
-                }
-                catch (JsonSerializationException)
-                {
-                    var accounts = JsonConvert.DeserializeObject<List<Account>>(accountData);
-                    if (accounts != null && accounts.Count > 0)
-                    {
-                        Account = accounts[0]; 
-                    }
-                }
+                var profile  = JsonConvert.DeserializeObject<UserProfile>(accountData);
+                UserProfile = profile;
             }
 
             return Page();

@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -101,8 +102,8 @@ namespace TripEnjoy.Infrastructure.Repositories
             var refreshToken = GenerateRefreshToken();
 
             await userManager.SetAuthenticationTokenAsync(identityUser, "TripEnjoy", "RefreshToken", refreshToken.RefreshToken);
-        
-           
+
+
             return new TokenResponseDTO
             {
                 AccessToken = accessToken,
@@ -154,6 +155,7 @@ namespace TripEnjoy.Infrastructure.Repositories
                 if (!await roleManager.RoleExistsAsync(AppRole.User))
                 {
                     await roleManager.CreateAsync(new IdentityRole(AppRole.User));
+
                 }
                 await userManager.AddToRoleAsync(user, AppRole.User);
 
@@ -218,7 +220,7 @@ namespace TripEnjoy.Infrastructure.Repositories
             {
                 throw new UnauthorizedAccessException("Invalid refresh token.");
             }
-        
+
             if (refreshToken.Expiration < DateTime.UtcNow)
             {
                 await userManager.RemoveAuthenticationTokenAsync(user, "TripEnjoy", "RefreshToken");
@@ -299,7 +301,7 @@ namespace TripEnjoy.Infrastructure.Repositories
                             await _context.SaveChangesAsync();
 
                             await transaction.CommitAsync();
-                          
+
                         }
                         catch (Exception ex)
                         {
@@ -402,7 +404,7 @@ namespace TripEnjoy.Infrastructure.Repositories
         // Get all accounts
         public async Task<IEnumerable<TripEnjoy.Domain.Models.Account>> GetAllAccountsAsync()
         {
-            return await _context.Accounts.ToListAsync();
+            return await _context.Accounts.Where(a => a.AccountRole != 4).ToListAsync();
         }
 
         // Get account by Id
@@ -431,36 +433,76 @@ namespace TripEnjoy.Infrastructure.Repositories
             return obj;
         }
 
-        public async Task<Account> UpdateAccountLevelAsync(string UId)
+        // accept
+        public async Task<Account> UpdateAccountLevelAsync(int id)
         {
-            Account acc = await _context.Accounts.Where(a => a.UserId == UId).FirstOrDefaultAsync();
-            if (acc != null)
+            using var transaction = await _context.Database.BeginTransactionAsync();
+            try
             {
-                acc.AccountUpLevel = true;
-                acc.AccountRole = 2;
-                _context.Accounts.Update(acc);
-                await _context.SaveChangesAsync();
-            }
-            return acc;
+                var acc = await _context.Accounts.FirstOrDefaultAsync(a => a.AccountId == id);
+                if (acc == null)
+                {
+                    throw new Exception("Account not found");
+                }
 
+                var user = await userManager.FindByIdAsync(acc.UserId);
+                if (user == null)
+                {
+                    throw new Exception("User not found");
+                }
+
+                var roles = await userManager.GetRolesAsync(user);
+                if (roles.Contains(AppRole.Partner))
+                {
+                    throw new Exception("Account is already a partner");
+                }
+
+                var removeResult = await userManager.RemoveFromRoleAsync(user, AppRole.User);
+                if (!removeResult.Succeeded)
+                {
+                    throw new Exception("Failed to remove user role");
+                }
+
+                var addResult = await userManager.AddToRoleAsync(user, AppRole.Partner);
+                if (!addResult.Succeeded)
+                {
+                    throw new Exception("Failed to assign partner role");
+                }
+
+                acc.AccountRole = 2; // Đảm bảo giá trị này phù hợp với ứng dụng của bạn
+                acc.AccountUpLevel = false;
+                _context.Accounts.Update(acc);
+
+                await _context.SaveChangesAsync();
+                await transaction.CommitAsync();
+
+                return acc;
+            }
+            catch (Exception ex)
+            {
+                await transaction.RollbackAsync();
+                throw new Exception($"Error updating account level: {ex.Message}", ex);
+            }
         }
 
-		public async Task<Account> GetAccountById(int accountId)
-		{
-			var account = await _context.Accounts.FirstOrDefaultAsync(a => a.AccountId == accountId);
-			if (account == null)
-			{
-				throw new Exception($"Account with ID {accountId} not found.");
-			}
-			return account;
-		}
+
+        public async Task<Account> GetAccountById(int accountId)
+        {
+            var account = await _context.Accounts.FirstOrDefaultAsync(a => a.AccountId == accountId);
+            if (account == null)
+            {
+                throw new Exception($"Account with ID {accountId} not found.");
+            }
+            return account;
+        }
 
         public async Task<Account> GetAccountByRoomID(int roomId)
         {
-           if(roomId == 0)
+            if (roomId == 0)
             {
                 throw new Exception("Room ID is invalid");
             }
+
             var account = await _context.Rooms
         .Include(r => r.Hotel) // Tải thông tin Hotel từ Room
         .Include(r => r.Hotel.Account) // Tải thông tin Account từ Hotel
@@ -472,6 +514,81 @@ namespace TripEnjoy.Infrastructure.Repositories
                 throw new Exception($"Account with ID {roomId} not found.");
             }
             return account;
+        }
+
+        public async Task<Account> DeleteAccountAsync(int id)
+        {
+            var account = await _context.Accounts.FirstOrDefaultAsync(a => a.AccountId == id);
+            if (account == null)
+            {
+                throw new Exception($"Account with ID {id} not found.");
+            }
+            account.AccountIsDeleted = true;
+            _context.Accounts.Update(account);
+            await _context.SaveChangesAsync();
+            return account;
+        }
+
+        public async Task<Account> RestoreAccount(int id)
+        {
+            var account = await _context.Accounts.FirstOrDefaultAsync(a => a.AccountId == id);
+            if (account == null)
+            {
+                throw new Exception($"Account with ID {id} not found.");
+            }
+            account.AccountIsDeleted = false;
+            _context.Accounts.Update(account);
+            await _context.SaveChangesAsync();
+            return account;
+        }
+
+        public async Task<Account> RequestBecamePartner(string email)
+        {
+            var account = _context.Accounts.FirstOrDefault(a => a.AccountEmail == email);
+            if (account == null)
+            {
+                throw new Exception("Account not found");
+            }
+            if (account.AccountRole == 2)
+            {
+                throw new Exception("Account is already a partner");
+            }
+            account.AccountUpLevel = true;
+            _context.Accounts.Update(account);
+            await _context.SaveChangesAsync();
+            return account;
+        }
+
+        public async Task<Account> GetAccountByEmail(string email)
+        {
+            var account = await _context.Accounts.FirstOrDefaultAsync(a => a.AccountEmail == email);
+            if (account == null)
+            {
+                throw new Exception("Account not found");
+            }
+            return account;
+        }
+
+        public async Task<IEnumerable<Account>> GetAccountNeedToBecamePartner()
+        {
+            var accounts = await _context.Accounts.Where(a => a.AccountRole == 1 && a.AccountUpLevel).ToListAsync();
+            if (accounts == null)
+            {
+                throw new Exception("No account need to became partner");
+            }
+            return accounts;
+        }
+        public async Task<Account> RejectUpdateAccountLevelAsync(int id)
+        {
+            var acc = await _context.Accounts.FirstOrDefaultAsync(a => a.AccountId == id);
+            if (acc == null)
+            {
+                throw new Exception("Account not found");
+            }
+            acc.AccountUpLevel = false;
+            _context.Accounts.Update(acc);
+            await _context.SaveChangesAsync();
+            return acc;
         }
     }
 }

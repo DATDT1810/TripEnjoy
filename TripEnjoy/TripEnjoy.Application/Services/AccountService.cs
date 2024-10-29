@@ -68,9 +68,39 @@ namespace TripEnjoy.Application.Services
             return await this.accountRepository.AddAccountAsync(account);
         }
 
-        public async Task<Account> UpdateAccountLevelAsync(string UId)
+        public async Task<Account> UpdateAccountLevelAsync(int id)
         {
-            return await this.accountRepository.UpdateAccountLevelAsync(UId);
+            return await this.accountRepository.UpdateAccountLevelAsync(id);
+        }
+
+        public Task<Account> DeleteAccountAsync(int id)
+        {
+            return this.accountRepository.DeleteAccountAsync(id);
+        }
+
+        public Task<Account> RestoreAccount(int id)
+        {
+          return this.accountRepository.RestoreAccount(id);
+        }
+
+        public Task<Account> RequestBecamePartner(string email)
+        {
+           return this.accountRepository.RequestBecamePartner(email);
+        }
+
+        public Task<IEnumerable<Account>> GetAccountNeedToBecamePartner()
+        {
+            return this.accountRepository.GetAccountNeedToBecamePartner();
+        }
+
+        public Task<Account> RejectUpdateAccountLevelAsync(int id)
+        {
+           return this.accountRepository.RejectUpdateAccountLevelAsync(id);
+        }
+
+        public async Task<Account> GetAccountByEmail(string email)
+        {
+            return await this.accountRepository.GetAccountByEmail(email);
         }
     }
 }

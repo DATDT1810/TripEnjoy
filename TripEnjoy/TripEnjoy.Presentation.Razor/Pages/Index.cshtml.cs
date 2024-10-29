@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Newtonsoft.Json;
 using System.Text.Json;
 using TripEnjoy.Presentation.Razor.Services;
-using TripEnjoy.Presentation.Razor.Model;
+using TripEnjoy.Presentation.Razor.ViewModels;
 namespace TripEnjoy.Presentation.Razor.Pages
 {
     public class IndexModel : PageModel
@@ -50,7 +50,11 @@ namespace TripEnjoy.Presentation.Razor.Pages
             if (imagesResponse.IsSuccessStatusCode)
             {
                 string imagesData = await imagesResponse.Content.ReadAsStringAsync();
-                HotelImages = JsonConvert.DeserializeObject<List<TripEnjoy.Presentation.Razor.ViewModels.HotelImages>>(imagesData);
+                HotelImages = JsonConvert.DeserializeObject<List<HotelImages>>(imagesData);
+                foreach (var hotel in Hotels)
+                {
+                    hotel.HotelImages = HotelImages.Where(img => img.HotelId == hotel.HotelId).ToList();
+                }
             }
 
             // Call API to get the list of categories
@@ -93,7 +97,7 @@ namespace TripEnjoy.Presentation.Razor.Pages
             // Giải mã dữ liệu từ JSON
             if (responseListSearchHotel.IsSuccessStatusCode)
             {
-                var hotels = System.Text.Json.JsonSerializer.Deserialize<List<Hotel>>(dataHotels, option);
+                var hotels = System.Text.Json.JsonSerializer.Deserialize<List<TripEnjoy.Presentation.Razor.Model.Hotel>>(dataHotels, option);
                 TempData["ListSearchHotel"] = System.Text.Json.JsonSerializer.Serialize(hotels);
             }
             else

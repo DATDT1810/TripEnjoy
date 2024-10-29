@@ -57,5 +57,6 @@ namespace TripEnjoy.Presentation.WPF.ViewModels
         {
             _execute((T)parameter);
         }
+
     }
 }
