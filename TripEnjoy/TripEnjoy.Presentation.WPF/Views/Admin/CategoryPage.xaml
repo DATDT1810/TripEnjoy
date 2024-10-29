@@ -30,10 +30,11 @@
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition></ColumnDefinition>
                     <ColumnDefinition></ColumnDefinition>
-
+                    <ColumnDefinition></ColumnDefinition>
                 </Grid.ColumnDefinitions>
-                <Button Content="Update" Command="{Binding Update}" Width="110" ></Button>
-                <Button Grid.Column="1" Content="Delete" Command="{Binding Delete}" Width="110"></Button>
+                <Button Content="Add" Command="{Binding Add}" Width="110"></Button>
+                <Button Content="Update" Grid.Column="1" Command="{Binding Update}" Width="110" ></Button>
+                <Button Grid.Column="2" Content="Delete" Command="{Binding Delete}" Width="110"></Button>
             </Grid>
 
         </Grid>

@@ -37,32 +37,28 @@ namespace TripEnjoy.Presentation.Web.Controllers
 
         [Authorize(Roles = "Admin")]
         [HttpPost]
-        public async Task<IActionResult> AddCategory([FromBody] Category category)
+        [Route("AddCategory")]
+        public async Task<IActionResult> AddCategory([FromBody] string categoryName)
         {
-            if (category == null)
+            if (categoryName == null)
             {
                 return BadRequest("Invalid category data!");
             }
-            await _categoryService.AddCategoryAsync(category);
-            return CreatedAtRoute("GetCategoryById", new { id = category.CategoryId }, category);
+            var category = await _categoryService.AddCategoryAsync(categoryName);
+            return Ok(category.CategoryId);
         }
 
         [Authorize(Roles = "Admin")]
-        [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateCategory(int id, [FromBody] Category category)
+        [HttpPut]
+        [Route("UpdateCategory")]
+        public async Task<IActionResult> UpdateCategory([FromBody] Category category)
         {
             if (category == null)
             {
                 return BadRequest("Invalid data.");
             }
-
-            Category obj = await _categoryService.GetCategoryByIdAsync(id);
-            if (obj == null)
-            {
-                return NotFound();
-            }
             await _categoryService.UpdateCatgoryAsync(category);
-            return CreatedAtRoute("GetCategoryById", new { id = category.CategoryId }, category);
+            return Ok(category.CategoryId);
         }
 
         [Authorize(Roles = "Admin")]

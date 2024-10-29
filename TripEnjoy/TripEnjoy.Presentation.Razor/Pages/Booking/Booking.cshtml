@@ -97,16 +97,16 @@
                         <div class="row g-3">
                             <div class="col-md-6">
                                 <label for="firstName">Full Name *</label>
-                                <input type="text" class="form-control" id="firstName" asp-for="Account.AccountFullname">
+                                <input type="text" class="form-control" id="firstName" asp-for="UserProfile.AccountFullname">
                             </div>
                             <div class="col-md-6">
                                 <label for="email">Email Address *</label>
-                                <input type="email" class="form-control" id="email" value="@Model.Account.AccountEmail">
+                                <input type="email" class="form-control" id="email" value="@Model.UserProfile.AccountEmail">
                                 <small>Booking confirmation will be sent to this email</small>
                             </div>
                             <div class="col-md-12">
                                 <label for="phone">Phone Number *</label>
-                                <input type="tel" class="form-control" id="phone" value="@Model.Account.AccountPhone">
+                                <input type="tel" class="form-control" id="phone" value="@Model.UserProfile.AccountPhone">
                                 <small>This phone number can receive booking confirmation messages</small>
                             </div>
 

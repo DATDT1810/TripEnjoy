@@ -26,9 +26,9 @@ namespace TripEnjoy.Application.Services.Category
             return await _categoryRepository.GetCategoryByIdAsync(id);
         }
 
-        public async Task<TripEnjoy.Domain.Models.Category> AddCategoryAsync(TripEnjoy.Domain.Models.Category category)
+        public async Task<TripEnjoy.Domain.Models.Category> AddCategoryAsync(string categoryName)
         {
-            return await _categoryRepository.AddCategoryAsync(category);
+            return await _categoryRepository.AddCategoryAsync(categoryName);
         }
 
         public async Task<TripEnjoy.Domain.Models.Category> UpdateCatgoryAsync(TripEnjoy.Domain.Models.Category category)

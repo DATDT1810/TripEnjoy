@@ -36,15 +36,18 @@ namespace TripEnjoy.Presentation.WPF.ViewModels.Admin
         {
             Categories = new ObservableCollection<Category>();
             _ = LoadDataAsync();
-            Add = new RelayCommand<Category>(Canchose, async (_) => await ShowAddCatePopup());
+            Add = new RelayCommand<Category>(_ => true, async (_) => await ShowAddCatePopup());
             Update = new RelayCommand<Category>(Canchose, async (category) => await UpdateCate(category));
             Delete = new RelayCommand<Category>(Canchose, async (category) => await DeleteCate(category));
         }
 
         private async Task ShowAddCatePopup()
         {
-            //    var popup = new AddNewCategoryWindow();
-            //    popup.ShowDialog();
+            var popup = new AddNewCategoryWindow
+            {
+                DataContext = new AddNewCategoryViewModel() // Gán ViewModel làm DataContext
+            };
+            popup.ShowDialog();
         }
 
         private async Task DeleteCate(Category category)
@@ -78,34 +81,17 @@ namespace TripEnjoy.Presentation.WPF.ViewModels.Admin
 
         private async Task UpdateCate(Category category)
         {
-            category = category ?? _selectedCategory;
+            category = _selectedCategory;
             if (category == null)
             {
                 throw new ArgumentNullException("Category");
             }
-            var client = new HttpClient();
-            client.Timeout = TimeSpan.FromMinutes(2);
-            var request = new HttpRequestMessage(HttpMethod.Put, "https://localhost:7126/api/Category/" + category.CategoryId);
-            //var content = new StringContent(JsonConvert.SerializeObject(category), Encoding.UTF8, "application/json");
-            //request.Content = content;
-            var token = TokenHelper.LoadToken();
-            if (token == null)
+            var editCategoryWindow = new UpdateCategoryWindows
             {
-                throw new ArgumentNullException("Token");
-            }
-            request.Headers.Add("Authorization", $"Bearer {token.accessToken}");
-            var response = await client.SendAsync(request);
-            if (response.IsSuccessStatusCode)
-            {
-                MessageBox.Show("Update category successfully.");
-                await LoadDataAsync();
-            }
-            else
-            {
-                MessageBox.Show("Failed to update category.");
-                await LoadDataAsync();
-            }
-
+                DataContext = new UpdateCategoryViewModel(category)
+            };
+            editCategoryWindow.ShowDialog();
+            await LoadDataAsync();
         }
 
         private bool Canchose(Category obj)
@@ -132,7 +118,7 @@ namespace TripEnjoy.Presentation.WPF.ViewModels.Admin
             else
             {
                 MessageBox.Show("Failed to load data.");
-            }
+            }   
         }
     }
 }

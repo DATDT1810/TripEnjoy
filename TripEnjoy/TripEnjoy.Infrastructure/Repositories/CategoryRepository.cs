@@ -32,11 +32,17 @@ namespace TripEnjoy.Infrastructure.Repositories
         }
 
         // Add new a category
-        public async Task<Category> AddCategoryAsync(Category category)
+        public async Task<Category> AddCategoryAsync(string categoryName)
         {
+           var category = new Category
+           {
+               CategoryName = categoryName,
+               CategoryStatus = true
+           };
+
             _context.Categories.Add(category);
             await _context.SaveChangesAsync();
-            return category;
+            return category; 
         }
 
         // Delete a category by ID
@@ -55,9 +61,21 @@ namespace TripEnjoy.Infrastructure.Repositories
         // Update an existing category
         public async Task<Category> UpdateCatgoryAsync(Category category)
         {
-            _context.Categories.Update(category);
+            var categoryExist = await _context.Categories.FirstOrDefaultAsync(c => c.CategoryId == category.CategoryId);
+
+            if (categoryExist == null)
+            {
+                throw new Exception("The category does not exist.");
+            }
+
+        
+            categoryExist.CategoryName = category.CategoryName;
+            categoryExist.CategoryStatus = category.CategoryStatus;
+
+            _context.Categories.Update(categoryExist);
             await _context.SaveChangesAsync();
-            return category;
+
+            return categoryExist; // Trả về danh mục sau khi cập nhật
         }
     }
 }

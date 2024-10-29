@@ -10,7 +10,7 @@ namespace TripEnjoy.Application.Interface.Category
     {
         Task<IEnumerable<TripEnjoy.Domain.Models.Category>> GetCategoriesAsync();
         Task<TripEnjoy.Domain.Models.Category> GetCategoryByIdAsync(int id);
-        Task<TripEnjoy.Domain.Models.Category> AddCategoryAsync(TripEnjoy.Domain.Models.Category category);
+        Task<TripEnjoy.Domain.Models.Category> AddCategoryAsync(string categoryName);
         Task<TripEnjoy.Domain.Models.Category> UpdateCatgoryAsync(TripEnjoy.Domain.Models.Category category);
         Task<bool> DeleteCategoryAsync(int id);
     }

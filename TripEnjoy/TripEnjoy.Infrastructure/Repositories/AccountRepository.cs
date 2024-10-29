@@ -516,7 +516,6 @@ namespace TripEnjoy.Infrastructure.Repositories
             return account;
         }
 
-
         public async Task<Account> DeleteAccountAsync(int id)
         {
             var account = await _context.Accounts.FirstOrDefaultAsync(a => a.AccountId == id);

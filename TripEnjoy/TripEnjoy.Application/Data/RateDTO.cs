@@ -16,7 +16,5 @@ namespace TripEnjoy.Application.Data
         public DateTime RateDate { get; set; }
         public int RoomId { get; set; }
         public int AccountId { get; set; }
-        public string FullName { get; set; }
-
     }
 }
