@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Extensions.Options;
 using System.Net.Http.Headers;
+using System.Security.Claims;
 using System.Text;
 using System.Text.Json;
 using TripEnjoy.Presentation.Razor.ViewModels;
@@ -21,10 +22,16 @@ namespace TripEnjoy.Presentation.Razor.Pages.Room
         public IEnumerable<RoomDetail> RelatedRooms { get; set; }
 
         [BindProperty(SupportsGet = true)]
-        public IEnumerable<Rate> Rates { get; set; } 
+        public IEnumerable<Rate> Rates { get; set; }
 
         [BindProperty(SupportsGet = true)]
         public IEnumerable<Comment> Comments { get; set; }
+
+        [BindProperty(SupportsGet = true)]
+        public RateAndComment RateAndComment { get; set; } = new RateAndComment();
+
+        [BindProperty(SupportsGet = true)]
+        public CommentReply CommentReply { get; set; } = new CommentReply();
         public RoomDetailModel(IHttpClientFactory httpClientFactory)
         {
             _httpClientFactory = httpClientFactory;
@@ -61,10 +68,22 @@ namespace TripEnjoy.Presentation.Razor.Pages.Room
                     RelatedRooms = JsonSerializer.Deserialize<List<RoomDetail>>(relatedRoomsData, option);
                     // Loại bỏ phòng hiện tại khỏi danh sách phòng liên quan
                     RelatedRooms = RelatedRooms.Where(room => room.RoomId != id).ToList();
+
+                    // Lấy ảnh cho từng phòng trong danh sách RelatedRooms
+                    foreach (var room in RelatedRooms)
+                    {
+                        var roomImagesResponse = await client.GetAsync($"https://localhost:7126/api/RoomImage/images/{room.RoomId}");
+                        if (roomImagesResponse.IsSuccessStatusCode)
+                        {
+                            string roomImagesData = await roomImagesResponse.Content.ReadAsStringAsync();
+                            var roomImages = JsonSerializer.Deserialize<List<RoomImages>>(roomImagesData, option);
+                            room.RoomImages = roomImages?.Take(1).ToList();
+                        }
+                    }
                 }
 
                 // Lấy danh sách đánh giá
-                var ratesResponse = await client.GetAsync($"https://localhost:7126/api/Rate/Room/{id}");
+                var ratesResponse = await client.GetAsync($"https://localhost:7126/api/Rate/Room{id}");
                 if (ratesResponse.IsSuccessStatusCode)
                 {
                     string ratesData = await ratesResponse.Content.ReadAsStringAsync();
@@ -78,96 +97,70 @@ namespace TripEnjoy.Presentation.Razor.Pages.Room
                     Comments = JsonSerializer.Deserialize<List<Comment>>(commentsData, option);
                 }
 
-
                 return Page();
             }
-            else if(response.StatusCode == System.Net.HttpStatusCode.NotFound)
+            else if (response.StatusCode == System.Net.HttpStatusCode.NotFound)
             {
-                return NotFound(); 
+                return NotFound();
             }
-            
+
             return Page();
-            
+
         }
 
-        public async Task<IActionResult> OnPostReply(int id)
+        public async Task<IActionResult> OnPostReplyAsync()
         {
-            var accessToken = Request.Cookies["accessToken"];
-            if (accessToken == null)
+            if (CommentReply == null || string.IsNullOrWhiteSpace(CommentReply.Content))
             {
-                // Có thể trả về một lỗi hoặc điều hướng người dùng đăng nhập
-                return Unauthorized();  // Sử dụng Unauthorized thay vì throw Exception
+                ModelState.AddModelError(string.Empty, "Reply cannot be empty.");
+                return Page();
             }
 
-            var replyRequest = new
+            var client = _httpClientFactory.CreateClient("DefaultClient");
+            var replyComment = new
             {
-                CommentId = id,  // Truyền đúng ID của comment cần trả lời
-                RoomId = RoomDetail.RoomId,  // Truyền RoomId hiện tại
-                                             // Có thể thêm trường content nếu phản hồi cần nội dung
-                Content = "" // Bạn có thể thay thế bằng dữ liệu từ form
+                RoomId = CommentReply.RoomId,
+                Content = CommentReply.Content,
+                ReplyToComment = CommentReply.ReplyToComment.ToString()
             };
 
-            var request = new HttpRequestMessage(HttpMethod.Post, "https://localhost:7126/api/Comment/Reply");
-            var options = new JsonSerializerOptions { PropertyNameCaseInsensitive = true };
+            string data = JsonSerializer.Serialize(replyComment);
+            var content = new StringContent(data, System.Text.Encoding.UTF8, "application/json");
+            HttpResponseMessage response = await client.PostAsync("https://localhost:7126/api/Comment/Reply", content);
 
-            // Chuyển đối tượng replyRequest thành chuỗi JSON
-            var jsonContent = JsonSerializer.Serialize(replyRequest, options);
-
-            // Thiết lập nội dung yêu cầu dưới dạng StringContent với JSON
-            request.Content = new StringContent(jsonContent, System.Text.Encoding.UTF8, "application/json");
-            var client = _httpClientFactory.CreateClient();
-            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
-
-            var response = await client.SendAsync(request);
-            if (response.IsSuccessStatusCode)
+            if (!response.IsSuccessStatusCode)
             {
-                // Nếu thành công, có thể load lại trang để hiển thị phản hồi mới
-                return RedirectToPage();  // Chuyển hướng lại trang để hiển thị bình luận mới
+                return StatusCode((int)response.StatusCode, "Error when submitting reply."); 
             }
-
-            // Trả về lỗi nếu request thất bại
-            return StatusCode((int)response.StatusCode, "Error when sending reply");
+            return RedirectToPage(new { id = CommentReply.RoomId });
         }
 
-        public async Task<IActionResult> OnPostRateAndComment()
+        public async Task<IActionResult> OnPostRateAndCommentAsync()
         {
-            var accessToken = Request.Cookies["accessToken"];
-            if (accessToken == null)
+            var client = _httpClientFactory.CreateClient("DefaultClient");
+
+            // Create a RateAndCommentDTO payload based on the RateAndComment model
+            var rateAndCommentDTO = new
             {
-                return Unauthorized();
+                RoomId = RateAndComment.RoomId,
+                RateValue = RateAndComment.RateValue,
+                CommentContent = RateAndComment.CommentContent,
+                ReviewDate = DateTime.Now
+
+            };
+
+            string data = JsonSerializer.Serialize(RateAndComment);
+
+            // Serialize the DTO and send it to the API
+            var content = new StringContent(JsonSerializer.Serialize(rateAndCommentDTO), Encoding.UTF8, "application/json");
+            var response = await client.PostAsync("https://localhost:7126/api/Rate/RateAndComment", content);
+
+            if (!response.IsSuccessStatusCode)
+            {
+                return StatusCode((int)response.StatusCode, "Error when sending rate and comment");
             }
 
-            // Parse JSON request body from the client
-            var requestBody = await new StreamReader(Request.Body).ReadToEndAsync();
-            var rateAndCommentRequest = JsonSerializer.Deserialize<RateAndComment>(requestBody);
-
-            if (rateAndCommentRequest == null)
-            {
-                return BadRequest("Invalid request data.");
-            }
-
-            rateAndCommentRequest.ReviewDate = DateTime.UtcNow;
-
-            // Set up client to send to API
-            var client = _httpClientFactory.CreateClient();
-            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
-
-            var requestContent = new StringContent(JsonSerializer.Serialize(rateAndCommentRequest), Encoding.UTF8, "application/json");
-
-            // Call the external API endpoint for handling the rating and comment
-            var response = await client.PostAsync("https://localhost:7126/api/Rate/RateAndComment", requestContent);
-
-            if (response.IsSuccessStatusCode)
-            {
-                return new JsonResult(new { success = true, message = "Review submitted successfully." });
-            }
-            else
-            {
-                var errorResponse = await response.Content.ReadAsStringAsync();
-                return StatusCode((int)response.StatusCode, $"Failed to rate and comment: {errorResponse}");
-            }
+            return RedirectToPage(new { id = RateAndComment.RoomId });
         }
-
-
     }
 }

@@ -9,6 +9,7 @@ using TripEnjoy.Application.Interface.Rate;
 using TripEnjoy.Application.Interface.Room;
 using TripEnjoy.Domain.Models;
 using System.Linq;
+using Microsoft.AspNetCore.Authorization;
 
 
 namespace TripEnjoy.Presentation.Web.Controllers
@@ -57,20 +58,27 @@ namespace TripEnjoy.Presentation.Web.Controllers
                 RateDate = rate.RateDate,
                 RoomId = rate.RoomId,
                 AccountId = rate.AccountId,
-                FullName = rate.Account.AccountFullname 
             });
 
             return Ok(rateDTOs);
         }
 
         // POST: api/Rate
+        [Authorize]
         [HttpPost]
         public async Task<IActionResult> RateRoom([FromBody] RateDTO rateDTO)
         {
             ClaimsPrincipal claims = this.User;
-            //var userID = "1ccb72fd-a14e-48ee-a4d6-496977e0cf5a";
-            var userID = claims.FindFirst(ClaimTypes.NameIdentifier).Value;
-            var account = await _accountService.GetAccountByIdAsync(userID);
+            var email = claims.FindFirst(ClaimTypes.Email)?.Value;
+
+            // Get the authenticated user
+            if (string.IsNullOrEmpty(email))
+            {
+                return Unauthorized("User is not authenticated.");
+            }
+
+            // Fetch account details from the user ID
+            var account = await _accountService.GetAccountByEmailAsync(email);
             var accountId = account.AccountId;
 
             if (!ModelState.IsValid)
@@ -91,20 +99,21 @@ namespace TripEnjoy.Presentation.Web.Controllers
         }
 
         // POST: api/Rate/RateAndComment
+        [Authorize]
         [HttpPost("RateAndComment")]
         public async Task<IActionResult> RateAndComment([FromBody] RateAndCommentDTO rateAndCommentDTO)
         {
-            // Get the authenticated user
             ClaimsPrincipal claims = this.User;
-            var userID = claims.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            var email = claims.FindFirst(ClaimTypes.Email)?.Value;
 
-            if (string.IsNullOrEmpty(userID))
+            // Get the authenticated user
+            if (string.IsNullOrEmpty(email))
             {
                 return Unauthorized("User is not authenticated.");
             }
 
             // Fetch account details from the user ID
-            var account = await _accountService.GetAccountByIdAsync(userID);
+            var account = await _accountService.GetAccountByEmailAsync(email);
             if (account == null)
             {
                 return Unauthorized("Account not found.");
@@ -163,6 +172,34 @@ namespace TripEnjoy.Presentation.Web.Controllers
                 // Log the exception and return an error response
                 return StatusCode(StatusCodes.Status500InternalServerError, $"An error occurred: {ex.Message}");
             }
+        }
+
+        [HttpGet("ReviewRoom/{roomId}")]
+        public async Task<IActionResult> GetRoomReviews(int roomId)
+        {
+            var rates = await _rateService.GetRatesForRoomAsync(roomId);
+            var comments = await _commentService.GetCommentByRoomIdAsync(roomId);
+
+
+            var roomReviews = new List<RoomReviewDTO>();
+
+            foreach (var rate in rates)
+            {
+                var comment = comments.FirstOrDefault(c => c.AccountId == rate.AccountId && c.RoomId == roomId);
+
+                var account = await _accountService.GetAccountByIdAsync(rate.AccountId.ToString());
+
+                roomReviews.Add(new RoomReviewDTO
+                {
+                    RoomId = roomId,
+                    AccountId = rate.AccountId,
+                    RateValue = rate.RateValue,
+                    CommentContent = comment?.CommentContent ?? "No Comment",
+                    ReviewDate = comment?.CommentDate ?? rate.RateDate,
+                    FullName = account?.AccountFullname ?? "Anonymous"
+                });
+            }
+            return Ok(roomReviews);
         }
 
     }

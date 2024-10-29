@@ -47,7 +47,7 @@ namespace TripEnjoy.Presentation.Razor.Pages
                 HotelImages = JsonConvert.DeserializeObject<List<HotelImages>>(imagesData);
                 foreach (var hotel in Hotels)
                 {
-                    hotel.HotelImages = HotelImages.FirstOrDefault(img => img.HotelId == hotel.HotelId);
+                    hotel.HotelImages = HotelImages.Where(img => img.HotelId == hotel.HotelId).ToList();
                 }
             }
 

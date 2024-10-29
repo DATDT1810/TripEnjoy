@@ -195,6 +195,18 @@ namespace TripEnjoy.Presentation.Web.Controllers
             return Ok(account);
         }
 
+        [HttpGet("user/{email}", Name = "GetAccountByEmail")]
+        public async Task<IActionResult> GetAccountByEmail(string email)
+        {
+
+            var account = await _accountService.GetAccountByIdAsync(email);
+            if (account == null)
+            {
+                return NotFound();
+            }
+            return Ok(account);
+        }
+
         [HttpPost]
         public async Task<IActionResult> AddAccount([FromBody] TripEnjoy.Domain.Models.Account account)
         {
@@ -206,9 +218,9 @@ namespace TripEnjoy.Presentation.Web.Controllers
             return CreatedAtRoute(nameof(GetAccountById), new { id = account.UserId }, account);
         }
 
-   
 
-        [HttpPut("UpgradeLevel/{UId}")]
+		[Authorize]
+		[HttpPut("UpgradeLevel/{UId}")]
         public async Task<IActionResult> UpdateAccountLevel(string UId)
         {
             if (UId == null)
@@ -222,7 +234,6 @@ namespace TripEnjoy.Presentation.Web.Controllers
             }
             return BadRequest("Failed to upgrade account");
         }
-
 
     }
 }

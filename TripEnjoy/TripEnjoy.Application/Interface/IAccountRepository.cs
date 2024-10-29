@@ -32,5 +32,7 @@ namespace TripEnjoy.Application.Interface
 
         Task<Account> GetAccountById(int accountId);
         Task<Account> GetAccountByRoomID(int roomId);
+        Task<Account> GetAccountByEmailAsync(string email);
+
     }
 }

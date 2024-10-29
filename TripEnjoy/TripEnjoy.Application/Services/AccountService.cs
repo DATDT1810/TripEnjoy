@@ -72,5 +72,10 @@ namespace TripEnjoy.Application.Services
         {
             return await this.accountRepository.UpdateAccountLevelAsync(UId);
         }
+
+        public async Task<Account> GetAccountByEmailAsync(string email)
+        {
+            return await this.accountRepository.GetAccountByEmailAsync(email);
+        }
     }
 }

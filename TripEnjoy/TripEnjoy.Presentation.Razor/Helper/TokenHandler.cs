@@ -65,10 +65,10 @@ namespace TripEnjoy.Presentation.Razor.Helper
                 }
                 catch (Exception ex)
                 {
-                    return new HttpResponseMessage(HttpStatusCode.InternalServerError)
-                    {
-                        Content = new StringContent($"An error occurred while refreshing the token: {ex.Message}")
-                    };
+                    var loginUrl = "/Login";
+                    var redirectResponse = new HttpResponseMessage(HttpStatusCode.Redirect);
+                    redirectResponse.Headers.Location = new Uri(loginUrl, UriKind.Relative);
+                    return redirectResponse;
                 }
             }
 

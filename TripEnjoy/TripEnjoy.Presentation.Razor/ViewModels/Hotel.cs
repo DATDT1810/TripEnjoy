@@ -13,7 +13,6 @@
         public DateTime HotelTimeEnd { get; set; }
         public int CategoryId { get; set; }
         public Category Category { get; set; }
-        public HotelImages HotelImages { get; set; }
-        public List<HotelImages> HotelImagesList { get; set; } = new List<HotelImages>();
+        public List<HotelImages> HotelImages { get; set; } = new List<HotelImages>();
     }
 }

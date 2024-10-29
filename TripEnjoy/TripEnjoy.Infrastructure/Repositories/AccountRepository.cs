@@ -473,5 +473,15 @@ namespace TripEnjoy.Infrastructure.Repositories
             }
             return account;
         }
+
+        public async Task<Account> GetAccountByEmailAsync(string email)
+        {
+            var account = await _context.Accounts.FirstOrDefaultAsync(a => a.AccountEmail == email);
+            if (account == null)
+            {
+                throw new ArgumentException();
+            }
+            return account;
+        }
     }
 }

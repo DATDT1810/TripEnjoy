@@ -8,5 +8,6 @@
         public int RoomId { get; set; }
         public int AccountId { get; set; }
         public string FullName { get; set; }
+        public string CommentContent { get; set; }
     }
 }

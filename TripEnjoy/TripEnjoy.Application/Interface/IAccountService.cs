@@ -25,6 +25,8 @@ namespace TripEnjoy.Application.Interface
         Task<TripEnjoy.Domain.Models.Account> GetAccountByIdAsync(string userId);
         Task<TripEnjoy.Domain.Models.Account> AddAccountAsync(Account account);
         Task<TripEnjoy.Domain.Models.Account> UpdateAccountLevelAsync(string UId);
+        Task<Account> GetAccountByEmailAsync(string email);
+
 
     }
 }

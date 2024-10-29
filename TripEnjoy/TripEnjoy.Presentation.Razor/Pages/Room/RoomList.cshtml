@@ -5,68 +5,184 @@
 }
 
 <div class="container">
-    <header class="hotel-header">
-        <small class="position-absolute mb-2 translate-middle-y bg-primary text-white rounded py-1 px-3">@Model.Hotel.Category.CategoryName</small>
-        <br />
-        <h1>@Model.Hotel.HotelName</h1>
-        <p class="address"><i class="fa fa-solid fa-location-dot text-primary"></i> @Model.Hotel.HotelAddress</p>
-    </header>
+    <div class="row">
+        <div class="col-md-8">
+            <header class="hotel-header">
+                <small class="position-absolute mb-2 translate-middle-y bg-primary text-white rounded py-1 px-3">@Model.Hotel.Category.CategoryName</small>
+                <br />
+                <h1>@Model.Hotel.HotelName</h1>
+                <p class="address"><i class="fa fa-solid fa-location-dot text-primary"></i> @Model.Hotel.HotelAddress</p>
+            </header>
 
-    <section class="gallery">
-        <div class="main-image">
-            <img src="@Model.Hotel.HotelImagesList.FirstOrDefault()?.ImageUrl" alt="Main Hotel Image">
-        </div>
-        <div class="thumbnail-images">
-            @if (Model.Hotel.HotelImagesList != null && Model.Hotel.HotelImagesList.Any())
-            {
-                <div class="main-image">
-                    <img src="@Model.Hotel.HotelImagesList.FirstOrDefault()?.ImageUrl" alt="Main Hotel Image">
+            <section class="gallery">
+                <div class="images-grid">
+                    @if (Model.HotelImages != null && Model.HotelImages.Any())
+                    {
+                        int count = 0;
+                        foreach (var image in Model.HotelImages)
+                        {
+                            <img src="@image.ImageUrl" alt="Hotel Image" class="hotel-image @(count >= 6 ? "hidden" : "")" onclick="openLightbox('@image.ImageUrl')">
+                            count++;
+                        }
+                    }
+                    else
+                    {
+                        <p>No images available for this hotel.</p>
+                    }
                 </div>
-            }
-            else
-            {
-                <p>No images available for this hotel.</p>
-            }
 
+                @if (Model.HotelImages != null && Model.HotelImages.Count() > 6)
+                {
+                    <button class="show-more-btn" onclick="showMoreImages()" style="width: 150px">Show more</button>
+                }
+            </section>
+
+
+            <div id="lightbox" class="lightbox">
+                <span class="close" onclick="closeLightbox()">&times;</span>
+                <img class="lightbox-content" id="lightboxImage" src="" alt="Popup Image">
+            </div>
+
+            <section class="description mt-3">
+                @if (Model.Hotel != null)
+                {
+                    <p>
+                        @Model.Hotel.HotelDescription
+                    </p>
+                }
+                else
+                {
+                    <p>Loading description...</p>
+                }
+            </section>
         </div>
-    </section>
+        <div class="col-md-4">
+            @{
+                List<KeyValuePair<string, string>> highlights;
 
-    <div id="fullImageOverlay" class="overlay" onclick="closeFullImage()">
-        <img id="fullImage" src="" alt="Full Image">
+                switch (Model.Hotel.HotelId)
+                {
+                    case 1:  // The Ritz-Carlton HCM
+                        highlights = new List<KeyValuePair<string, string>>
+            {
+            new KeyValuePair<string, string>("Elegant luxury", "fa-gem"),
+            new KeyValuePair<string, string>("Prime city location", "fa-map-marker-alt"),
+            new KeyValuePair<string, string>("World-class amenities", "fa-concierge-bell"),
+            new KeyValuePair<string, string>("Exquisite dining", "fa-utensils"),
+            new KeyValuePair<string, string>("Personalized service", "fa-user-tie")
+            };
+                        break;
+
+                    case 2:  // Muong Thanh Luxury Can Tho
+                        highlights = new List<KeyValuePair<string, string>>
+            {
+            new KeyValuePair<string, string>("River views", "fa-water"),
+            new KeyValuePair<string, string>("Premium spa", "fa-spa"),
+            new KeyValuePair<string, string>("Business facilities", "fa-briefcase"),
+            new KeyValuePair<string, string>("Fine dining options", "fa-utensils")
+            };
+                        break;
+
+                    case 3:  // Holiday Inn
+                        highlights = new List<KeyValuePair<string, string>>
+            {
+            new KeyValuePair<string, string>("Affordable comfort", "fa-bed"),
+            new KeyValuePair<string, string>("Family-friendly", "fa-child"),
+            new KeyValuePair<string, string>("Convenient location", "fa-map-marker-alt"),
+            new KeyValuePair<string, string>("Extended stay options", "fa-calendar-alt")
+            };
+                        break;
+
+                    case 4:  // Ibis Hotel
+                        highlights = new List<KeyValuePair<string, string>>
+            {
+            new KeyValuePair<string, string>("Budget-friendly", "fa-wallet"),
+            new KeyValuePair<string, string>("Central location", "fa-map-marker-alt"),
+            new KeyValuePair<string, string>("Essential comforts", "fa-check-circle"),
+            new KeyValuePair<string, string>("Easy transportation access", "fa-bus")
+            };
+                        break;
+
+                    case 5:  // Backpacker Hostel Can Tho
+                        highlights = new List<KeyValuePair<string, string>>
+            {
+            new KeyValuePair<string, string>("Social atmosphere", "fa-users"),
+            new KeyValuePair<string, string>("Affordable dorms", "fa-bed"),
+            new KeyValuePair<string, string>("Ideal for solo travelers", "fa-user"),
+            new KeyValuePair<string, string>("Community-focused", "fa-handshake")
+            };
+                        break;
+
+                    case 6:  // Oakwood Apartments
+                        highlights = new List<KeyValuePair<string, string>>
+            {
+            new KeyValuePair<string, string>("Long-term stay", "fa-calendar-alt"),
+            new KeyValuePair<string, string>("Spacious apartments", "fa-home"),
+            new KeyValuePair<string, string>("City access", "fa-map-marker-alt"),
+            new KeyValuePair<string, string>("Fully serviced", "fa-bell")
+            };
+                        break;
+
+                    case 7:  // Banyan Tree Resort
+                        highlights = new List<KeyValuePair<string, string>>
+            {
+            new KeyValuePair<string, string>("Beachfront luxury", "fa-umbrella-beach"),
+            new KeyValuePair<string, string>("Award-winning spa", "fa-spa"),
+            new KeyValuePair<string, string>("Scenic views", "fa-mountain"),
+            new KeyValuePair<string, string>("Perfect for relaxation", "fa-leaf")
+            };
+                        break;
+
+                    case 8:  // Novotel Airport Hotel
+                        highlights = new List<KeyValuePair<string, string>>
+            {
+            new KeyValuePair<string, string>("Near airport", "fa-plane"),
+            new KeyValuePair<string, string>("Modern rooms", "fa-bed"),
+            new KeyValuePair<string, string>("Business-friendly", "fa-briefcase"),
+            new KeyValuePair<string, string>("Quick access to transport", "fa-train")
+            };
+                        break;
+
+                    case 9:  // Hotel des Arts
+                        highlights = new List<KeyValuePair<string, string>>
+            {
+            new KeyValuePair<string, string>("Unique artistic decor", "fa-paint-brush"),
+            new KeyValuePair<string, string>("Boutique experience", "fa-store"),
+            new KeyValuePair<string, string>("Personalized service", "fa-user-tie"),
+            new KeyValuePair<string, string>("Intimate ambiance", "fa-heart")
+            };
+                        break;
+
+                    case 10:  // Local Homestay
+                        highlights = new List<KeyValuePair<string, string>>
+            {
+            new KeyValuePair<string, string>("Authentic experience", "fa-globe"),
+            new KeyValuePair<string, string>("Rustic charm", "fa-tree"),
+            new KeyValuePair<string, string>("Cultural immersion", "fa-landmark"),
+            new KeyValuePair<string, string>("Warm hospitality", "fa-smile")
+            };
+                        break;
+
+                    default:
+                        highlights = new List<KeyValuePair<string, string>>
+            {
+            new KeyValuePair<string, string>("No specific highlights available", "fa-info-circle")
+            };
+                        break;
+                }
+
+            }
+            <section class="amenities">
+                <h2>Hotel Highlights</h2>
+                <ul class="amenity-list">
+                    @foreach (var highlight in highlights)
+                    {
+                        <li><i class="fa @highlight.Value text-primary"></i> @highlight.Key</li>
+                    }
+                </ul>
+            </section>
+        </div>
     </div>
-
-    <section class="description">
-        @if (Model.Hotel != null)
-        {
-            <p>
-                @Model.Hotel.HotelDescription
-            </p>
-        }
-        else
-        {
-            <p>Loading description...</p>
-        }
-    </section>
-
-    <section class="amenities">
-        <h2>Điểm nổi bật của chỗ nghỉ</h2>
-        <ul class="amenity-list">
-            <li>Hồ bơi ngoài trời</li>
-            <li>WiFi miễn phí</li>
-            <li>Phòng gia đình</li>
-            <li>Giáp biển</li>
-            <li>Trung tâm thể dục</li>
-            <li>3 nhà hàng</li>
-            <li>Quầy bar</li>
-            <li>Bữa sáng tuyệt hảo</li>
-        </ul>
-    </section>
-
-    <section class="map">
-        <h2>Bản đồ</h2>
-        <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3833.8482706323184!2d108.24316277526296!3d16.07417094589816!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3142177f0a7e788b%3A0x123456789abc!2sParis%20Deli%20Danang%20Beach%20Hotel!5e0!3m2!1sen!2s!4v1601234567890!5m2!1sen!2s"
-                width="600" height="450" frameborder="0" style="border:0;" allowfullscreen="" aria-hidden="false" tabindex="0"></iframe>
-    </section>
 </div>
 
 <div class="container-xxl bg-white p-0">
@@ -81,21 +197,17 @@
                 {
                     @foreach (var room in Model.RoomVM)
                     {
-                        @* var roomImg = Model.RoomImages.FirstOrDefault(img => img.RoomId == room.RoomId); *@
-
                         // room rate
                         var roomRates = Model.Rates?.Where(rate => rate.RoomId == room.RoomId).ToList();
 
                         // Check if roomRates is not null and contains elements
                         double averageRating = (roomRates != null && roomRates.Any()) ? roomRates.Average(rate => rate.RateValue) : 0;
 
-                        // Tiện nghi
-                        var amenities = new List<KeyValuePair<string, string>>();
-
                         <div class="col-lg-4 col-md-6 wow fadeInUp" data-wow-delay="0.3s">
-                            <div class="room-item rounded">
+
+                            <div class="room-item rounded room-item_list">
                                 <div class="position-relative">
-                                    <img class="img" src="@room.RoomImage" alt="@room.RoomTitle" style="width: 100%">
+                                    <img class="img" src="@room.RoomImages.FirstOrDefault()?.ImageUrl" alt="@room.RoomTitle" style="width: 100%">
                                     <small class="position-absolute start-0 top-100 translate-middle-y bg-primary text-white rounded py-1 px-3 ms-4">@room.RoomPrice.ToString("#,##0 VND")/Night</small>
                                 </div>
                                 <div class="p-4 mt-2">
@@ -129,6 +241,8 @@
                                         </div>
                                     </div>
                                     @{
+                                        // Tiện nghi
+                                        var amenities = new List<KeyValuePair<string, string>>();
                                         switch (room.RoomTypeId)
                                         {
                                             case 1:  // Standard Room
@@ -207,9 +321,8 @@
                                         }
                                     </div>
                                     <p class="text-body mb-3">@room.RoomDescription</p>
-                                    <div class="d-flex justify-content-between">
+                                    <div class="">
                                         <a asp-page="/Room/RoomDetail" asp-route-id="@room.RoomId" class="btn btn-sm btn-primary rounded py-2 px-4">View Detail</a>
-                                        <a class="btn btn-sm btn-dark rounded py-2 px-4">Book Now</a>
                                     </div>
                                 </div>
                             </div>
@@ -219,23 +332,31 @@
             </div>
 
             <div class="col-12 wow slideInUp" data-wow-delay="0.1s">
-                <nav aria-label="Page navigation">
-                    <ul class="pagination justify-content-center m-0">
-                        <li class="page-item disabled">
-                            <a class="page-link rounded-0" href="#" aria-label="Previous">
-                                <span aria-hidden="true"><i class="bi bi-arrow-left"></i></span>
-                            </a>
-                        </li>
-                        <li class="page-item active"><a class="page-link" href="#">1</a></li>
-                        <li class="page-item"><a class="page-link" href="#">2</a></li>
-                        <li class="page-item"><a class="page-link" href="#">3</a></li>
-                        <li class="page-item">
-                            <a class="page-link rounded-0" href="#" aria-label="Next">
-                                <span aria-hidden="true"><i class="bi bi-arrow-right"></i></span>
-                            </a>
-                        </li>
-                    </ul>
-                </nav>
+                <div class="col-12 wow slideInUp" data-wow-delay="0.1s">
+                    <nav aria-label="Page navigation">
+                        <ul class="pagination justify-content-center m-0">
+                            <li class="page-item @(Model.Page == 1 ? "disabled" : "")">
+                                <a class="page-link rounded-0" href="?hotelId=@Model.Hotel.HotelId&page=@(Model.Page - 1)" aria-label="Previous">
+                                    <span aria-hidden="true"><i class="bi bi-arrow-left"></i></span>
+                                </a>
+                            </li>
+
+                            @for (int i = 1; i <= Model.TotalPages; i++)
+                            {
+                                <li class="page-item @(i == Model.Page ? "active" : "")">
+                                    <a class="page-link" href="?hotelId=@Model.Hotel.HotelId&page=@i">@i</a>
+                                </li>
+                            }
+
+                            <li class="page-item @(Model.Page == Model.TotalPages ? "disabled" : "")">
+                                <a class="page-link rounded-0" href="?hotelId=@Model.Hotel.HotelId&page=@(Model.Page + 1)" aria-label="Next">
+                                    <span aria-hidden="true"><i class="bi bi-arrow-right"></i></span>
+                                </a>
+                            </li>
+                        </ul>
+                    </nav>
+                </div>
+
             </div>
         </div>
     </div>
@@ -248,19 +369,27 @@
             let words = fullText.split(' ');
 
             if (words.length > 6) {
-                let shortText = words.slice(0, 6).join(' ') + ' ...';
+                        let shortText = words.slice(0, 6).join(' ') + ' ...';
                 p.textContent = shortText;
             }
         });
-
-        function openFullImage(img) {
-            var fullImage = document.getElementById("fullImage");
-            fullImage.src = img.src;
-            document.getElementById("fullImageOverlay").style.display = "block";
+    </script>
+    <script>
+        function showMoreImages() {
+            const hiddenImages = document.querySelectorAll('.hotel-image.hidden');
+            hiddenImages.forEach(image => {
+                image.classList.remove('hidden');
+            });
+            document.querySelector('.show-more-btn').style.display = 'none';
         }
 
-        function closeFullImage() {
-            document.getElementById("fullImageOverlay").style.display = "none";
+        function openLightbox(imageUrl) {
+            document.getElementById('lightboxImage').src = imageUrl;
+            document.getElementById('lightbox').style.display = 'flex';
+        }
+
+        function closeLightbox() {
+            document.getElementById('lightbox').style.display = 'none';
         }
     </script>
 }

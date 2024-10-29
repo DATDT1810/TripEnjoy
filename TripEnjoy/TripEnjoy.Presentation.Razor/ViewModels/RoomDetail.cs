@@ -12,5 +12,6 @@
         public string? RoomDescription { get; set; }
         public int RateValue { get; set; }
         public string CommentContent { get; set; }
+        public List<RoomImages> RoomImages { get; set; } = new List<RoomImages>();
     }
 }

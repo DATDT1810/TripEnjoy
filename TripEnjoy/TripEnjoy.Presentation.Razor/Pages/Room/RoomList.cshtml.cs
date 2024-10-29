@@ -16,26 +16,36 @@ namespace TripEnjoy.Presentation.Razor.Pages.Room
         public IEnumerable<RoomImages> RoomImages { get; set; }
 
         [BindProperty(SupportsGet = true)]
+        public IEnumerable<HotelImages> HotelImages { get; set; }
+
+        [BindProperty(SupportsGet = true)]
         public IEnumerable<Rate> Rates { get; set; }
 
         [BindProperty(SupportsGet = true)]
         public Hotel Hotel { get; set; }
+
+        [BindProperty(SupportsGet = true)]
+        public int Page { get; set; } = 1;
+
+        [BindProperty(SupportsGet = true)]
+        public int TotalPages { get; set; }
 
         public RoomListModel(IHttpClientFactory httpClientFactory)
         {
             _httpClientFactory = httpClientFactory;
         }
 
-        public async Task<IActionResult> OnGetAsync(int hotelId)
+        public async Task<IActionResult> OnGetAsync(int hotelId, int page = 1, int pageSize = 10)
         {
-            if(hotelId == 0)
+            Page = page; 
+            if (hotelId == 0)
             {
                 return NotFound();
             }
             
             var client = _httpClientFactory.CreateClient("DefaultClient");
 
-            // gọi api của hotel, lấy hotel
+            // fetch hotel
             var hotelResponse = await client.GetAsync($"https://localhost:7126/api/Hotel/{hotelId}");
             if (hotelResponse.IsSuccessStatusCode)
             {
@@ -43,6 +53,7 @@ namespace TripEnjoy.Presentation.Razor.Pages.Room
                 var option = new JsonSerializerOptions { PropertyNameCaseInsensitive = true };
                 Hotel = JsonSerializer.Deserialize<Hotel>(hotelData, option);
 
+                // fetch category   
                 var categoryResponse = await client.GetAsync("https://localhost:7126/api/Category");
                 if (categoryResponse.IsSuccessStatusCode)
                 {
@@ -55,34 +66,51 @@ namespace TripEnjoy.Presentation.Razor.Pages.Room
             {
                 return NotFound();
             }
-
+            // Fetch rooms
             var response = await client.GetAsync($"https://localhost:7126/api/Room/hotel/{hotelId}");
             if (response.IsSuccessStatusCode)
             {
                 string data = await response.Content.ReadAsStringAsync();
                 var option = new JsonSerializerOptions { PropertyNameCaseInsensitive = true };
 
-                RoomVM = JsonSerializer.Deserialize<List<RoomVM>>(data, option);
+                var allRooms = JsonSerializer.Deserialize<List<RoomVM>>(data, option);
 
-                // Goi API lay list image cua phong
-                var imagesResponse = await client.GetAsync($"https://localhost:7126/api/RoomImage/images/{hotelId}");
+                // Calculate total pages
+                TotalPages = (int)Math.Ceiling((double)allRooms.Count / pageSize);
+
+                // Fetch the specific page of rooms
+                RoomVM = allRooms.Skip((page - 1) * pageSize).Take(pageSize).ToList();
+
+                // Fetch room images
+                var imagesResponse = await client.GetAsync("https://localhost:7126/api/RoomImage");
                 if (imagesResponse.IsSuccessStatusCode)
                 {
                     string imagesData = await imagesResponse.Content.ReadAsStringAsync();
-                    RoomImages = JsonSerializer.Deserialize<List<RoomImages>>(imagesData, option);
-                    foreach(var room in RoomVM)
+                    var allRoomImages = JsonSerializer.Deserialize<List<RoomImages>>(imagesData, option);
+
+                    // Link images to their respective rooms
+                    foreach (var room in RoomVM)
                     {
-                        var roomImg = RoomImages.FirstOrDefault(img => img.RoomId == room.RoomId);
-                        room.RoomImage = roomImg?.ImageUrl;
+                        room.RoomImages = allRoomImages.Where(img => img.RoomId == room.RoomId).ToList();
                     }
                 }
 
-                // Lấy danh sách đánh giá
-                var ratesResponse = await client.GetAsync($"https://localhost:7126/api/Rate/Room/{hotelId}");
+                // Fetch room rates
+                var ratesResponse = await client.GetAsync($"https://localhost:7126/api/Rate");
                 if (ratesResponse.IsSuccessStatusCode)
                 {
                     string ratesData = await ratesResponse.Content.ReadAsStringAsync();
                     Rates = JsonSerializer.Deserialize<List<Rate>>(ratesData, option);
+                }
+
+                // Fetch hotel images
+                var hotelImagesResponse = await client.GetAsync("https://localhost:7126/api/ImageHotel");
+                if (hotelImagesResponse.IsSuccessStatusCode)
+                {
+                    string hotelImagesData = await hotelImagesResponse.Content.ReadAsStringAsync();
+                    var allImg = JsonSerializer.Deserialize<List<HotelImages>>(hotelImagesData, option);
+                    HotelImages = allImg.Where(img => img.HotelId == hotelId).ToList();
+                        
                 }
 
                 return Page();
@@ -91,6 +119,7 @@ namespace TripEnjoy.Presentation.Razor.Pages.Room
             {
                 return NotFound();
             }
+
             return Page();
         }
     }

@@ -1,0 +1,21 @@
+﻿@page
+@model TripEnjoy.Presentation.Razor.Pages.Partner.PartnershipModel
+@{
+	ViewData["Title"] = "Partner";
+}
+<div class="strttech120">
+	<h4>Become a Partner</h4>
+	<p>
+		Partner with TripEnjoy and expand your reach in the hotel booking industry. We provide tools and solutions to help you connect with millions of potential customers, increase revenue, and build sustainable relationships in the travel sector.
+	</p>
+	<button id="RegisInstructorBtn" class="Get_btn" onclick="window.location.href = '/Account/UpdateAccountLevel';">Start Teaching</button>
+</div>
+
+@section Scripts{
+	<script src="~/js/sweetAlert.js"></script>
+	<script>
+		document.getElementById('RegisInstructorBtn').addEventListener('click', function () {
+			sweetAlertSuccess("Success", "You have successfully registered to become an Instructor.");
+		});
+	</script>
+}

@@ -63,8 +63,7 @@ namespace TripEnjoy.Presentation.Web.Controllers
         [Route("UploadImageProfile")]
         public async Task<IActionResult> UploadImageProfile(List<IFormFile> files)
         {
-            //var email = User.FindFirstValue(ClaimTypes.Email);
-            var email = "datdtce171751@fpt.edu.vn";
+            var email = User.FindFirstValue(ClaimTypes.Email);
             if (email == null)
             {
                 return Unauthorized("Invalid token");

@@ -13,7 +13,6 @@ namespace TripEnjoy.Presentation.Razor.ViewModels
         public int RoomStatusID { get; set; }      
         public decimal RoomPrice { get; set; }   
         public string? RoomDescription { get; set; }
-        public string RoomImage { get; set; }
-
+        public List<RoomImages> RoomImages { get; set; } = new List<RoomImages>();
     }
 }

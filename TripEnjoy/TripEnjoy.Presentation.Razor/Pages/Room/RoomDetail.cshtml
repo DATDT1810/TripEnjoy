@@ -74,7 +74,6 @@
                                 <small class="fa fa-star text-gray"></small>
                                 (0)
                             </div>
-                            
                         </div>
                     }
                 </div>
@@ -236,15 +235,12 @@
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a class="d-flex align-items-center py-3" data-bs-toggle="pill" href="#tab-3">
-                                <i class="fa fa-map-marker-alt text-primary me-2"></i>
-                                <h6 class="mb-0">Location</h6>
-                            </a>
-                        </li>
-                        <li class="nav-item">
                             <a class="d-flex align-items-center py-3" data-bs-toggle="pill" href="#tab-4">
                                 <i class="fa fa-star text-primary me-2"></i>
-                                <h6 class="mb-0">Reviews (@Model.Rates.Count())</h6>
+                                @{
+                                    int totalReviews = (Model.Comments?.Count() ?? 0) + (Model.Rates?.Count() ?? 0);
+                                }
+                                <h6 class="mb-0">Reviews (@totalReviews)</h6>
                             </a>
                         </li>
                     </ul>
@@ -257,14 +253,6 @@
                                 sanctus et. Ipsum sit gubergren dolores et, consetetur justo invidunt at et
                                 aliquyam ut et vero clita. Diam sea sea no sed dolores diam nonumy, gubergren
                                 sit stet no diam kasd vero.
-                            </p>
-                            <p>
-                                Voluptua est takimata stet invidunt sed rebum nonumy stet, clita aliquyam dolores
-                                vero stet consetetur elitr takimata rebum sanctus. Sit sed accusam stet sit
-                                nonumy kasd diam dolores, sanctus lorem kasd duo dolor dolor vero sit et. Labore
-                                ipsum duo sanctus amet eos et. Consetetur no sed et aliquyam ipsum justo et,
-                                clita lorem sit vero amet amet est dolor elitr, stet et no diam sit. Dolor erat
-                                justo dolore sit invidunt.
                             </p>
                         </div>
                         <div id="tab-2" class="tab-pane fade show p-0">
@@ -309,114 +297,133 @@
                                 </div>
                             </div>
                         </div>
-                        <div id="tab-3" class="tab-pane fade show p-0">
-                            <div class="row g-4 mb-4">
-                                <div class="col-md-4 d-flex align-items-center">
-                                    <div class="flex-shrink-0 border rounded p-1 me-3" style="width: 45px; height: 45px;">
-                                        <div class="w-100 h-100 border rounded d-flex align-items-center justify-content-center">
-                                            <i class="fa fa-map-marker-alt text-primary"></i>
-                                        </div>
-                                    </div>
-                                    <span>123 Street, New York, USA</span>
-                                </div>
-                                <div class="col-md-4 d-flex align-items-center">
-                                    <div class="flex-shrink-0 border rounded p-1 me-3" style="width: 45px; height: 45px;">
-                                        <div class="w-100 h-100 border rounded d-flex align-items-center justify-content-center">
-                                            <i class="fa fa-phone-alt text-primary"></i>
-                                        </div>
-                                    </div>
-                                    <span>+012 345 67890</span>
-                                </div>
-                                <div class="col-md-4 d-flex align-items-center">
-                                    <div class="flex-shrink-0 border rounded p-1 me-3" style="width: 45px; height: 45px;">
-                                        <div class="w-100 h-100 border rounded d-flex align-items-center justify-content-center">
-                                            <i class="fa fa-envelope text-primary"></i>
-                                        </div>
-                                    </div>
-                                    <span><a href="https://demo.htmlcodex.com/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="d0b9beb6bf90b5a8b1bda0bcb5feb3bfbd">[email&#160;protected]</a></span>
-                                </div>
-                            </div>
-                            <iframe class="position-relative rounded w-100 h-100" src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3001156.4288297426!2d-78.01371936852176!3d42.72876761954724!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x4ccc4bf0f123a5a9%3A0xddcfc6c1de189567!2sNew%20York%2C%20USA!5e0!3m2!1sen!2sbd!4v1603794290143!5m2!1sen!2sbd" frameborder="0" style="min-height: 350px; border:0;" allowfullscreen aria-hidden="false" tabindex="0"></iframe>
-                        </div>
+                        
                         <div id="tab-4" class="tab-pane fade show p-0">
-                            <div class="mb-4">
-                                <h4 class="mb-4">@Model.Rates.Count() Reviews</h4>
-                                @foreach (var comment in Model.Comments.Where(c => c.CommentLevel == 1))
-                                {
-                                    <div class="d-flex mb-4">
-                                        <img src="" class="img-fluid rounded" style="width: 45px; height: 45px;">
-                                        <div class="ps-3">
-                                            <h6>Anonymous Customer <small class="text-body fw-normal fst-italic">@comment.CommentDate.ToString("dd MMM yyyy")</small></h6>
-                                            <div class="rating mb-2">
-                                                @for (int i = 0; i < 5; i++)
-                                                {
-                                                    <small class="fa fa-star text-primary"></small>
-                                                }
-                                            </div>
-                                            <p class="mb-2">@comment.CommentContent</p>
+                            <div id="review-section" data-room-id="@Model.RoomDetail.RoomId">
+                                <div class="mb-4">
+                                    <h4 class="mb-4">@totalReviews Reviews</h4>
+                                    @foreach (var comment in Model.Comments.Where(c => c.CommentLevel == 1))
+                                    {
+                                        <div class="d-flex mb-4">
+                                            <img src="" class="img-fluid rounded" style="width: 45px; height: 45px;">
+                                            <div class="ps-3">
+                                                <h6>@comment.FullName <small class="text-body fw-normal fst-italic">@comment.CommentDate.ToString("dd MMM yyyy")</small></h6>
 
-                                            <!-- Phần hiển thị các phản hồi -->
-                                            <div class="cmt-replies mt-3">
-                                                @foreach (var reply in Model.Comments.Where(c => c.CommentReply == comment.CommentId.ToString()))
-                                                {
-                                                    <div class="d-flex mt-3">
-                                                        <img src="" class="img-fluid rounded" style="width: 35px; height: 35px;">
-                                                        <div class="ps-3">
-                                                            <h6>Anonymous Customer <small class="text-body fw-normal fst-italic">@reply.CommentDate.ToString("dd MMM yyyy")</small></h6>
-                                                            <p class="mb-2">@reply.CommentContent</p>
-                                                        </div>
-                                                    </div>
-                                                }
-                                            </div>
-
-                                            <!-- Hiển thị nút Reply -->
-                                            <div class="cmt-action">
-                                                <div class="cmt-reply">
-                                                    <a href="javascript:void(0);" class="btn-reply" role="button"
-                                                       data-comment-id="@comment.CommentId">Reply</a>
+                                                <!-- Phần hiển thị sao đánh giá -->
+                                                <div class="rating mb-2">
+                                                    @for (int i = 0; i < 5; i++)
+                                                    {
+                                                        // if (i < comment.RateValue)
+                                                        // {
+                                                        //     <small class="fa fa-star text-warning"></small>
+                                                        // }
+                                                        // else
+                                                        // {
+                                                        //     <small class="fa fa-star text-muted"></small> 
+                                                        // }
+                                                    }
                                                 </div>
-                                            </div>
 
+                                                <p class="mb-2">@comment.CommentContent</p>
 
-                                            <!-- Form để nhập phản hồi -->
-                                            <div class="reply-form mt-3" id="reply-form-@comment.CommentId" style="display:none;">
-                                                <textarea id="reply-content-@comment.CommentId" class="form-control" rows="3" placeholder="Add a reply..."></textarea>
-                                                <button type="button" class="btn btn-primary btn-submit-reply mt-2" data-comment-id="@comment.CommentId">Submit Reply</button>
+                                                <!-- Phần hiển thị các phản hồi -->
+                                                <div class="cmt-replies mt-3">
+                                                    @foreach (var reply in Model.Comments.Where(c => c.CommentReply == comment.CommentId.ToString()))
+                                                    {
+                                                        <div class="d-flex mt-3">
+                                                            <img src="" class="img-fluid rounded" style="width: 35px; height: 35px;">
+                                                            <div class="ps-3">
+                                                                <h6>Anonymous Customer <small class="text-body fw-normal fst-italic">@reply.CommentDate.ToString("dd MMM yyyy")</small></h6>
+                                                                <p class="mb-2">@reply.CommentContent</p>
+                                                            </div>
+                                                        </div>
+                                                    }
+                                                </div>
+
+                                                <!-- Nút "Reply" và form nhập phản hồi -->
+                                                <div class="cmt-action">
+                                                    <a href="javascript:void(0);" class="btn-reply text-primary" role="button" data-comment-id="@comment.CommentId">Reply</a>
+                                                </div>
+
+                                                <form method="post" asp-page-handler="Reply" class="reply-form mt-3" id="reply-form-@comment.CommentId" style="display:none;">
+                                                    <input type="hidden" name="CommentReply.RoomId" value="@Model.RoomDetail.RoomId" />
+                                                    <input type="hidden" name="CommentReply.ReplyToComment" value="@comment.CommentId" />
+                                                    <textarea name="CommentReply.Content" class="form-control" rows="3" placeholder="Add a reply..."></textarea>
+                                                    <button type="submit" class="btn btn-primary mt-2">Submit Reply</button>
+                                                </form>
                                             </div>
                                         </div>
-                                    </div>
-                                }
-
+                                    }
+                                </div>
                             </div>
 
+                            <!-- Script để hiển thị/ẩn form reply khi nhấn nút Reply -->
                             <script>
-                                var roomId = @Model.RoomDetail.RoomId;
+                                document.addEventListener("DOMContentLoaded", function () {
+                                    const replyButtons = document.querySelectorAll(".btn-reply");
+
+                                    replyButtons.forEach(button => {
+                                        button.addEventListener("click", function () {
+                                            const commentId = this.getAttribute("data-comment-id");
+                                            const replyForm = document.getElementById(`reply-form-${commentId}`);
+
+                                            // Hiển thị/ẩn form trả lời
+                                            if (replyForm) {
+                                                replyForm.style.display = replyForm.style.display === "none" ? "block" : "none";
+                                            }
+                                        });
+                                    });
+                                });
                             </script>
 
-                            <div class="bg-light p-4 p-md-5">
-                                <h4 class="mb-4">Leave A Review</h4>
-                                <form id="review-form" method="post">
-                                    <div class="row g-3">
-                                        <div class="col-12 d-flex align-items-center">
-                                            <h6 class="mb-0 me-2">Rate Me:</h6>
-                                            <div id="stars" class="fs-3 me-2">
-                                                <i class="fa fa-star star" data-value="1"></i>
-                                                <i class="fa fa-star star" data-value="2"></i>
-                                                <i class="fa fa-star star" data-value="3"></i>
-                                                <i class="fa fa-star star" data-value="4"></i>
-                                                <i class="fa fa-star star" data-value="5"></i>
-                                            </div>
-                                            <input type="hidden" id="rate-value" value="0">
+
+                            <form id="review-form" method="post" asp-page-handler="RateAndComment">
+                                <input type="hidden" asp-for="RateAndComment.RoomId" value="@Model.RoomDetail.RoomId" />
+                                <div class="row g-3">
+                                    <div class="col-12 d-flex align-items-center">
+                                        <h6 class="mb-0 me-2">Rate Me:</h6>
+                                        <div id="stars" class="fs-3 me-2">
+                                            <i class="fa fa-star star" data-value="1"></i>
+                                            <i class="fa fa-star star" data-value="2"></i>
+                                            <i class="fa fa-star star" data-value="3"></i>
+                                            <i class="fa fa-star star" data-value="4"></i>
+                                            <i class="fa fa-star star" data-value="5"></i>
                                         </div>
-                                        <div class="col-12">
-                                            <textarea class="form-control bg-white border-0" id="comment-content" rows="5" placeholder="Comment"></textarea>
-                                        </div>
-                                        <div class="col-12">
-                                            <button id="submit-review" class="btn btn-primary w-100 py-3" type="button">Leave Your Review</button>
-                                        </div>
+                                        <input type="hidden" id="rate-value" name="RateAndComment.RateValue" value="0">
                                     </div>
-                                </form>
-                            </div>
+                                    <div class="col-12">
+                                        <textarea class="form-control bg-white border-0" id="comment-content" name="RateAndComment.CommentContent" rows="5" placeholder="Comment"></textarea>
+                                    </div>
+                                    <div class="col-12">
+                                        <button id="submit-review" class="btn btn-primary w-100 py-3" type="submit">Leave Your Review</button>
+                                    </div>
+                                </div>
+                            </form>
+
+                            <script>
+                                document.addEventListener("DOMContentLoaded", function () {
+                                    const stars = document.querySelectorAll("#stars .star");
+                                    const rateValue = document.getElementById("rate-value");
+
+                                    stars.forEach(star => {
+                                        star.addEventListener("click", function () {
+                                            // Set the rate value based on clicked star
+                                            const value = this.getAttribute("data-value");
+                                            rateValue.value = value;
+
+                                            // Update star display
+                                            stars.forEach(s => s.classList.remove("text-warning"));
+                                            this.classList.add("text-warning");
+                                            let previousSibling = this.previousElementSibling;
+                                            while (previousSibling) {
+                                                previousSibling.classList.add("text-warning");
+                                                previousSibling = previousSibling.previousElementSibling;
+                                            }
+                                        });
+                                    });
+                                });
+                            </script>
+
                         </div>
                     </div>
                 </div>
@@ -523,24 +530,41 @@
                 foreach (var relatedRoom in Model.RelatedRooms)
                 {
                     <div class="col-lg-4 col-md-6 wow fadeInUp" data-wow-delay="0.1s">
-                        <div class="room-item rounded">
+                        <div class="room-item room-item_related rounded">
                             <div class="position-relative">
-                                <img class="img-fluid" src="" alt>
+                                <img class="img" src="@relatedRoom.RoomImages.FirstOrDefault()?.ImageUrl" alt>
                                 <small class="position-absolute start-0 top-100 translate-middle-y bg-primary text-white rounded py-1 px-3 ms-4">
                                     @relatedRoom.RoomPrice.ToString("#,##0 VND")/Night
                                 </small>
                             </div>
                             <div class="p-4 mt-2">
                                 <h5 class="mb-0">@relatedRoom.RoomTitle</h5>
-                                <div class="d-flex justify-content-between mb-3">
-                                    <div class="ps-0">
-                                        <small class="fa fa-star text-warning"></small>
-                                        <small class="fa fa-star text-warning"></small>
-                                        <small class="fa fa-star text-warning"></small>
-                                        <small class="fa fa-star text-warning"></small>
-                                        <small class="fa fa-star text-warning"></small>
-                                    </div>
-                                </div>
+                                <div class="ps-2" style="width: 150px">
+                                    @if (averageRating > 0)
+                                    {
+                                        @for (var i = 0; i < Math.Floor(averageRating); i++)
+                                        {
+                                            <small class="fa fa-star text-primary"></small>
+                                        }
+                                        @if (averageRating - Math.Floor(averageRating) >= 0.5)
+                                        {
+                                            <small class="fa fa-star-half-alt text-primary"></small>
+                                        }
+                                        <small>(@averageRating.ToString("0.0"))</small>
+                                    }
+                                    else if (averageRating <= 0)
+                                    {
+                                        <div class="d-flex justify-content-between mb-3">
+                                            <div class="ps-0">
+                                                <small class="fa fa-star text-gray"></small>
+                                                <small class="fa fa-star text-gray"></small>
+                                                <small class="fa fa-star text-gray"></small>
+                                                <small class="fa fa-star text-gray"></small>
+                                                <small class="fa fa-star text-gray"></small>
+                                            </div>
+                                        </div>
+                                    }
+                                </div>  
                                 <div class="d-flex mb-3">
                                     <small class="border-end me-3 pe-3"><i class="fa fa-bed text-primary me-2"></i>@bedInfo</small>
                                     <small class="border-end me-3 pe-3"><i class="fa fa-bath text-primary me-2"></i>@bathInfo</small>
@@ -549,7 +573,6 @@
                                 <p class="text-body mb-3">@relatedRoom.RoomDescription</p>
                                 <div class="d-flex justify-content-between">
                                     <a class="btn btn-sm btn-primary rounded py-2 px-4" asp-page="/Room/RoomDetail" asp-route-id="@relatedRoom.RoomId">View Detail</a>
-                                    <a class="btn btn-sm btn-dark rounded py-2 px-4" href="/Booking?roomId=@relatedRoom.RoomId">Book Now</a>
                                 </div>
                             </div>
                         </div>
@@ -567,127 +590,11 @@
     </div>
 </div>
 
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-
 @section Scripts {
-    <script>
-        $(document).ready(function () {
-            // Toggle reply form
-            $(document).on('click', '.btn-reply', function (e) {
-                e.preventDefault();
-                var commentId = $(this).data('comment-id');
-
-                if (commentId === 0) {
-                    alert("No comment associated with this reply.");
-                    return;
-                }
-
-                $('#reply-form-' + commentId).toggle();
-            });
-
-
-            // Handle reply submission
-            $(document).on('click', '.btn-submit-reply', function () {
-                var commentId = $(this).data('comment-id');
-                var replyContent = $('#reply-content-' + commentId).val();
-
-                if (replyContent === "") {
-                    alert("Please enter a reply.");
-                    return;
-                }
-
-                console.log("Submitting reply for commentId: " + commentId);
-
-                $.ajax({
-                    url: '@Url.Page("/Room/RoomDetail", new { handler = "Reply" })',  // Tạo URL gọi tới phương thức OnPostReply
-                    type: 'POST',
-                    contentType: 'application/json',
-                    data: JSON.stringify({
-                        RoomId: @Model.RoomDetail.RoomId,  // Lấy RoomId từ Model
-                        CommentId: commentId,
-                        ReplyContent: replyContent
-                    }),
-                    success: function (response) {
-                        if (response.success) {
-                            alert(response.message);
-                            location.reload();  // Tải lại trang sau khi gửi phản hồi thành công
-                        } else {
-                            alert(response.message);
-                        }
-                    },
-                    error: function (error) {
-                        console.error("Error submitting reply:", error);
-                        alert("Failed to submit the reply.");
-                    }
-                });
-            });
-        });
-
-
-        $(document).ready(function () {
-            var rateValue = 0;
-
-            // Khi click vào các ngôi sao để đánh giá
-            $('#stars i').on('click', function () {
-                rateValue = $(this).data('value');
-                $('#rate-value').val(rateValue);
-
-                // Highlight các sao được chọn
-                $('#stars i').each(function (index) {
-                    if (index < rateValue) {
-                        $(this).addClass('text-warning');
-                    } else {
-                        $(this).removeClass('text-warning');
-                    }
-                });
-            });
-
-            // Xử lý submit review
-            $('#submit-review').on('click', function (e) {
-                e.preventDefault();
-
-                var commentContent = $('#comment-content').val();
-                var roomId = $('#room-id').val(); // Thay bằng RoomId thực tế của phòng bạn
-                var rateValue = $('#rate-value').val();
-
-                // Kiểm tra dữ liệu trước khi gửi
-                if (!rateValue || rateValue < 1 || rateValue > 5) {
-                    alert("Please select a valid rate between 1 and 5.");
-                    return;
-                }
-
-                if (commentContent.trim() === "") {
-                    alert("Please enter a comment.");
-                    return;
-                }
-
-                // Gửi đánh giá và bình luận qua AJAX
-                $.ajax({
-                    url: '@Url.Page("/Room/RoomDetail", new { handler = "RateAndComment" })', // Đường dẫn đến phương thức OnPostRateAndComment
-                    type: 'POST',
-                    contentType: 'application/json',
-                    data: JSON.stringify({
-                        RoomId: roomId,
-                        RateValue: rateValue,
-                        CommentContent: commentContent,
-                        ReviewDate: new Date().toISOString() // Ngày hiện tại
-                    }),
-                    success: function (response) {
-                        if (response.success) {
-                            alert(response.message);
-                            location.reload(); // Tải lại trang để cập nhật danh sách đánh giá
-                        } else {
-                            alert(response.message);
-                        }
-                    },
-                    error: function (error) {
-                        console.error("Error submitting review:", error);
-                        alert("Failed to submit the review. Please try again.");
-                    }
-                });
-            });
-        });
-
-    </script>
+    <!-- jQuery -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 }
+
+
+
 
