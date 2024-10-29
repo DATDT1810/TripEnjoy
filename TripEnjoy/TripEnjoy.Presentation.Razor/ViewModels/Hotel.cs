@@ -1,4 +1,6 @@
-﻿namespace TripEnjoy.Presentation.Razor.ViewModels
+﻿using TripEnjoy.Presentation.Razor.Model;
+
+namespace TripEnjoy.Presentation.Razor.ViewModels
 {
     public class Hotel
     {
