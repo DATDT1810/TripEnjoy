@@ -78,7 +78,7 @@ namespace TripEnjoy.Presentation.Web.Controllers
             }
 
             // Fetch account details from the user ID
-            var account = await _accountService.GetAccountByEmailAsync(email);
+            var account = await _accountService.GetAccountByEmail(email);
             var accountId = account.AccountId;
 
             if (!ModelState.IsValid)
@@ -113,7 +113,7 @@ namespace TripEnjoy.Presentation.Web.Controllers
             }
 
             // Fetch account details from the user ID
-            var account = await _accountService.GetAccountByEmailAsync(email);
+            var account = await _accountService.GetAccountByEmail(email);
             if (account == null)
             {
                 return Unauthorized("Account not found.");

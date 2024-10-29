@@ -61,7 +61,7 @@ namespace TripEnjoy.Presentation.Web.Controllers
                 return Unauthorized("User is not authenticated.");
             }
 
-            var account = await _accountService.GetAccountByEmailAsync(email);
+            var account = await _accountService.GetAccountByEmail(email);
             if (account == null)
             {
                 return NotFound("Account not found.");
@@ -106,7 +106,7 @@ namespace TripEnjoy.Presentation.Web.Controllers
                 return Unauthorized("User is not authenticated.");
             }
 
-            var account = await _accountService.GetAccountByEmailAsync(email);
+            var account = await _accountService.GetAccountByEmail(email);
             if (account == null)
             {
                 return NotFound("Account not found.");

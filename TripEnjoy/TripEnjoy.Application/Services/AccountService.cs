@@ -98,9 +98,9 @@ namespace TripEnjoy.Application.Services
            return this.accountRepository.RejectUpdateAccountLevelAsync(id);
         }
 
-        public async Task<Account> GetAccountByEmailAsync(string email)
+        public async Task<Account> GetAccountByEmail(string email)
         {
-            return await this.accountRepository.GetAccountByEmailAsync(email);
+            return await this.accountRepository.GetAccountByEmail(email);
         }
     }
 }
