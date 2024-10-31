@@ -80,6 +80,7 @@ namespace TripEnjoy.Presentation.Razor.Pages
             var dateParts = dateBooking.Split(new string[] { " to " }, StringSplitOptions.None);
             var checkinDate = dateParts[0];
             var checkoutDate = dateParts[1];
+            Console.WriteLine(checkoutDate);
             var roomtype = roomtypeInput.Split(", ");
             var roomTypeName = roomtype[0];
             var roomTypeQuanlity = roomtype[2];
@@ -93,7 +94,7 @@ namespace TripEnjoy.Presentation.Razor.Pages
 
             var option = new JsonSerializerOptions { PropertyNameCaseInsensitive = true };
             string dataHotels = await responseListSearchHotel.Content.ReadAsStringAsync();
-            Console.WriteLine(dataHotels);
+
             // Giải mã dữ liệu từ JSON
             if (responseListSearchHotel.IsSuccessStatusCode)
             {

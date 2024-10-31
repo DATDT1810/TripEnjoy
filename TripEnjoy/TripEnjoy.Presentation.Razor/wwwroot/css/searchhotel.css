@@ -81,7 +81,6 @@
     pointer-events: none;
 }
 .roomtype-container {
-    display: none;
     background: white;
     position: absolute;
     border: 1px solid black;
@@ -146,6 +145,10 @@
     display: flex;
     margin-bottom: 10px;
 }
+.numberinroom {
+    display: flex;
+}
+
 @media (max-width: 767px) {
     .calendarCurrentMonth {
     margin: 0 10px; 
