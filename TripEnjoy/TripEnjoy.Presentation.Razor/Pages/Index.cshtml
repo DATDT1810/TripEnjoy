@@ -52,26 +52,32 @@
                             </div>
                             <div class="col-md-4 p-0">
                                 <div class="room-type">
-                                    <input id="roomtypeInput" name="roomtypeInput" type="text" value="1 người lớn, 0 trẻ em, 1 phòng" readonly />
+                                    <input id="roomtypeInput" name="roomtypeInput" type="text" value="1 adult, 0 children, 1 room" readonly />
                                 </div>
                                 <div id="roomtypeContainer" class="roomtype-container">
-                                    <div class="roomtypeAdult">
-                                        <p>Người lớn</p>
-                                        <button id="decreaseAdultButton" type="button">-</button>
-                                        <input type="number" id="adultCount" value="1" min="1" max="30" readonly />
-                                        <button id="increaseAdultButton" type="button">+</button>
+                                    <div class="roomtypeAdult numberinroom">
+                                        <p>Number Adult</p>
+                                        <div>
+                                            <button id="decreaseAdultButton" type="button">-</button>
+                                            <input type="number" id="adultCount" value="1" min="1" max="30" readonly />
+                                            <button id="increaseAdultButton" type="button">+</button>
+                                        </div>
                                     </div>
-                                    <div id="roomtypeChildrent" class="roomtypeChildrent">
-                                        <p>Trẻ em</p>
-                                        <button id="decreaseChildrentButton" type="button">-</button>
-                                        <input type="number" id="childrentCount" value="0" min="0" max="6" readonly />
-                                        <button id="increaseChildrentButton" type="button">+</button>
+                                    <div class="roomtypeChildren numberinroom">
+                                        <p>Number Children</p>
+                                        <div>
+                                            <button id="decreaseChildrenButton" type="button">-</button>
+                                            <input type="number" id="childrenCount" value="0" min="0" max="6" readonly />
+                                            <button id="increaseChildrenButton" type="button">+</button>
+                                        </div>
                                     </div>
-                                    <div id="numberOfRoom" class="numberOfRoom">
-                                        <p>Số lượng phòng</p>
-                                        <button id="decreaseNumberOfRoomButton" type="button">-</button>
-                                        <input type="number" id="numberOfRoomCount" value="1" min="1" max="8" readonly />
-                                        <button id="increaseNumberOfRoomButton" type="button">+</button>
+                                    <div class="numberOfRoom numberinroom">
+                                        <p>Number Room</p>
+                                        <div>
+                                            <button id="decreaseNumberOfRoomButton" type="button">-</button>
+                                            <input type="number" id="numberOfRoomCount" value="1" min="1" max="8" readonly />
+                                            <button id="increaseNumberOfRoomButton" type="button">+</button>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -453,8 +459,8 @@
             //cộng 1 là vì trả về giá trị từ 0 đến 11 nên +1 cho đúng tháng hiện tại
             const year = today.getFullYear();//trả về năm hiện tại
             const tomorrow = new Date(today);
-            tomorrow.setDate(today.getDay() + 1);
-            const nextDay = String(today.getDate() + 1).padStart(2, '0');
+            tomorrow.setDate(today.getDate() + 1);
+            const nextDay = String(tomorrow.getDate()).padStart(2, '0');
             const nextMonth = String(tomorrow.getMonth() + 1).padStart(2, '0');
             const nextYear = tomorrow.getFullYear();
             const formatDate = `${year}-${month}-${day} to ${nextYear}-${nextMonth}-${nextDay}`;
@@ -575,7 +581,7 @@
                             }
                         })
                         setTimeout(() => {
-                            dateInput.value = `${selectedDates[0]} - ${selectedDates[1]}`;// Cập nhật giá trị input
+                            dateInput.value = `${selectedDates[0]} to ${selectedDates[1]}`;// Cập nhật giá trị input
                             calendarContainer.style.display = 'none';// Ẩn lịch
                         }, 200);
 
@@ -598,7 +604,7 @@
             });
 
             const adultCountInput = document.getElementById("adultCount");
-            const childrentCountInput = document.getElementById("childrentCount");
+            const childrenCountInput = document.getElementById("childrenCount");
             const numberOfRoomCountInput = document.getElementById("numberOfRoomCount");
             const decreaseAdultButton = document.getElementById("decreaseAdultButton");
             const increaseAdultButton = document.getElementById("increaseAdultButton");
@@ -609,9 +615,9 @@
 
             function updateRoomTypeSummary() {
                 const adults = adultCountInput.value;
-                const childrents = childrentCountInput.value;
+                const childrens = childrenCountInput.value;
                 const numberOfRoom = numberOfRoomCountInput.value;
-                roomtypeInput.value = `${adults} người lớn, ${childrents} trẻ em, ${numberOfRoom} phòng`;
+                roomtypeInput.value = `${adults} adult, ${childrens} children, ${numberOfRoom} room`;
             }
 
 
@@ -632,8 +638,8 @@
 
             document.getElementById("decreaseAdultButton").addEventListener("click", () => decreaseCounter(adultCountInput, 1));
             document.getElementById("increaseAdultButton").addEventListener("click", () => increaseCounter(adultCountInput, 30));
-            document.getElementById("decreaseChildrentButton").addEventListener("click", () => decreaseCounter(childrentCountInput, 0));
-            document.getElementById("increaseChildrentButton").addEventListener("click", () => increaseCounter(childrentCountInput, 6));
+            document.getElementById("decreaseChildrenButton").addEventListener("click", () => decreaseCounter(childrenCountInput, 0));
+            document.getElementById("increaseChildrenButton").addEventListener("click", () => increaseCounter(childrenCountInput, 6));
             document.getElementById("decreaseNumberOfRoomButton").addEventListener("click", () => decreaseCounter(numberOfRoomCountInput, 1));
             document.getElementById("increaseNumberOfRoomButton").addEventListener("click", () => increaseCounter(numberOfRoomCountInput, 8));
 
