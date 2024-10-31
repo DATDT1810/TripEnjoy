@@ -145,9 +145,6 @@
     display: flex;
     margin-bottom: 10px;
 }
-.numberinroom {
-    display: flex;
-}
 
 @media (max-width: 767px) {
     .calendarCurrentMonth {
