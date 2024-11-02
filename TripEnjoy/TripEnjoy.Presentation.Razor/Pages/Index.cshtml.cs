@@ -14,7 +14,7 @@ namespace TripEnjoy.Presentation.Razor.Pages
         public IEnumerable<Hotel> Hotels { get; set; }   
 
         [BindProperty(SupportsGet = true)]
-        public IEnumerable<TripEnjoy.Presentation.Razor.ViewModels.HotelImages> HotelImages { get; set; }
+        public IEnumerable<HotelImages> HotelImages { get; set; }
         [BindProperty(SupportsGet = true)]
         public IEnumerable<Category> ListCategory { get; set; }
         public IndexModel(IHttpClientFactory httpClientFactory , TokenServices tokenServices)
@@ -98,7 +98,7 @@ namespace TripEnjoy.Presentation.Razor.Pages
             // Giải mã dữ liệu từ JSON
             if (responseListSearchHotel.IsSuccessStatusCode)
             {
-                var hotels = System.Text.Json.JsonSerializer.Deserialize<List<TripEnjoy.Presentation.Razor.Model.Hotel>>(dataHotels, option);
+                var hotels = System.Text.Json.JsonSerializer.Deserialize<List<Hotel>>(dataHotels, option);
                 TempData["ListSearchHotel"] = System.Text.Json.JsonSerializer.Serialize(hotels);
             }
             else
