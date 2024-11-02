@@ -1,8 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using System.Text.Json;
-using TripEnjoy.Presentation.Razor.Model;
 using TripEnjoy.Presentation.Razor.Services;
+using TripEnjoy.Presentation.Razor.ViewModels;
 
 namespace TripEnjoy.Presentation.Razor.Pages
 {

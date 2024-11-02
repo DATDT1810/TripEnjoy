@@ -1,4 +1,5 @@
-﻿using TripEnjoy.Presentation.Razor.Model;
+﻿
+using System.Text.Json.Serialization;
 
 namespace TripEnjoy.Presentation.Razor.ViewModels
 {
@@ -15,6 +16,9 @@ namespace TripEnjoy.Presentation.Razor.ViewModels
         public DateTime HotelTimeEnd { get; set; }
         public int CategoryId { get; set; }
         public Category Category { get; set; }
+        [JsonPropertyName("rooms")]
+        public List<RoomVM> Rooms { get; set; } = new List<RoomVM>();
+        [JsonPropertyName("imageHotels")]
         public List<HotelImages> HotelImages { get; set; } = new List<HotelImages>();
     }
 }
