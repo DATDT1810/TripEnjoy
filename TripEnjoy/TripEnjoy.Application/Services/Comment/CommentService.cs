@@ -31,4 +31,4 @@ namespace TripEnjoy.Application.Services.Comment
             return await _commentRepository.GetCommentByRoomIdAsync(roomId);
         }
     }
-}
+}   

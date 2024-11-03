@@ -33,7 +33,7 @@ namespace TripEnjoy.Presentation.Web.Controllers
         public async Task<IActionResult> GetAllComment()
         {
             var comments = await _commentService.GetAllCommentAsync();
-            return Ok(comments);    
+            return Ok(comments);
         }
 
         // GET: api/Comment/Room/{roomId}

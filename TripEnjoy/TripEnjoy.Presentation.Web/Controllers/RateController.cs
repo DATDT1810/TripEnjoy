@@ -10,6 +10,7 @@ using TripEnjoy.Application.Interface.Room;
 using TripEnjoy.Domain.Models;
 using System.Linq;
 using Microsoft.AspNetCore.Authorization;
+using CloudinaryDotNet.Actions;
 
 
 namespace TripEnjoy.Presentation.Web.Controllers
@@ -185,22 +186,44 @@ namespace TripEnjoy.Presentation.Web.Controllers
 
             foreach (var rate in rates)
             {
-                var comment = comments.FirstOrDefault(c => c.AccountId == rate.AccountId && c.RoomId == roomId);
+                // Tìm bình luận cha có cùng AccountId và RoomId với rate
+                var parentComments = comments.Where(c => c.AccountId == rate.AccountId && c.CommentLevel == 1 ).ToList();
 
-                var account = await _accountService.GetAccountByIdAsync(rate.AccountId.ToString());
-
-                roomReviews.Add(new RoomReviewDTO
+               foreach(var mainComment in parentComments)
                 {
-                    RoomId = roomId,
-                    AccountId = rate.AccountId,
-                    RateValue = rate.RateValue,
-                    CommentContent = comment?.CommentContent ?? "No Comment",
-                    ReviewDate = comment?.CommentDate ?? rate.RateDate,
-                    FullName = account?.AccountFullname ?? "Anonymous"
-                });
+                    var roomReviewParent = new RoomReviewDTO
+                    {
+                        RoomId = roomId,
+                        AccountId = rate.AccountId,
+                        RateValue = rate.RateValue,
+                        CommentId = mainComment.CommentId,
+                        CommentContent = mainComment.CommentContent,
+                        CommentLevel = mainComment.CommentLevel,
+                        ReviewDate = mainComment.CommentDate,
+                        FullName = rate.Account?.AccountFullname ?? "Anonymous",
+                        Image = rate.Account?.AccountImage
+                    };
+
+                    var roomReviewChild = comments.FirstOrDefault(c => c.CommentContent == roomReviewParent.CommentContent && c.CommentLevel == 2);
+
+                    if (roomReviewChild != null)
+                    {
+                        roomReviewParent.IsReply = true;
+                        roomReviewParent.AccountIdReply = roomReviewChild.AccountId;
+                        roomReviewParent.AccountNameReply = roomReviewChild.Account.AccountFullname;
+                        roomReviewParent.ReplyDate = roomReviewChild.CommentDate;
+                        roomReviewParent.CommentIdReply = roomReviewChild.CommentId;
+                        roomReviewParent.CommentReplyContent = roomReviewChild.CommentReply;
+                        roomReviewParent.ImageReply = roomReviewChild.Account?.AccountImage;
+                    }
+
+                    roomReviews.Add(roomReviewParent);
+                }
             }
+
             return Ok(roomReviews);
         }
 
     }
 }
+

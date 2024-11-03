@@ -34,7 +34,7 @@ namespace TripEnjoy.Infrastructure.Repositories
         public async Task<IEnumerable<Domain.Models.Comment>> GetCommentByRoomIdAsync(int roomId)
         {
             return await _context.Comments
-           .Where(c => c.RoomId == roomId)
+           .Where(c => c.RoomId == roomId).Include(c => c.Account)
            .OrderBy(c => c.CommentDate) 
            .ToListAsync();
         }

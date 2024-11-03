@@ -81,7 +81,7 @@
                     @{
                         string bedInfo = string.Empty;
                         string bathInfo = string.Empty;
-                        int maxOccupancy = 1; 
+                        int maxOccupancy = 1;
                         Dictionary<string, string> amenities = new Dictionary<string, string>();
 
                         switch (Model.RoomDetail.RoomTypeId)
@@ -237,10 +237,8 @@
                         <li class="nav-item">
                             <a class="d-flex align-items-center py-3" data-bs-toggle="pill" href="#tab-4">
                                 <i class="fa fa-star text-primary me-2"></i>
-                                @{
-                                    int totalReviews = (Model.Comments?.Count() ?? 0) + (Model.Rates?.Count() ?? 0);
-                                }
-                                <h6 class="mb-0">Reviews (@totalReviews)</h6>
+                                
+                                <h6 class="mb-0">Reviews (@Model.RateAndCommentS.Count())</h6>
                             </a>
                         </li>
                     </ul>
@@ -297,49 +295,52 @@
                                 </div>
                             </div>
                         </div>
-                        
+
                         <div id="tab-4" class="tab-pane fade show p-0">
                             <div id="review-section" data-room-id="@Model.RoomDetail.RoomId">
                                 <div class="mb-4">
-                                    <h4 class="mb-4">@totalReviews Reviews</h4>
-                                    @foreach (var comment in Model.Comments.Where(c => c.CommentLevel == 1))
+                                    <h4 class="mb-4">@Model.RateAndCommentS.Count() Reviews</h4>
+                                    @foreach (var comment in Model.RateAndCommentS)
                                     {
+
                                         <div class="d-flex mb-4">
-                                            <img src="" class="img-fluid rounded" style="width: 45px; height: 45px;">
+
+                                            <img src="@comment.Image" class="img-fluid rounded" style="width: 45px; height: 45px;">
                                             <div class="ps-3">
-                                                <h6>@comment.FullName <small class="text-body fw-normal fst-italic">@comment.CommentDate.ToString("dd MMM yyyy")</small></h6>
+                                                <h6>@comment.FullName <small class="text-body fw-normal fst-italic">@comment.ReviewDate.ToString("dd MMM yyyy")</small></h6>
 
                                                 <!-- Phần hiển thị sao đánh giá -->
                                                 <div class="rating mb-2">
                                                     @for (int i = 0; i < 5; i++)
                                                     {
-                                                        // if (i < comment.RateValue)
-                                                        // {
-                                                        //     <small class="fa fa-star text-warning"></small>
-                                                        // }
-                                                        // else
-                                                        // {
-                                                        //     <small class="fa fa-star text-muted"></small> 
-                                                        // }
+                                                        if (i < comment.RateValue)
+                                                        {
+                                                            <small class="fa fa-star text-warning"></small>
+                                                        }
+                                                        else
+                                                        {
+                                                            <small class="fa fa-star text-muted"></small>
+                                                        }
                                                     }
                                                 </div>
 
                                                 <p class="mb-2">@comment.CommentContent</p>
 
-                                                <!-- Phần hiển thị các phản hồi -->
-                                                <div class="cmt-replies mt-3">
-                                                    @foreach (var reply in Model.Comments.Where(c => c.CommentReply == comment.CommentId.ToString()))
-                                                    {
+                                                @if (comment.IsReply)
+                                                {
+                                                    <!-- Phần hiển thị các phản hồi -->
+                                                    <div class="cmt-replies mt-3">
+
                                                         <div class="d-flex mt-3">
-                                                            <img src="" class="img-fluid rounded" style="width: 35px; height: 35px;">
+                                                            <img src="@comment.ImageReply" class="img-fluid rounded" style="width: 35px; height: 35px;">
                                                             <div class="ps-3">
-                                                                <h6>Anonymous Customer <small class="text-body fw-normal fst-italic">@reply.CommentDate.ToString("dd MMM yyyy")</small></h6>
-                                                                <p class="mb-2">@reply.CommentContent</p>
+                                                                <h6>@comment.AccountNameReply <small class="text-body fw-normal fst-italic">@comment.ReplyDate?.ToString("dd MMM yyyy")</small></h6>
+                                                                   <p class="mb-2">@comment.CommentReplyContent</p>
                                                             </div>
                                                         </div>
-                                                    }
-                                                </div>
 
+                                                    </div>
+                                                }
                                                 <!-- Nút "Reply" và form nhập phản hồi -->
                                                 <div class="cmt-action">
                                                     <a href="javascript:void(0);" class="btn-reply text-primary" role="button" data-comment-id="@comment.CommentId">Reply</a>
@@ -564,7 +565,7 @@
                                             </div>
                                         </div>
                                     }
-                                </div>  
+                                </div>
                                 <div class="d-flex mb-3">
                                     <small class="border-end me-3 pe-3"><i class="fa fa-bed text-primary me-2"></i>@bedInfo</small>
                                     <small class="border-end me-3 pe-3"><i class="fa fa-bath text-primary me-2"></i>@bathInfo</small>

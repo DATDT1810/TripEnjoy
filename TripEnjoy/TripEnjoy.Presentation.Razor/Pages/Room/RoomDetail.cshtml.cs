@@ -32,6 +32,9 @@ namespace TripEnjoy.Presentation.Razor.Pages.Room
 
         [BindProperty(SupportsGet = true)]
         public CommentReply CommentReply { get; set; } = new CommentReply();
+
+        [BindProperty(SupportsGet = true)]
+        public IEnumerable<RateAndComment> RateAndCommentS { get; set; }
         public RoomDetailModel(IHttpClientFactory httpClientFactory)
         {
             _httpClientFactory = httpClientFactory;
@@ -83,18 +86,26 @@ namespace TripEnjoy.Presentation.Razor.Pages.Room
                 }
 
                 // Lấy danh sách đánh giá
-                var ratesResponse = await client.GetAsync($"https://localhost:7126/api/Rate/Room{id}");
-                if (ratesResponse.IsSuccessStatusCode)
-                {
-                    string ratesData = await ratesResponse.Content.ReadAsStringAsync();
-                    Rates = JsonSerializer.Deserialize<List<Rate>>(ratesData, option);
-                }
+                //var ratesResponse = await client.GetAsync($"https://localhost:7126/api/Rate/GetRatesForRoom/{id}");
+                //if (ratesResponse.IsSuccessStatusCode)
+                //{
+                //    string ratesData = await ratesResponse.Content.ReadAsStringAsync();
+                //    Rates = JsonSerializer.Deserialize<List<Rate>>(ratesData, option);
+                //}
 
-                var commentsResponse = await client.GetAsync($"https://localhost:7126/api/Comment/Room/{id}");
-                if (commentsResponse.IsSuccessStatusCode)
+                //var commentsResponse = await client.GetAsync($"https://localhost:7126/api/Comment/Room/{id}");
+                //if (commentsResponse.IsSuccessStatusCode)
+                //{
+                //    string commentsData = await commentsResponse.Content.ReadAsStringAsync();
+                //    Comments = JsonSerializer.Deserialize<List<Comment>>(commentsData, option);
+                //}
+
+                var reviewRoomResponse = await client.GetAsync($"https://localhost:7126/api/Rate/ReviewRoom/{id}");
+                if (reviewRoomResponse.IsSuccessStatusCode)
                 {
-                    string commentsData = await commentsResponse.Content.ReadAsStringAsync();
-                    Comments = JsonSerializer.Deserialize<List<Comment>>(commentsData, option);
+                    string content = await reviewRoomResponse.Content.ReadAsStringAsync();
+
+                    RateAndCommentS = JsonSerializer.Deserialize<List<RateAndComment>>(content, option);
                 }
 
                 return Page();
@@ -130,7 +141,7 @@ namespace TripEnjoy.Presentation.Razor.Pages.Room
 
             if (!response.IsSuccessStatusCode)
             {
-                return StatusCode((int)response.StatusCode, "Error when submitting reply."); 
+                return StatusCode((int)response.StatusCode, "Error when submitting reply.");
             }
             return RedirectToPage(new { id = CommentReply.RoomId });
         }
