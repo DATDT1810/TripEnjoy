@@ -36,18 +36,18 @@ namespace TripEnjoy.Presentation.Razor.Services
         {
             var cookieOptions = new CookieOptions
             {
-                HttpOnly = true,
+                HttpOnly = false,
                 Secure = true,
                 Expires = DateTime.UtcNow.AddMinutes(30),
-                SameSite = SameSiteMode.Lax,
+                SameSite = SameSiteMode.None,
             };
             // Thiết lập cookie  refreshToken
             var cookieOptions2 = new CookieOptions
             {
-                HttpOnly = true,
+                HttpOnly = false,
                 Secure = true,
                 Expires = DateTime.UtcNow.AddDays(1),
-                SameSite = SameSiteMode.Lax,
+                SameSite = SameSiteMode.None,
             };
             // Thiết lập cookie cho accessToken và refreshToken
             if (_httpContextAccessor.HttpContext != null)
@@ -62,7 +62,7 @@ namespace TripEnjoy.Presentation.Razor.Services
         {
             if(refreshToken == null)
             {
-                throw new Exception("Refresh token is null");
+                return null;
             }
             var request = new HttpRequestMessage(HttpMethod.Post, "https://localhost:7126/api/Account/RefreshToken");
             request.Content = new StringContent(JsonConvert.SerializeObject(new { refreshToken }), Encoding.UTF8, "application/json");
@@ -79,8 +79,17 @@ namespace TripEnjoy.Presentation.Razor.Services
                     return tokenResponse; // Trả về access token mới
                 }
             }
-
-            throw new Exception("Failed to refresh token");
+            DeleteTokens();
+            return null;
+        }
+        public void DeleteTokens()
+        {
+            if (_httpContextAccessor.HttpContext != null)
+            {
+                _httpContextAccessor.HttpContext.Response.Cookies.Delete("accessToken");
+                _httpContextAccessor.HttpContext.Response.Cookies.Delete("refreshToken");
+                _httpContextAccessor.HttpContext.Response.Cookies.Delete("refreshTokenExpiration");
+            }
         }
     }
 }

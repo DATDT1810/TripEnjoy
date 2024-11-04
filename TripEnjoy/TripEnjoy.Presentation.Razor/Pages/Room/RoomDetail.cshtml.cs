@@ -83,29 +83,42 @@ namespace TripEnjoy.Presentation.Razor.Pages.Room
                 }
 
                 // Lấy danh sách đánh giá
-                var ratesResponse = await client.GetAsync($"https://localhost:7126/api/Rate/Room{id}");
+                var rateRequest = new HttpRequestMessage(HttpMethod.Get, "https://localhost:7126/api/Rate/GetRatesForRoom/" + id );
+                var ratesResponse = await client.SendAsync(rateRequest);
                 if (ratesResponse.IsSuccessStatusCode)
                 {
                     string ratesData = await ratesResponse.Content.ReadAsStringAsync();
-                    Rates = JsonSerializer.Deserialize<List<Rate>>(ratesData, option);
+                    Rates = JsonSerializer.Deserialize<List<Rate>>(ratesData, option); //3
                 }
 
+                
                 var commentsResponse = await client.GetAsync($"https://localhost:7126/api/Comment/Room/{id}");
                 if (commentsResponse.IsSuccessStatusCode)
                 {
                     string commentsData = await commentsResponse.Content.ReadAsStringAsync();
-                    Comments = JsonSerializer.Deserialize<List<Comment>>(commentsData, option);
+                    Comments = JsonSerializer.Deserialize<List<Comment>>(commentsData, option); // 5
+             
+                    var ratesList = Rates.ToList(); // chuyển đổi cho việc sử dụng for
+                    var rateIndex = 0; // start = 0 -> rate ++
+                    foreach (var item in Comments)
+                    {
+                        if (item.CommentReply == "0" && rateIndex < ratesList.Count)
+                        {
+                            item.RateValue = ratesList[rateIndex].RateValue;
+                            rateIndex++;
+                        }
+                    }
                 }
 
                 return Page();
             }
-            else if (response.StatusCode == System.Net.HttpStatusCode.NotFound)
+            else
             {
-                return NotFound();
+                var redirectPath = await response.Content.ReadAsStringAsync();
+                return RedirectToPage(redirectPath);
             }
 
-            return Page();
-
+           
         }
 
         public async Task<IActionResult> OnPostReplyAsync()
@@ -135,6 +148,7 @@ namespace TripEnjoy.Presentation.Razor.Pages.Room
             return RedirectToPage(new { id = CommentReply.RoomId });
         }
 
+        
         public async Task<IActionResult> OnPostRateAndCommentAsync()
         {
             var client = _httpClientFactory.CreateClient("DefaultClient");
@@ -160,7 +174,7 @@ namespace TripEnjoy.Presentation.Razor.Pages.Room
                 return StatusCode((int)response.StatusCode, "Error when sending rate and comment");
             }
 
-            return RedirectToPage(new { id = RateAndComment.RoomId });
+            return new JsonResult(new { success = true, message = "Rate and comment added successfully!" });
         }
     }
 }

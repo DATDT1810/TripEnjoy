@@ -43,7 +43,7 @@ using TripEnjoy.Infrastructure.Entities;
 using TripEnjoy.Infrastructure.Helper;
 using TripEnjoy.Infrastructure.Repositories;
 using TripEnjoy.Infrastructure.Service;
-using TripEnjoy.Presentation.Web.Middleware;
+
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -53,9 +53,10 @@ builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowAllOrigins", policy =>
     {
-        policy.AllowAnyOrigin()
+        policy.WithOrigins("https://localhost:7112") // Thay đổi địa chỉ này nếu cần
               .AllowAnyMethod()
-              .AllowAnyHeader();
+              .AllowAnyHeader()
+              .AllowCredentials();
     });
 });
 // thêm session vào ứng dụng

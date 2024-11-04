@@ -49,7 +49,7 @@ app.UseCors("AllowAll");
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
 {
-    app.UseExceptionHandler("/Error");
+    app.UseExceptionHandler("/Home/404");
     app.UseHsts();
 }
 
@@ -68,5 +68,5 @@ app.UseEndpoints(endpoints =>  // Thêm Endpoint Mapping cho Razor Pages
 {
     endpoints.MapRazorPages();
 });
-
+app.UseStatusCodePagesWithReExecute("/Home/404");
 app.Run();

@@ -42,7 +42,8 @@ namespace TripEnjoy.Presentation.Web.Controllers
         }
 
         // GET: api/Rate/Room/{id}
-        [HttpGet("Room/{id}")]
+        [HttpGet]
+        [Route("GetRatesForRoom/{id}")]
         public async Task<IActionResult> GetRatesForRoom(int id)
         {
             var room = await _roomService.GetRoomDetailByIdAsync(id);

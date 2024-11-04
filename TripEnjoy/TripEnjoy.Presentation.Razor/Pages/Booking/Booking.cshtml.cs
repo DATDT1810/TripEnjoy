@@ -42,6 +42,7 @@ namespace TripEnjoy.Presentation.Razor.Pages.Booking
             };
 
 
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
             // Call API to get the room details
             var client = _httpClientFactory.CreateClient("DefaultClient");
             var roomResponse = await client.GetAsync($"https://localhost:7126/api/Room/{id}");
@@ -55,6 +56,11 @@ namespace TripEnjoy.Presentation.Razor.Pages.Booking
 
                 // Tính tổng tiền dựa trên giá phòng, số lượng phòng và số ngày ở
                 BookingViewModel.BookingTotalPrice = RoomDetail.RoomPrice * BookingViewModel.RoomQuantity * totalDays;
+            }
+            else
+            {
+                string redirectPath = await roomResponse.Content.ReadAsStringAsync();
+                return RedirectToPage(redirectPath);
             }
 
             // If RoomDetail exists, use its HotelId to get the correct Hotel
@@ -73,7 +79,7 @@ namespace TripEnjoy.Presentation.Razor.Pages.Booking
             if (accountResponse.IsSuccessStatusCode)
             {
                 string accountData = await accountResponse.Content.ReadAsStringAsync();
-                var profile  = JsonConvert.DeserializeObject<UserProfile>(accountData);
+                var profile = JsonConvert.DeserializeObject<UserProfile>(accountData);
                 UserProfile = profile;
             }
             HttpContext.Session.SetString("BookingViewModel", JsonConvert.SerializeObject(BookingViewModel));
@@ -99,8 +105,12 @@ namespace TripEnjoy.Presentation.Razor.Pages.Booking
                 var bookingId = await response.Content.ReadAsStringAsync();
                 return RedirectToPage("/Payment/Payment", new { bookingId });
             }
-
-            return Page();
+            else
+            {
+                var redirectPath = await response.Content.ReadAsStringAsync();
+                return RedirectToPage(redirectPath);
+            }
+           
         }
     }
 }

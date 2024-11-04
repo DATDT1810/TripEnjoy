@@ -1,4 +1,4 @@
-﻿    using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -34,8 +34,8 @@ namespace TripEnjoy.Infrastructure.Repositories
         public async Task<IEnumerable<Domain.Models.Comment>> GetCommentByRoomIdAsync(int roomId)
         {
             return await _context.Comments
-           .Where(c => c.RoomId == roomId)
-           .OrderBy(c => c.CommentDate) 
+           .Where(c => c.RoomId == roomId).Include(c => c.Account)
+           .OrderBy(c => c.CommentDate)
            .ToListAsync();
         }
     }

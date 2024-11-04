@@ -197,9 +197,24 @@ namespace TripEnjoy.Presentation.WPF.ViewModels
                 }
                 TokenHelper.SaveToken(tokenResponse);
                 
-                var dashboardWindow = new AdminDashBoardWindow();
-                dashboardWindow.Show();
-                p.Close();
+                var tokenPayload =  TokenHelper.GetTokenPayload(tokenResponse.accessToken);
+                if(tokenPayload != null)
+                {
+                    // phần quyền với roleClaims token
+                    if(tokenPayload.Role == "Admin")
+                    {
+                        var dashboardWindow = new AdminDashBoardWindow();
+                        dashboardWindow.Show();
+                        p.Close();
+                    }
+                    else if(tokenPayload.Role == "Partner")
+                    {
+                        var dashboardWindow = new DashboardWindow();
+                        dashboardWindow.Show();
+                        p.Close();
+                    }
+                }
+              
 			}
 			else
             {
