@@ -1,163 +1,9 @@
 ﻿@page
 @model TripEnjoy.Presentation.Razor.Pages.ListSearchHotelModel
 @{
+    ViewData["Title"] = "Search room";
 }
 <div class="container-xxl bg-white p-0">
-
-    <div id="spinner" class="show bg-white position-fixed translate-middle w-100 vh-100 top-50 start-50 d-flex align-items-center justify-content-center">
-        <div class="spinner-border text-primary" style="width: 3rem; height: 3rem;" role="status">
-            <span class="sr-only">Loading...</span>
-        </div>
-    </div>
-
-
-    <div class="container-fluid bg-dark px-0">
-        <div class="row gx-0">
-            <div class="col-lg-3 bg-dark d-none d-lg-block">
-                <a href="index-2.html" class="navbar-brand w-100 h-100 m-0 p-0 d-flex align-items-center justify-content-center">
-                    <h1 class="m-0 text-primary text-uppercase">Hotelier</h1>
-                </a>
-            </div>
-            <div class="col-lg-9">
-                <div class="row gx-0 bg-white d-none d-lg-flex">
-                    <div class="col-lg-7 px-5 text-start">
-                        <div class="h-100 d-inline-flex align-items-center py-2 me-4">
-                            <i class="fa fa-envelope text-primary me-2"></i>
-                            <p class="mb-0"><a href="https://demo.htmlcodex.com/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="2940474f46694c51484459454c074a4644">[email&#160;protected]</a></p>
-                        </div>
-                        <div class="h-100 d-inline-flex align-items-center py-2">
-                            <i class="fa fa-phone-alt text-primary me-2"></i>
-                            <p class="mb-0">+012 345 6789</p>
-                        </div>
-                    </div>
-                    <div class="col-lg-5 px-5 text-end">
-                        <div class="d-inline-flex align-items-center py-2">
-                            <a class="me-3" href><i class="fab fa-facebook-f"></i></a>
-                            <a class="me-3" href><i class="fab fa-twitter"></i></a>
-                            <a class="me-3" href><i class="fab fa-linkedin-in"></i></a>
-                            <a class="me-3" href><i class="fab fa-instagram"></i></a>
-                            <a class href><i class="fab fa-youtube"></i></a>
-                        </div>
-                    </div>
-                </div>
-                <nav class="navbar navbar-expand-lg bg-dark navbar-dark p-3 p-lg-0">
-                    <a href="index-2.html" class="navbar-brand d-block d-lg-none">
-                        <h1 class="m-0 text-primary text-uppercase">Hotelier</h1>
-                    </a>
-                    <button type="button" class="navbar-toggler" data-bs-toggle="collapse" data-bs-target="#navbarCollapse">
-                        <span class="navbar-toggler-icon"></span>
-                    </button>
-                    <div class="collapse navbar-collapse justify-content-between" id="navbarCollapse">
-                        <div class="navbar-nav mr-auto py-0">
-                            <div class="nav-item dropdown">
-                                <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">Home</a>
-                                <div class="dropdown-menu fade-up rounded-0 m-0">
-                                    <a href="home-1.html" class="dropdown-item">Home 1</a>
-                                    <a href="home-2.html" class="dropdown-item">Home 2</a>
-                                </div>
-                            </div>
-                            <div class="nav-item dropdown">
-                                <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">About</a>
-                                <div class="dropdown-menu fade-down rounded-0 m-0">
-                                    <a href="about-1.html" class="dropdown-item">About 1</a>
-                                    <a href="about-2.html" class="dropdown-item">About 2</a>
-                                </div>
-                            </div>
-                            <div class="nav-item dropdown">
-                                <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">Rooms</a>
-                                <div class="dropdown-menu fade-up rounded-0 m-0">
-                                    <a href="room-grid.html" class="dropdown-item">Room Grid</a>
-                                    <a href="room-list.html" class="dropdown-item">Room List</a>
-                                    <a href="room-detail.html" class="dropdown-item">Room Detail</a>
-                                </div>
-                            </div>
-                            <div class="nav-item dropdown">
-                                <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">Pages</a>
-                                <div class="dropdown-menu fade-down rounded-0 m-0">
-                                    <a href="service-1.html" class="dropdown-item">Service 1</a>
-                                    <a href="service-2.html" class="dropdown-item">Service 2</a>
-                                    <a href="service-detail.html" class="dropdown-item">Service Detail</a>
-                                    <a href="blog-grid.html" class="dropdown-item">Blog Grid</a>
-                                    <a href="blog-list.html" class="dropdown-item">Blog List</a>
-                                    <a href="blog-detail.html" class="dropdown-item">Blog Detail</a>
-                                    <a href="faq.html" class="dropdown-item">FAQs</a>
-                                    <a href="gallery.html" class="dropdown-item">Gallery</a>
-                                    <a href="contact.html" class="dropdown-item">Contact Us</a>
-                                    <a href="booking-1.html" class="dropdown-item">Booking 1</a>
-                                    <a href="booking-2.html" class="dropdown-item">Booking 2</a>
-                                    <a href="team.html" class="dropdown-item">Our Team</a>
-                                    <a href="testimonial-1.html" class="dropdown-item">Testimonial 1</a>
-                                    <a href="testimonial-2.html" class="dropdown-item">Testimonial 2</a>
-                                    <a href="404.html" class="dropdown-item">404</a>
-                                </div>
-                            </div>
-                            <a href="element.html" class="nav-item nav-link">Elements</a>
-                        </div>
-                        <a href="https://htmlcodex.com/hotel-html-template-pro" class="btn btn-primary rounded-0 py-4 px-lg-5 d-none d-lg-block">Purchase Now<i class="fa fa-arrow-right ms-3"></i></a>
-                    </div>
-                </nav>
-            </div>
-        </div>
-    </div>
-
-
-    <div class="container-fluid page-header mb-5 p-0" style="background-image: url(img/carousel-1.jpg);">
-        <div class="container-fluid page-header-inner py-5">
-            <div class="container text-center pb-5">
-                <h1 class="display-3 text-white mb-3 animated slideInDown">Room List</h1>
-                <nav aria-label="breadcrumb">
-                    <ol class="breadcrumb justify-content-center text-uppercase">
-                        <li class="breadcrumb-item"><a href="#">Home</a></li>
-                        <li class="breadcrumb-item"><a href="#">Pages</a></li>
-                        <li class="breadcrumb-item text-white active" aria-current="page">Room List</li>
-                    </ol>
-                </nav>
-            </div>
-        </div>
-    </div>
-
-
-    <div class="container-fluid booking pb-5 wow fadeIn" data-wow-delay="0.1s">
-        <div class="container">
-            <div class="bg-white shadow" style="padding: 35px;">
-                <div class="row g-2">
-                    <div class="col-md-10">
-                        <div class="row g-2">
-                            <div class="col-md-3">
-                                <div class="date" id="date1" data-target-input="nearest">
-                                    <input type="text" class="form-control datetimepicker-input" placeholder="Check in" data-target="#date1" data-toggle="datetimepicker" />
-                                </div>
-                            </div>
-                            <div class="col-md-3">
-                                <div class="date" id="date2" data-target-input="nearest">
-                                    <input type="text" class="form-control datetimepicker-input" placeholder="Check out" data-target="#date2" data-toggle="datetimepicker" />
-                                </div>
-                            </div>
-                            <div class="col-md-3">
-                                <select class="form-select">
-                                    <option selected>Adult</option>
-                                    <option value="1">Adult 1</option>
-                                    <option value="2">Adult 2</option>
-                                    <option value="3">Adult 3</option>
-                                </select>
-                            </div>
-                            <div class="col-md-3">
-                                <select class="form-select">
-                                    <option selected>Child</option>
-                                    <option value="1">Child 1</option>
-                                    <option value="2">Child 2</option>
-                                    <option value="3">Child 3</option>
-                                </select>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-2">
-                        <button class="btn btn-primary w-100">Submit</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
 
     <div class="container-xxl py-5">
         <div class="container">
@@ -165,7 +11,7 @@
                 <div class="col-lg-8">
                     <div class="sort-box">
                         <div class="sort-content">
-                            <b>Hiển thị giá: </b>
+                            <b>Show Price: </b>
                             <div class="sort-price-input" id="sort-price-input">
                                 Từ thấp đến cao
                                 <i class="sort-price-button fa fa-chevron-down"></i>
@@ -194,46 +40,120 @@
                     {
                         @foreach (var hotel in Model.ListSearchHotel)
                         {
-                            <div class="row room-item m-0 mb-4 wow fadeinup" data-wow-delay="0.1s">
-                                <div class="col-md-5 col-lg-12 col-xl-5 p-0" style="min-height: 300px;">
-                                    <input type="hidden" name="hotelId" value="@hotel.HotelId" />
-                                    <div class="position-relative h-100">
-                                        @foreach (var hotelImage in hotel.HotelImages)
-                                        {
-                                            <img class="position-absolute w-100 h-100" src="@hotelImage.ImageUrl" alt="Image of @hotel.HotelName" style="object-fit: cover;">
-                                        }
-                                    </div>
-                                </div>
-                                <div class="col-md-7 col-lg-12 col-xl-7 h-100 px-0">
-                                    <div class="p-4 body-list-hotel">
-                                        <div>
-                                            <h5 class="mb-3">@hotel.HotelName</h5>
-                                            <h7 class="mb-3"><i class="fas fa-map-marker-alt hoteladdress"></i> @hotel.HotelAddress</h7>
-                                            <p class="mb-3">
-                                                @hotel.Category.CategoryName
-                                                <small class="fa fa-star text-primary"></small>
-                                                <small class="fa fa-star text-primary"></small>
-                                                <small class="fa fa-star text-primary"></small>
-                                                <small class="fa fa-star text-primary"></small>
-                                                <small class="fa fa-star text-primary"></small>
-                                            </p>
-                                            <div class="d-flex mb-3">
-                                                <small class="border-end me-3 pe-3"><i class="fa fa-bed text-primary me-2"></i>3 Bed</small>
-                                                <small class="border-end me-3 pe-3"><i class="fa fa-bath text-primary me-2"></i>2 Bath</small>
-                                                <small><i class="fa fa-wifi text-primary me-2"></i>Wifi</small>
-                                            </div>
-                                            <p class="text-body mb-0">@hotel.HotelDescription.</p>
+                            <a asp-page="/Room/RoomDetail" asp-route-id="@hotel.Rooms.FirstOrDefault()?.RoomId">
+                                <div class="row room-item m-0 mb-4 wow fadeinup" data-wow-delay="0.1s">
+                                    <div class="col-md-5 col-lg-12 col-xl-5 p-0" style="min-height: 300px;">
+                                        <input type="hidden" name="hotelId" value="@hotel.HotelId" />
+                                        <div class="position-relative h-100">
+                                            @foreach (var hotelImage in hotel.HotelImages)
+                                            {
+                                                <img class="position-absolute w-100 h-100" src="@hotelImage.ImageUrl" alt="Image of @hotel.HotelName" style="object-fit: cover;">
+                                            }
                                         </div>
-                                        <div>
-                                            <div class="d-flex align-items-center justify-content-between mb-3">
-                                                <small class="bg-primary text-white rounded py-1 px-3">@String.Format("{0:0,0VND}", hotel.Rooms.FirstOrDefault().RoomPrice)</small>
+                                    </div>
+                                    <div class="col-md-7 col-lg-12 col-xl-7 h-100 px-0">
+                                        <div class="p-4 body-list-hotel">
+                                            <div>
+                                                <h5 class="mb-3">@hotel.HotelName</h5>
+                                                <h7 class="mb-3 text-dark"><i class="fas fa-map-marker-alt hoteladdress text-primary"></i> @hotel.HotelAddress</h7>
+                                                <h5 class="mb-3 text-dark">
+                                                    @hotel.Category.CategoryName
+                                                </h5>
+                                                <div class="d-flex mb-3">
+                                                    @{
+                                                        // Tiện nghi
+                                                        var amenities = new List<KeyValuePair<string, string>>();
+                                                        switch (hotel.HotelId)
+                                                        {
+                                                            case 1:  // Standard Room
+                                                            case 9:
+                                                            case 10:
+                                                                amenities = new List<KeyValuePair<string, string>>
+                                            {
+                                            new KeyValuePair<string, string>("Free Wifi", "fa-wifi"),
+                                            new KeyValuePair<string, string>("TV", "fa-tv"),
+                                            new KeyValuePair<string, string>("Air Conditioning", "fa-fan")
+                                            };
+                                                                break;
+
+                                                            case 2:  // Deluxe Room
+                                                                amenities = new List<KeyValuePair<string, string>>
+                                            {
+                                            new KeyValuePair<string, string>("Free Wifi", "fa-wifi"),
+                                            new KeyValuePair<string, string>("Flat-screen TV", "fa-tv"),
+                                            new KeyValuePair<string, string>("Air Conditioning", "fa-fan")
+                                            };
+                                                                break;
+
+                                                            case 3:  // Suite Room
+                                                                amenities = new List<KeyValuePair<string, string>>
+                                            {
+                                            new KeyValuePair<string, string>("Free Wifi", "fa-wifi"),
+                                            new KeyValuePair<string, string>("TV", "fa-tv"),
+                                            new KeyValuePair<string, string>("Village View", "fa-mountain")
+                                            };
+                                                                break;
+
+                                                            case 4:  // Family Room
+                                                                amenities = new List<KeyValuePair<string, string>>
+                                            {
+                                            new KeyValuePair<string, string>("Free Wifi", "fa-wifi"),
+                                            new KeyValuePair<string, string>("TV", "fa-tv"),
+                                            new KeyValuePair<string, string>("Living Area", "fa-couch")
+                                            };
+                                                                break;
+
+                                                            case 5:  // Executive Room
+                                                                amenities = new List<KeyValuePair<string, string>>
+                                            {
+                                            new KeyValuePair<string, string>("Free Wifi", "fa-wifi"),
+                                            new KeyValuePair<string, string>("Flat-screen TV", "fa-tv"),
+                                            new KeyValuePair<string, string>("Mini-bar", "fa-wine-glass-alt")
+                                            };
+                                                                break;
+
+                                                            case 6:  // Villa with Private Pool
+                                                                amenities = new List<KeyValuePair<string, string>>
+                                            {
+                                            new KeyValuePair<string, string>("Free Wifi", "fa-wifi"),
+                                            new KeyValuePair<string, string>("Private Pool", "fa-swimmer"),
+                                            new KeyValuePair<string, string>("Garden", "fa-tree")
+                                            };
+                                                                break;
+
+                                                            case 11: // Suite Room with Village View
+                                                                amenities = new List<KeyValuePair<string, string>>
+                                            {
+                                            new KeyValuePair<string, string>("Free Wifi", "fa-wifi"),
+                                            new KeyValuePair<string, string>("TV", "fa-tv"),
+                                            new KeyValuePair<string, string>("Village View", "fa-mountain")
+                                            };
+                                                                break;
+                                                        }
+
+                                                    }
+                                                    <div class="d-flex mb-3">
+                                                        @foreach (var amenity in amenities.Take(3))
+                                                        {
+                                                            <small class="border-end me-3 pe-3 text-dark">
+                                                                <i class="fa @amenity.Value text-primary me-2"></i>@amenity.Key
+                                                            </small>
+                                                        }
+                                                    </div>
+                                                </div>
+                                                <p class="text-body mb-0">@hotel.HotelDescription.</p>
                                             </div>
+                                            <div>
+                                                <div class="d-flex align-items-center justify-content-between mb-3">
+                                                    <small class="bg-primary text-white rounded py-1 px-3">@String.Format("{0:0,0VND}", hotel.Rooms.FirstOrDefault().RoomPrice)</small>
+                                                </div>
+                                            </div>
+
                                         </div>
 
                                     </div>
-
                                 </div>
-                            </div>
+                            </a>
                         }
                     }
                     else
@@ -241,101 +161,9 @@
                         <p class="text-danger mt-4">No hotels found. Please try another search.</p>
                     }
                 </div>
-
-                <div class="col-lg-4">
-                    <div class="bg-light mb-5 wow fadeInUp" data-wow-delay="0.1s">
-                        <div class="border-bottom text-center text-dark p-3 pt-4 mb-3">
-                            <span class="align-top fs-4 lh-base">$</span>
-                            <span class="align-middle fs-1 lh-sm fw-bold">49.00</span>
-                            <span class="align-bottom fs-6 lh-lg">/ Night</span>
-                        </div>
-                        <div class="row g-3 p-4 pt-2">
-                            <div class="col-12">
-                                <div class="date" id="date3" data-target-input="nearest">
-                                    <input type="text" class="form-control datetimepicker-input" placeholder="Check in" data-target="#date3" data-toggle="datetimepicker" />
-                                </div>
-                            </div>
-                            <div class="col-12">
-                                <div class="date" id="date4" data-target-input="nearest">
-                                    <input type="text" class="form-control datetimepicker-input" placeholder="Check out" data-target="#date4" data-toggle="datetimepicker" />
-                                </div>
-                            </div>
-                            <div class="col-12">
-                                <select class="form-select">
-                                    <option selected>Adult</option>
-                                    <option value="1">Adult 1</option>
-                                    <option value="2">Adult 2</option>
-                                    <option value="3">Adult 3</option>
-                                </select>
-                            </div>
-                            <div class="col-12">
-                                <select class="form-select">
-                                    <option selected>Child</option>
-                                    <option value="1">Child 1</option>
-                                    <option value="2">Child 2</option>
-                                    <option value="3">Child 3</option>
-                                </select>
-                            </div>
-                            <div class="col-12">
-                                <select class="form-select">
-                                    <option selected>Night</option>
-                                    <option value="1">Night 1</option>
-                                    <option value="2">Night 2</option>
-                                    <option value="3">Night 3</option>
-                                </select>
-                            </div>
-                            <div class="col-12">
-                                <button class="btn btn-primary py-3 w-100">Book Now</button>
-                            </div>
-                        </div>
-                    </div>
-
-
-                    <div class="bg-light p-4 mb-5 wow fadeInUp" data-wow-delay="0.1s">
-                        <h4 class="mb-4">Category</h4>
-                        <a class="d-block position-relative mb-3" href>
-                            <img class="img-fluid" src="img/cat-1.jpg" alt>
-                            <div class="d-flex position-absolute top-0 start-0 w-100 h-100 p-3" style="background: rgba(0,0,0,.3);">
-                                <h5 class="text-white m-0 mt-auto">luxury Room</h5>
-                            </div>
-                        </a>
-                        <a class="d-block position-relative mb-3" href>
-                            <img class="img-fluid" src="img/cat-2.jpg" alt>
-                            <div class="d-flex position-absolute top-0 start-0 w-100 h-100 p-3" style="background: rgba(0,0,0,.3);">
-                                <h5 class="text-white m-0 mt-auto">Couple Room</h5>
-                            </div>
-                        </a>
-                        <a class="d-block position-relative" href>
-                            <img class="img-fluid" src="img/cat-3.jpg" alt>
-                            <div class="d-flex position-absolute top-0 start-0 w-100 h-100 p-3" style="background: rgba(0,0,0,.3);">
-                                <h5 class="text-white m-0 mt-auto">Single Room</h5>
-                            </div>
-                        </a>
-                    </div>
-
-
-                    <div class="border p-1 wow fadeInUp" data-wow-delay="0.1s">
-                        <div class="border p-4">
-                            <h4 class="mb-4">Help & Support</h4>
-                            <p>Lorem sed erat elitr magna magna labore duo elitr ipsum duo. Et sed duo rebum lorem sed stet sed</p>
-                            <div class="bg-primary text-center p-3">
-                                <h4 class="text-white m-0">+012 345 67890</h4>
-                            </div>
-                        </div>
-                    </div>
-
-                </div>
-
             </div>
-
         </div>
     </div>
-
-
-
-
-
-
     <a href="#" class="btn btn-lg btn-primary btn-lg-square back-to-top"><i class="bi bi-arrow-up"></i></a>
 </div>
 <script>

@@ -3,147 +3,261 @@
 @{
     ViewData["Title"] = "Profile";
 }
+
 <div class="container-xl px-4 mt-4">
     <!-- Account page navigation-->
-    <nav class="nav nav-borders">
-        <a class="nav-link active ms-0" href="https://www.bootdey.com/snippets/view/bs5-edit-profile-account-details" target="__blank">Profile</a>
-        <a class="nav-link" href="https://www.bootdey.com/snippets/view/bs5-profile-billing-page" target="__blank">Billing</a>
-        <a class="nav-link" href="https://www.bootdey.com/snippets/view/bs5-profile-security-page" target="__blank">Security</a>
-        <a class="nav-link" href="https://www.bootdey.com/snippets/view/bs5-edit-notifications-page" target="__blank">Notifications</a>
+    <nav class="nav nav-borders mb-4">
+        <a class="nav-link ms-0 active" href="javascript:void(0)" onclick="showSection('profileSection')" id="profileTab">Profile</a>
+        <a class="nav-link" href="javascript:void(0)" onclick="showSection('bookingSection')" id="bookingTab">Booking</a>
     </nav>
-    <hr class="mt-0 mb-4">
-    <div class="row">
-        <div class="col-xl-4">
-            <!-- Profile picture card-->
-            <div class="card mb-4 mb-xl-0">
-                <div class="card-header">Profile Picture</div>
-                <div class="card-body text-center">
-                    <!-- Profile picture image-->
-                    <img class="img-account-profile rounded-circle mb-2" src="@Model.UserProfile.AccountImage" alt="Hình ảnh user">
 
-
-                    <!-- Profile picture help block-->
-                    <div class="small font-italic text-muted mb-4">JPG or PNG no larger than 5 MB</div>
-
-                    <!-- Profile picture upload button-->
-                    <form asp-page-handler="UploadImage" method="post" enctype="multipart/form-data" class="mb-3">
-                        <div class="mb-3">
-                            <input type="file" id="imageInput" name="files" accept="image/*" required class="form-control" />
-                        </div>
-                        <button class="btn btn-primary" type="submit">Upload new image</button>
-                    </form>
+    <!-- Profile Section -->
+    <div id="profileSection" style="display: block;">
+        <div class="row">
+            <div class="col-xl-4">
+                <!-- Profile picture card-->
+                <div class="card mb-4 mb-xl-0">
+                    <div class="card-header text-center">Profile Picture</div>
+                    <div class="card-body text-center">
+                        <img class="img-account-profile rounded-circle mb-2" src="@Model.UserProfile?.AccountImage" alt="User Image" style="width: 150px; height: 150px; object-fit: cover;">
+                        <div class="small font-italic text-muted mb-4">JPG or PNG no larger than 5 MB</div>
+                        <form asp-page-handler="UploadImage" method="post" enctype="multipart/form-data" class="mb-3">
+                            <input type="file" id="imageInput" name="files" accept="image/*" required class="form-control mb-2" />
+                            <button class="btn btn-primary w-100" type="submit">Upload new image</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xl-8">
+                <!-- Account details card-->
+                <div class="card mb-4">
+                    <div class="card-header">Account Details</div>
+                    <div class="card-body">
+                        <form method="post">
+                            <div class="mb-3">
+                                <label class="small mb-1" for="inputFullname">Full Name</label>
+                                <input asp-for="UserProfile.AccountFullname" class="form-control" id="inputFullname" type="text" placeholder="Enter your full name">
+                                <span asp-validation-for="UserProfile.AccountFullname" class="text-danger"></span>
+                            </div>
+                            <div class="row gx-3 mb-3">
+                                <div class="col-md-6">
+                                    <label class="small mb-1" for="inputEmail">Email</label>
+                                    <input asp-for="UserProfile.AccountEmail" class="form-control" id="inputEmail" type="text" placeholder="Enter your email">
+                                    <span asp-validation-for="UserProfile.AccountEmail" class="text-danger"></span>
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="small mb-1" for="inputPhone">Phone Number</label>
+                                    <input asp-for="UserProfile.AccountPhone" class="form-control" id="inputPhone" type="tel" placeholder="Enter your phone number">
+                                    <span asp-validation-for="UserProfile.AccountPhone" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="row gx-3 mb-3">
+                                <div class="col-md-6">
+                                    <label class="small mb-1" for="inputGender">Gender</label>
+                                    <select asp-for="UserProfile.AccountGender" class="form-control" id="inputGender">
+                                        <option value="" disabled selected>Select your gender</option>
+                                        <option value="Male">Male</option>
+                                        <option value="Female">Female</option>
+                                    </select>
+                                    <span asp-validation-for="UserProfile.AccountGender" class="text-danger"></span>
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="small mb-1" for="inputBirthday">Birthday</label>
+                                    <input asp-for="UserProfile.AccountDateOfBirth" class="form-control" id="inputBirthday" type="date">
+                                    <span asp-validation-for="UserProfile.AccountDateOfBirth" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="mb-3">
+                                <label class="small mb-1" for="inputAddress">Address</label>
+                                <input asp-for="UserProfile.AccountAddress" class="form-control" id="inputAddress" type="text" placeholder="Enter your address">
+                                <span asp-validation-for="UserProfile.AccountAddress" class="text-danger"></span>
+                            </div>
+                            <button class="btn btn-primary w-100" type="submit">Save changes</button>
+                        </form>
+                    </div>
                 </div>
             </div>
         </div>
+    </div>
 
-        <div class="col-xl-8">
-            <!-- Account details card-->
-            <div class="card mb-4">
-                <div class="card-header">Account Details</div>
-                <div class="card-body">
-                    <form method="post">
-                        <div class="mb-3" style="display:none">
-                            <label class="small mb-1" for="inputAccountId">Account ID</label>
-                            <input asp-for="UserProfile.AccountId" class="form-control" id="inputAccountId" type="text">
-                        </div>
-
-                        <!-- Form Group (Full name) -->
-                        <div class="mb-3">
-                            <label class="small mb-1" for="inputFullname">Full Name</label>
-                            <input asp-for="UserProfile.AccountFullname" class="form-control" id="inputFullname" type="text" placeholder="Enter your full name">
-                            <span asp-validation-for="UserProfile.AccountFullname" class="text-danger"></span>
-                        </div>
-
-                        <div class="row gx-3 mb-3">
-                            <!-- Form Group (Email) -->
-                            <div class="col-md-6" style="display:none">
-                                <label class="small mb-1" for="inputEmail">Email</label>
-                                <input asp-for="UserProfile.AccountEmail" class="form-control" id="inputEmail" type="text" placeholder="Enter your email">
-                                <span asp-validation-for="UserProfile.AccountEmail" class="text-danger"></span>
-                            </div>
-
-                            <!-- Form Group (Phone number) -->
-                            <div class="col-md-6">
-                                <label class="small mb-1" for="inputPhone">Phone Number</label>
-                                <input asp-for="UserProfile.AccountPhone" class="form-control" id="inputPhone" type="tel" placeholder="Enter your phone number">
-                                <span asp-validation-for="UserProfile.AccountPhone" class="text-danger"></span>
-                            </div>
-                        </div>
-
-                        <div class="row gx-3 mb-3">
-                            <!-- Form Group (Gender) -->
-                            <div class="col-md-6">
-                                <label class="small mb-1" for="inputGender">Gender</label>
-                                <select asp-for="UserProfile.AccountGender" class="form-control" id="inputGender">
-                                    <option value="" disabled selected>Select your gender</option>
-                                    <option value="Male">Male</option>
-                                    <option value="Female">Female</option>
-                                </select>
-                                <span asp-validation-for="UserProfile.AccountGender" class="text-danger"></span>
-                            </div>
-
-                            <!-- Form Group (Birthday) -->
-                            <div class="col-md-6">
-                                <label class="small mb-1" for="inputBirthday">Birthday</label>
-                                <input asp-for="UserProfile.AccountDateOfBirth" class="form-control" id="inputBirthday" type="date">
-                                <span asp-validation-for="UserProfile.AccountDateOfBirth" class="text-danger"></span>
-                            </div>
-                        </div>
-
-                        <!-- Form Group (Address) -->
-                        <div class="mb-3">
-                            <label class="small mb-1" for="inputAddress">Address</label>
-                            <input asp-for="UserProfile.AccountAddress" class="form-control" id="inputAddress" type="text" placeholder="Enter your address">
-                            <span asp-validation-for="UserProfile.AccountAddress" class="text-danger"></span>
-                        </div>
-
-                        <!-- Form Group (Image URL) -->
-                        <div class="mb-3" style="display:none">
-                            <label class="small mb-1" for="inputImage">Image URL</label>
-                            <input asp-for="UserProfile.AccountImage" class="form-control" id="inputImage" type="text" placeholder="Enter image URL">
-                            <span asp-validation-for="UserProfile.AccountImage" class="text-danger"></span>
-                        </div>
-
-                        <!-- Save changes button -->
-                        <button class="btn btn-primary" type="submit">Save changes</button>
-                    </form>
-
+    <!-- Booking Section -->
+    <div id="bookingSection" style="display: none;">
+        <div class="card mb-4">
+            <div class="card-header">Booking History</div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-bordered table-hover">
+                        <thead class="table-light">
+                            <tr>
+                                <th>#</th>
+                                <th>Room Title</th>
+                                <th>Room Quantity</th>
+                                <th>Total Price</th>
+                                <th>Status</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @if (Model.Booking != null && Model.Booking.Any())
+                            {
+                                @for (var i = 0; i < Model.Booking.Count; i++)
+                                {
+                                    var booking = Model.Booking[i];
+                                    <tr>
+                                        <td>@(i + 1)</td>
+                                        <td>@booking.Room.RoomTitle</td>
+                                        <td>@booking.RoomQuantity</td>
+                                        <td>@booking.BookingTotalPrice.ToString("#, ##0 VND")</td>
+                                        <td>@booking.BookingStatus</td>
+                                        <td>
+                                            <button class="btn btn-sm btn-info" onclick="viewBookingDetails(@booking.BookingId)">
+                                                View Details
+                                            </button>
+                                        </td>
+                                    </tr>
+                                }
+                            }
+                            else
+                            {
+                                <tr>
+                                    <td colspan="6" class="text-center text-muted">No booking history available</td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
                 </div>
             </div>
         </div>
     </div>
 </div>
 
+<!--<!-- Booking Details Modal -->
+<div class="modal fade" id="bookingDetailsModal" tabindex="-1" aria-labelledby="bookingDetailsModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="bookingDetailsModalLabel">Booking Details</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div id="bookingDetailsContent">
+                    <!-- Booking details will be loaded here dynamically -->
+                    <p>Loading...</p>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
 @section Styles {
-    <link href="~/css/CustomProfile.css" rel="stylesheet" />
+    <style>
+        .nav.nav-borders .nav-link {
+            color: #555;
+            border-bottom: 2px solid transparent;
+            padding-bottom: 0.25rem;
+        }
+        .nav.nav-borders .nav-link.active {
+            color: #007bff;
+            border-bottom: 2px solid #007bff;
+            font-weight: bold;
+        }
+        .img-account-profile {
+            border-radius: 50%;
+            object-fit: cover;
+        }
+        .table-bordered th, .table-bordered td {
+            vertical-align: middle;
+        }
+        .table-hover tbody tr:hover {
+            background-color: #f8f9fa;
+        }
+    </style>
 }
+
 @section Scripts {
     <script>
+        function showSection(sectionId) {
+            document.getElementById("profileSection").style.display = "none";
+            document.getElementById("bookingSection").style.display = "none";
+            document.getElementById(sectionId).style.display = "block";
+            document.getElementById("profileTab").classList.remove("active");
+            document.getElementById("bookingTab").classList.remove("active");
+            document.getElementById(sectionId === 'profileSection' ? "profileTab" : "bookingTab").classList.add("active");
+        }
+
+        function viewBookingDetails(bookingId) {
+    // Show the modal
+    var modal = new bootstrap.Modal(document.getElementById('bookingDetailsModal'));
+    modal.show();
+    document.getElementById("bookingDetailsContent").innerHTML = "<p>Loading...</p>";
+
+    // Fetch booking details using the correct endpoint
+    fetch(`/api/Booking/GetBookingId/${bookingId}`)
+        .then(response => {
+            if (!response.ok) {
+                throw new Error(`HTTP error! Status: ${response.status}`);
+            }
+            return response.json();
+        })
+        .then(data => {
+            // Populate the modal with booking details
+            document.getElementById("bookingDetailsContent").innerHTML = `
+                <dl class="row">
+                    <dt class="col-sm-4">Booking ID</dt>
+                    <dd class="col-sm-8">${data.bookingId}</dd>
+
+                    <dt class="col-sm-4">Check-in Date</dt>
+                    <dd class="col-sm-8">${new Date(data.checkinDate).toLocaleDateString()}</dd>
+
+                    <dt class="col-sm-4">Check-out Date</dt>
+                    <dd class="col-sm-8">${new Date(data.checkoutDate).toLocaleDateString()}</dd>
+
+                    <dt class="col-sm-4">Booking Status</dt>
+                    <dd class="col-sm-8">${data.bookingStatus}</dd>
+
+                    <dt class="col-sm-4">Total Price</dt>
+                    <dd class="col-sm-8">${data.bookingTotalPrice.toLocaleString()} VND</dd>
+
+                    <dt class="col-sm-4">Room Title</dt>
+                    <dd class="col-sm-8">${data.room?.roomTitle ?? "N/A"}</dd>
+
+                    <dt class="col-sm-4">Room Quantity</dt>
+                    <dd class="col-sm-8">${data.roomQuantity}</dd>
+
+                    <dt class="col-sm-4">Room Price per Night</dt>
+                    <dd class="col-sm-8">${data.room?.roomPrice?.toLocaleString() ?? "N/A"} VND</dd>
+
+                    <dt class="col-sm-4">Customer Name</dt>
+                    <dd class="col-sm-8">${data.account?.accountFullname ?? "N/A"}</dd>
+
+                    <dt class="col-sm-4">Email</dt>
+                    <dd class="col-sm-8">${data.account?.accountEmail ?? "N/A"}</dd>
+
+                    <dt class="col-sm-4">Phone Number</dt>
+                    <dd class="col-sm-8">${data.account?.accountPhone ?? "N/A"}</dd>
+                </dl>`;
+        })
+        .catch(error => {
+            console.error("Error fetching booking details:", error);
+            document.getElementById("bookingDetailsContent").innerHTML = "<p class='text-danger'>Error loading booking details. Please try again.</p>";
+        });
+
+        }
+
         $(document).ready(function () {
             var message = '@TempData["message"]';
             if (message) {
                 Swal.fire({
-                    title: 'Update Success!',
+                    title: 'Notification',
                     text: message,
-                    icon: 'success',
+                    icon: message.includes("successfully") ? 'success' : 'error',
                     confirmButtonText: 'OK',
-                    timer: 3000, 
-                    timerProgressBar: true, 
-                    willClose: () => {
-                        clearInterval(timerInterval); 
-                    }
-                });
-            } else {
-                Swal.fire({
-                    title: 'Update Failed!',
-                    text: message,
-                    icon: 'error',
-                    confirmButtonText: 'OK',
-                    timer: 3000, 
-                    timerProgressBar: true, 
-                    willClose: () => {
-                        clearInterval(timerInterval); 
-                    }
+                    timer: 3000,
+                    timerProgressBar: true
                 });
             }
         });

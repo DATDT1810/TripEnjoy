@@ -37,7 +37,9 @@ namespace TripEnjoy.Infrastructure.Repositories
         // Get room by Hotel
         public async Task<IEnumerable<Room>> GetRoomsByHotelIdAsync(int hotelId)
         {
-            return await _context.Rooms.Where(r => r.HotelId == hotelId).ToListAsync();
+            return await _context.Rooms.Where(r => r.HotelId == hotelId)
+                .Include(rt => rt.RoomStatus)
+                .ToListAsync();
         }
         // Create a new room
         public async Task<Room> CreateRoomAsync(Room room)
