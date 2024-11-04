@@ -1,6 +1,7 @@
 ﻿using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.IdentityModel.Tokens.Jwt;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -54,6 +55,23 @@ namespace TripEnjoy.Presentation.WPF.Helper
             {
                 File.Delete(tokenFilePath);
             }
+        }
+
+        public static TokenPayload GetTokenPayload(string token)
+        {
+            var handler = new JwtSecurityTokenHandler();
+            var jwtToken = handler.ReadToken(token) as JwtSecurityToken;
+
+            if (jwtToken != null)
+            {
+                return new TokenPayload
+                {
+                    Email = jwtToken.Claims.FirstOrDefault(c => c.Type == "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/emailaddress")?.Value,
+                    Role = jwtToken.Claims.FirstOrDefault(c => c.Type == "http://schemas.microsoft.com/ws/2008/06/identity/claims/role")?.Value
+                };
+            }
+
+            return null;
         }
     }
 }

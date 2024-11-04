@@ -56,22 +56,24 @@ namespace TripEnjoy.Presentation.Razor.Helper
                     }
                     else
                     {
-                        // Nếu không làm mới được token, chuyển hướng đến trang đăng nhập
-                        var loginUrl = "/Login";
-                        var redirectResponse = new HttpResponseMessage(HttpStatusCode.Redirect);
-                        redirectResponse.Headers.Location = new Uri(loginUrl, UriKind.Relative);
-                        return redirectResponse;
+                        _tokenService.DeleteTokens();
+                        response.Content = new StringContent("/Login");
                     }
                 }
                 catch (Exception)
                 {
-                    var loginUrl = "/Login";
-                    var redirectResponse = new HttpResponseMessage(HttpStatusCode.Redirect);
-                    redirectResponse.Headers.Location = new Uri(loginUrl, UriKind.Relative);
-                    return redirectResponse;
+                    _tokenService.DeleteTokens();
+                    response.Content = new StringContent("/Login");
                 }
             }
-
+            else if(response.StatusCode == HttpStatusCode.InternalServerError)
+            {
+                response.Content =  new StringContent("/Home/404");
+            }
+            else if(response.StatusCode == HttpStatusCode.NotFound)
+            {
+                response.Content = new StringContent("/Home/404");
+            }
             return response;
         }
         private HttpRequestMessage CloneHttpRequestMessage(HttpRequestMessage req)
@@ -100,6 +102,7 @@ namespace TripEnjoy.Presentation.Razor.Helper
             return clone;
         }
 
-
+       
+        
     }
 }

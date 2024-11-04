@@ -1,6 +1,7 @@
 ﻿@page "{id:int}"
 @model TripEnjoy.Presentation.Razor.Pages.Room.RoomDetailModel
 @{
+
     ViewData["Title"] = "Room details";
 }
 
@@ -238,7 +239,7 @@
                             <a class="d-flex align-items-center py-3" data-bs-toggle="pill" href="#tab-4">
                                 <i class="fa fa-star text-primary me-2"></i>
                                 @{
-                                    int totalReviews = (Model.Comments?.Count() ?? 0) + (Model.Rates?.Count() ?? 0);
+                                    int totalReviews = Model.Rates?.Count() ?? 0;
                                 }
                                 <h6 class="mb-0">Reviews (@totalReviews)</h6>
                             </a>
@@ -305,22 +306,22 @@
                                     @foreach (var comment in Model.Comments.Where(c => c.CommentLevel == 1))
                                     {
                                         <div class="d-flex mb-4">
-                                            <img src="" class="img-fluid rounded" style="width: 45px; height: 45px;">
+                                            <img src="@comment.AccountImage" class="img-fluid rounded" style="width: 45px; height: 45px;">
                                             <div class="ps-3">
-                                                <h6>@comment.FullName <small class="text-body fw-normal fst-italic">@comment.CommentDate.ToString("dd MMM yyyy")</small></h6>
+                                                <h6>@comment.AccountName <small class="text-body fw-normal fst-italic">@comment.CommentDate.ToString("dd MMM yyyy")</small></h6>
 
                                                 <!-- Phần hiển thị sao đánh giá -->
                                                 <div class="rating mb-2">
                                                     @for (int i = 0; i < 5; i++)
                                                     {
-                                                        // if (i < comment.RateValue)
-                                                        // {
-                                                        //     <small class="fa fa-star text-warning"></small>
-                                                        // }
-                                                        // else
-                                                        // {
-                                                        //     <small class="fa fa-star text-muted"></small> 
-                                                        // }
+                                                        if (i < comment.RateValue)
+                                                        {
+                                                            <small class="fa fa-star text-warning"></small>
+                                                        }
+                                                        else
+                                                        {
+                                                            <small class="fa fa-star text-muted"></small> 
+                                                        }
                                                     }
                                                 </div>
 
@@ -331,9 +332,9 @@
                                                     @foreach (var reply in Model.Comments.Where(c => c.CommentReply == comment.CommentId.ToString()))
                                                     {
                                                         <div class="d-flex mt-3">
-                                                            <img src="" class="img-fluid rounded" style="width: 35px; height: 35px;">
+                                                            <img src="@comment.AccountImage" class="img-fluid rounded" style="width: 35px; height: 35px;">
                                                             <div class="ps-3">
-                                                                <h6>Anonymous Customer <small class="text-body fw-normal fst-italic">@reply.CommentDate.ToString("dd MMM yyyy")</small></h6>
+                                                                <h6>@comment.AccountName <small class="text-body fw-normal fst-italic">@reply.CommentDate.ToString("dd MMM yyyy")</small></h6>
                                                                 <p class="mb-2">@reply.CommentContent</p>
                                                             </div>
                                                         </div>
@@ -377,7 +378,7 @@
                             </script>
 
 
-                            <form id="review-form" method="post" asp-page-handler="RateAndComment">
+                            <form id="review-form" method="post" >
                                 <input type="hidden" asp-for="RateAndComment.RoomId" value="@Model.RoomDetail.RoomId" />
                                 <div class="row g-3">
                                     <div class="col-12 d-flex align-items-center">
@@ -584,7 +585,7 @@
                 <p class="text-center">No related rooms found.</p>
             }
             <div class="col-12 text-center wow fadeInUp" data-wow-delay="0.9s">
-                <a href class="btn btn-primary py-3 px-5">Explore All Rooms</a>
+                <a href="#" class="btn btn-primary py-3 px-5">Explore All Rooms</a>
             </div>
         </div>
     </div>
@@ -593,6 +594,7 @@
 @section Scripts {
     <!-- jQuery -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="~/js/rateandcomment.js"></script>
 }
 
 

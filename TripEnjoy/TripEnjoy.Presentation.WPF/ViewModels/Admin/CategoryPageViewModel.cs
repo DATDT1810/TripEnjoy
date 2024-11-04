@@ -36,15 +36,15 @@ namespace TripEnjoy.Presentation.WPF.ViewModels.Admin
         {
             Categories = new ObservableCollection<Category>();
             _ = LoadDataAsync();
-            Add = new RelayCommand<Category>(Canchose, async (_) => await ShowAddCatePopup());
+            Add = new RelayCommand<Category>(_ => true, async (_) => await ShowAddCatePopup());
             Update = new RelayCommand<Category>(Canchose, async (category) => await UpdateCate(category));
             Delete = new RelayCommand<Category>(Canchose, async (category) => await DeleteCate(category));
         }
 
         private async Task ShowAddCatePopup()
         {
-            //    var popup = new AddNewCategoryWindow();
-            //    popup.ShowDialog();
+            var popup = new AddNewCategoryWindow();
+            popup.ShowDialog();
         }
 
         private async Task DeleteCate(Category category)
