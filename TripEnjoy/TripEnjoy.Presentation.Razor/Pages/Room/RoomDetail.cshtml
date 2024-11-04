@@ -82,7 +82,7 @@
                     @{
                         string bedInfo = string.Empty;
                         string bathInfo = string.Empty;
-                        int maxOccupancy = 1; 
+                        int maxOccupancy = 1;
                         Dictionary<string, string> amenities = new Dictionary<string, string>();
 
                         switch (Model.RoomDetail.RoomTypeId)
@@ -248,57 +248,47 @@
                     <div class="tab-content">
                         <div id="tab-1" class="tab-pane fade show p-0 active">
                             <p>
-                                Sadipscing labore amet rebum est et justo gubergren. Et eirmod ipsum sit diam ut
-                                magna lorem. Nonumy vero labore lorem sanctus rebum et lorem magna kasd, stet
-                                amet magna accusam consetetur eirmod. Kasd accusam sit ipsum sadipscing et at at
-                                sanctus et. Ipsum sit gubergren dolores et, consetetur justo invidunt at et
-                                aliquyam ut et vero clita. Diam sea sea no sed dolores diam nonumy, gubergren
-                                sit stet no diam kasd vero.
+                                Each of our hotels offers a unique blend of comfort, convenience, and charm, ensuring an exceptional experience for every guest. From modern amenities to serene environments, our properties are thoughtfully designed to make your stay memorable, whether for relaxation, business, or exploration.
                             </p>
                         </div>
                         <div id="tab-2" class="tab-pane fade show p-0">
                             <p>
-                                Voluptua est takimata stet invidunt sed rebum nonumy stet, clita aliquyam dolores
-                                vero stet consetetur elitr takimata rebum sanctus. Sit sed accusam stet sit
-                                nonumy kasd diam dolores, sanctus lorem kasd duo dolor dolor vero sit et. Labore
-                                ipsum duo sanctus amet eos et. Consetetur no sed et aliquyam ipsum justo et,
-                                clita lorem sit vero amet amet est dolor elitr, stet et no diam sit. Dolor erat
-                                justo dolore sit invidunt.
+                                Explore our range of flexible pricing options designed to suit every stay duration and occasion. Whether you're booking nightly, weekly, or for a longer term, we offer competitive rates, including special prices for weekends and additional guests. Our security deposit ensures a smooth and secure experience for all.
                             </p>
                             <div class="row g-4">
                                 <div class="col-sm-6 d-flex align-items-center justify-content-between">
                                     <span>Nightly:</span>
                                     <hr class="flex-grow-1 my-0 mx-3">
-                                    <span>$100</span>
+                                    <span>3,000,000 VND </span>
                                 </div>
                                 <div class="col-sm-6 d-flex align-items-center justify-content-between">
                                     <span>Weekly:</span>
                                     <hr class="flex-grow-1 my-0 mx-3">
-                                    <span>$100</span>
+                                    <span>2,500,000 VND </span>
                                 </div>
                                 <div class="col-sm-6 d-flex align-items-center justify-content-between">
                                     <span>Monthly:</span>
                                     <hr class="flex-grow-1 my-0 mx-3">
-                                    <span>$100</span>
+                                    <span>2,000,000 VND </span>
                                 </div>
                                 <div class="col-sm-6 d-flex align-items-center justify-content-between">
                                     <span>Weekends:</span>
                                     <hr class="flex-grow-1 my-0 mx-3">
-                                    <span>$100</span>
+                                    <span>3,000,000 VND </span>
                                 </div>
                                 <div class="col-sm-6 d-flex align-items-center justify-content-between">
                                     <span>Additional Guest:</span>
                                     <hr class="flex-grow-1 my-0 mx-3">
-                                    <span>$100</span>
+                                    <span>2,800,000 VND </span>
                                 </div>
                                 <div class="col-sm-6 d-flex align-items-center justify-content-between">
                                     <span>Security Deposit:</span>
                                     <hr class="flex-grow-1 my-0 mx-3">
-                                    <span>$100</span>
+                                    <span>1,500,000 VND </span>
                                 </div>
                             </div>
                         </div>
-                        
+
                         <div id="tab-4" class="tab-pane fade show p-0">
                             <div id="review-section" data-room-id="@Model.RoomDetail.RoomId">
                                 <div class="mb-4">
@@ -431,7 +421,6 @@
             </div>
 
             <div class="col-lg-4">
-
                 <div class="bg-light mb-5 wow fadeInUp" data-wow-delay="0.1s">
                     <div class="border-bottom text-center text-dark p-3 pt-4 mb-3">
                         <span class="align-middle fs-1 lh-sm fw-bold">@Model.RoomDetail.RoomPrice.ToString("#,##0 VND") </span>
@@ -472,13 +461,12 @@
                                 <option value="3">Night 3</option>
                             </select>
                         </div>
+                    <div class="row g-3 p-4 pt-2">
                         <div class="col-12">
                             <a class="btn btn-primary py-3 w-100" asp-page="/Booking/Booking" asp-route-id="@Model.RoomDetail.RoomId">Book Now</a>
                         </div>
                     </div>
                 </div>
-
-
                 <div class="bg-light p-4 mb-5 wow fadeInUp" data-wow-delay="0.1s">
                     <h4 class="section-title text-start mb-4">Category</h4>
                     <a class="d-block position-relative mb-3" href>
@@ -565,7 +553,7 @@
                                             </div>
                                         </div>
                                     }
-                                </div>  
+                                </div>
                                 <div class="d-flex mb-3">
                                     <small class="border-end me-3 pe-3"><i class="fa fa-bed text-primary me-2"></i>@bedInfo</small>
                                     <small class="border-end me-3 pe-3"><i class="fa fa-bath text-primary me-2"></i>@bathInfo</small>

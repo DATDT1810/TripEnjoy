@@ -32,8 +32,17 @@ namespace TripEnjoy.Presentation.Razor.Pages.Booking
 
         public async Task<IActionResult> OnGet(int id)
         {
-            //var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-            id = 2;
+            // Lấy thông tin từ Session và gán vào BookingViewModel
+            BookingViewModel = new BookingViewModel
+            {
+                CheckinDate = DateTime.Parse(HttpContext.Session.GetString("CheckinDate")),
+                CheckoutDate = DateTime.Parse(HttpContext.Session.GetString("CheckoutDate")),
+                RoomQuantity = HttpContext.Session.GetInt32("RoomQuantity") ?? 1,
+                RoomId = id
+            };
+
+
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
             // Call API to get the room details
             var client = _httpClientFactory.CreateClient("DefaultClient");
             var roomResponse = await client.GetAsync($"https://localhost:7126/api/Room/{id}");
@@ -41,6 +50,12 @@ namespace TripEnjoy.Presentation.Razor.Pages.Booking
             {
                 string roomData = await roomResponse.Content.ReadAsStringAsync();
                 RoomDetail = JsonConvert.DeserializeObject<RoomDetail>(roomData);
+
+                // Tính toán tổng số ngày ở
+                int totalDays = (BookingViewModel.CheckoutDate - BookingViewModel.CheckinDate).Days;
+
+                // Tính tổng tiền dựa trên giá phòng, số lượng phòng và số ngày ở
+                BookingViewModel.BookingTotalPrice = RoomDetail.RoomPrice * BookingViewModel.RoomQuantity * totalDays;
             }
             else
             {
@@ -67,16 +82,23 @@ namespace TripEnjoy.Presentation.Razor.Pages.Booking
                 var profile = JsonConvert.DeserializeObject<UserProfile>(accountData);
                 UserProfile = profile;
             }
-
+            HttpContext.Session.SetString("BookingViewModel", JsonConvert.SerializeObject(BookingViewModel));
             return Page();
         }
 
         public async Task<IActionResult> OnPost()
         {
+            var client = _httpClientFactory.CreateClient("DefaultClient");
+
+            var bookingViewModelJson = HttpContext.Session.GetString("BookingViewModel");
+            if (bookingViewModelJson != null)
+            {
+                BookingViewModel = JsonConvert.DeserializeObject<BookingViewModel>(bookingViewModelJson);
+            }
+
             var request = new HttpRequestMessage(HttpMethod.Post, "https://localhost:7126/api/Booking/CreateBooking");
             request.Content = new StringContent(JsonConvert.SerializeObject(BookingViewModel), Encoding.UTF8, "application/json");
-            var client = _httpClientFactory.CreateClient("DefaultClient");
-            client.Timeout = TimeSpan.FromMinutes(2);
+            client.Timeout = TimeSpan.FromMinutes(3);
             var response = await client.SendAsync(request);
             if (response.IsSuccessStatusCode)
             {

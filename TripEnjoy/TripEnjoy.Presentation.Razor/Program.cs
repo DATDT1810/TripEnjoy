@@ -23,6 +23,15 @@ builder.Services.AddTransient<TokenHandler>();
 builder.Services.AddHttpClient();
 builder.Services.AddHttpClient("DefaultClient").AddHttpMessageHandler<TokenHandler>();
 builder.Services.AddHttpContextAccessor();
+
+// Cấu hình cho Session
+builder.Services.AddSession(options =>
+{
+    options.IdleTimeout = TimeSpan.FromMinutes(30); // Thời gian hết hạn Session
+    options.Cookie.HttpOnly = true; // Đảm bảo chỉ có thể truy cập Session cookie qua HTTP
+    options.Cookie.IsEssential = true; // Cần thiết cho hoạt động của ứng dụng
+});
+
 builder.Services.AddAuthentication(options =>
 {
     options.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme;
@@ -49,8 +58,11 @@ app.UseStaticFiles();
 
 app.UseRouting();
 
-app.UseAuthentication(); // Thêm dòng này để kích hoạt Authentication
+app.UseAuthentication();
 app.UseAuthorization();
+
+// Kích hoạt Session Middleware
+app.UseSession();  // Phải được thêm trước app.UseEndpoints
 
 app.UseEndpoints(endpoints =>  // Thêm Endpoint Mapping cho Razor Pages
 {
