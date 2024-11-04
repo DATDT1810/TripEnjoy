@@ -40,12 +40,12 @@ namespace TripEnjoy.Presentation.Web.Controllers
         [HttpGet("Room/{roomId}")]
         public async Task<IActionResult> GetCommentsByRoomId(int roomId)
         {
-            var comments = await _commentService.GetCommentByRoomIdAsync(roomId);
+            var comments = await _commentService.GetCommentAndReplyByRoomIdAsync(roomId);
             if (comments == null || !comments.Any())
             {
                 return NotFound("No comments found for this room.");
             }
-
+          
             return Ok(comments);
         }
 

@@ -20,7 +20,7 @@ namespace TripEnjoy.Presentation.Web.Controllers
             _bookingService = bookingService;
             _mapper = mapper;
         }
-
+        [Authorize]
         [HttpGet]
         public async Task<IActionResult> GetBookingList()
         {
@@ -40,7 +40,7 @@ namespace TripEnjoy.Presentation.Web.Controllers
             return Ok(booking);
         }
 
-
+        [Authorize]
         [HttpPost]
         [Route("CreateBooking")]
         public async Task<IActionResult> CreateBooking([FromBody] BookingDTO bookingDto)
@@ -81,5 +81,7 @@ namespace TripEnjoy.Presentation.Web.Controllers
 			}
 			return Ok(booking.BookingStatus);
 		}
+
+       // public async Task<IActionResult> CheckRoomBookedForAccount
 	}
 }

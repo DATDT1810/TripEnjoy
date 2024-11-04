@@ -107,8 +107,17 @@
                 <a asp-page="/Room/RoomList" asp-route-hotelId="@hotel.HotelId" class="room-item rounded d-block text-decoration-none">
                     <div class="room-item rounded room-item_hotel">
                         <div class="position-relative">
-                            <img class="img-fluid" src="@hotel.HotelImages.First().ImageUrl" alt="Hotel Image">
-                            <small class="position-absolute start-0 top-100 translate-middle-y bg-warning text-white rounded py-1 px-3 ms-4"><i class="fa fa-solid fa-hotel"></i>
+                            @if (hotel.HotelImages != null && hotel.HotelImages.Any())
+                            {
+                                var imageUrl = hotel.HotelImages.FirstOrDefault().ImageUrl;
+                                @if (imageUrl != null)
+                                {
+                                    <img class="img-fluid" src="@imageUrl" alt="Hotel Image">
+                                }
+
+                            }
+                            <small class="position-absolute start-0 top-100 translate-middle-y bg-warning text-white rounded py-1 px-3 ms-4">
+                                <i class="fa fa-solid fa-hotel"></i>
                                 @if (hotel.Category != null && !string.IsNullOrEmpty(hotel.Category.CategoryName))
                                 {
                                     @hotel.Category.CategoryName
@@ -116,12 +125,12 @@
                                 else
                                 {
                                     @:Unknown Category
-                                }                                   
+                                }
                             </small>
                         </div>
                         <div class="p-4 mt-2">
                             <h5 class="mb-3">@hotel.HotelName</h5>
-                            
+
                             <div class="d-flex mb-3">
                                 <small class="border-end me-3 pe-3">
                                     <i class="fa-solid fa-location-dot text-warning me-2"></i>@hotel.HotelAddress
@@ -151,8 +160,17 @@
                     <a asp-page="/Room/RoomList" asp-route-hotelId="@hotel.HotelId" class="room-item rounded d-block text-decoration-none">
                         <div class="room-item rounded room-item_hotel">
                             <div class="position-relative">
-                                <img class="img-fluid" src="@hotel.HotelImages.First().ImageUrl" alt="Hotel Image">
-                                <small class="position-absolute start-0 top-100 translate-middle-y bg-warning text-white rounded py-1 px-3 ms-4"><i class="fa fa-solid fa-hotel"></i>
+                                @if (hotel.HotelImages != null && hotel.HotelImages.Any())
+                                {
+                                    var imageUrl = hotel.HotelImages.FirstOrDefault().ImageUrl;
+                                    @if (imageUrl != null)
+                                    {
+                                        <img class="img-fluid" src="@imageUrl" alt="Hotel Image">
+                                    }
+
+                                }
+                                <small class="position-absolute start-0 top-100 translate-middle-y bg-warning text-white rounded py-1 px-3 ms-4">
+                                    <i class="fa fa-solid fa-hotel"></i>
                                     @if (hotel.Category != null && !string.IsNullOrEmpty(hotel.Category.CategoryName))
                                     {
                                         @hotel.Category.CategoryName
@@ -335,7 +353,7 @@
     </div>
 </div>
 
-@section Scripts{
+@section Scripts {
     <script>
         document.querySelectorAll('a.room-item .text-body.mb-3').forEach(function (p) {
             let fullText = p.textContent;
@@ -512,14 +530,14 @@
                 const isCurrentMonth = today.getFullYear() === year && today.getMonth() === month;
                 const daysInMonth = new Date(year, month + 1, 0).getDate();
                 let calendarHtml = `
-                            <div class="calendar-header">
-                                <h5>${date.toLocaleString('default', { month: 'long' })} ${year}</h5>
-                                <div class="calendar-button">
-                                    <button class="prev-month" data-calendar="${calendarType}">&lt;</button>
-                                    <button class="next-month" data-calendar="${calendarType}">&gt;</button>
-                                </div>
-                            </div>
-                            <table><tr>`;
+                                    <div class="calendar-header">
+                                        <h5>${date.toLocaleString('default', { month: 'long' })} ${year}</h5>
+                                        <div class="calendar-button">
+                                            <button class="prev-month" data-calendar="${calendarType}">&lt;</button>
+                                            <button class="next-month" data-calendar="${calendarType}">&gt;</button>
+                                        </div>
+                                    </div>
+                                    <table><tr>`;
                 const daysOfWeek = ['Su', 'Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa'];
 
                 daysOfWeek.forEach(day => {
