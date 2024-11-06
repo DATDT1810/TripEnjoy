@@ -38,7 +38,7 @@ namespace TripEnjoy.Infrastructure.Repositories
                 throw new Exception("Room not found.");
             }
 
-            // Kiểm tra xem số lượng phòng còn đủ không
+            // Kiểm tra quantity
             if (room.RoomQuantity < booking.RoomQuantity)
             {
                 throw new Exception($"Not enough rooms available. Only {room.RoomQuantity} rooms left.");
@@ -73,8 +73,18 @@ namespace TripEnjoy.Infrastructure.Repositories
 
             // Lưu thông tin booking
             _context.Bookings.Add(booking);
-            await _context.SaveChangesAsync();  // Lưu thông tin booking trước
-
+            //await _context.SaveChangesAsync();
+            try
+            {
+                await _context.SaveChangesAsync();
+            }
+            catch (DbUpdateException ex)
+            {
+                Console.WriteLine("Error saving booking: " + ex.Message);
+                if (ex.InnerException != null)
+                    Console.WriteLine("Inner exception: " + ex.InnerException.Message);
+                throw;
+            }
             return booking;
         }
 
@@ -109,6 +119,7 @@ namespace TripEnjoy.Infrastructure.Repositories
             booking.BookingStatus = "Cancelled";
             _context.Bookings.Update(booking);
             await _context.SaveChangesAsync();
+
             return booking;
         }
 

@@ -45,5 +45,10 @@ namespace TripEnjoy.Application.Services.Rate
         {
             return await _rateRepository.GetRatesForRoomAsync(roomId);
         }
+
+        public async Task<bool> HasUserBookedRoomAsync(int roomId, int accountId)
+        {
+           return await _rateRepository.HasUserBookedRoomAsync(roomId, accountId);
+        }
     }
 }

@@ -310,7 +310,7 @@
                                                         }
                                                         else
                                                         {
-                                                            <small class="fa fa-star text-muted"></small> 
+                                                            <small class="fa fa-star text-muted"></small>
                                                         }
                                                     }
                                                 </div>
@@ -368,7 +368,7 @@
                             </script>
 
 
-                            <form id="review-form" method="post" >
+                            <form id="review-form" method="post">
                                 <input type="hidden" asp-for="RateAndComment.RoomId" value="@Model.RoomDetail.RoomId" />
                                 <div class="row g-3">
                                     <div class="col-12 d-flex align-items-center">
@@ -423,50 +423,57 @@
             <div class="col-lg-4">
                 <div class="bg-light mb-5 wow fadeInUp" data-wow-delay="0.1s">
                     <div class="border-bottom text-center text-dark p-3 pt-4 mb-3">
-                        <span class="align-middle fs-1 lh-sm fw-bold">@Model.RoomDetail.RoomPrice.ToString("#,##0 VND") </span>
+                        <span class="align-middle fs-1 lh-sm fw-bold">@Model.RoomDetail.RoomPrice.ToString("#,##0 VND")</span>
                         <span class="align-bottom fs-6 lh-lg">/ Night</span>
                     </div>
-                    <div class="row g-3 p-4 pt-2">
-                        <div class="col-12">
-                            <div class="date" id="date3" data-target-input="nearest">
-                                <input type="text" class="form-control datetimepicker-input" placeholder="Check in" data-target="#date3" data-toggle="datetimepicker" />
+                    @{
+                        bool isSearchSessionAvailable = HttpContext.Session.GetString("CheckinDate") != null &&
+                        HttpContext.Session.GetString("CheckoutDate") != null &&
+                        HttpContext.Session.GetInt32("RoomQuantity") != null;
+                    }
+
+                    @if (!isSearchSessionAvailable)
+                    {
+                        <!-- Hiển thị form nếu không có session từ search -->
+                        <form method="post" asp-page-handler="BookingNoSearch">
+                            <div class="row g-3 p-4 pt-2">
+                                <div class="col-12">
+                                    <label for="checkinDate">Check In</label>
+                                    <div class="input-group date" id="date3" data-target-input="nearest">
+                                        <input asp-for="BookingNoSearchVM.Checkin" type="text" class="form-control datetimepicker-input" placeholder="Check in" data-target="#date3" />
+                                        <div class="input-group-append" data-target="#date3" data-toggle="datetimepicker">
+                                            <div class="input-group-text"><i class="fa fa-calendar"></i></div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-12">
+                                    <label for="checkoutDate">Check Out</label>
+                                    <div class="input-group date" id="date4" data-target-input="nearest">
+                                        <input asp-for="BookingNoSearchVM.Checkout" type="text" class="form-control datetimepicker-input" placeholder="Check out" data-target="#date4" />
+                                        <div class="input-group-append" data-target="#date4" data-toggle="datetimepicker">
+                                            <div class="input-group-text"><i class="fa fa-calendar"></i></div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-12">
+                                    <label for="quantity">Quantity</label>
+                                    <input asp-for="BookingNoSearchVM.Quantity" type="number" class="form-control" min="1" />
+                                </div>
+                                <div class="col-12 pt-2">
+                                    <button class="btn btn-primary py-3 w-100" type="submit">Book Now</button>
+                                </div>
                             </div>
-                        </div>
-                        <div class="col-12">
-                            <div class="date" id="date4" data-target-input="nearest">
-                                <input type="text" class="form-control datetimepicker-input" placeholder="Check out" data-target="#date4" data-toggle="datetimepicker" />
-                            </div>
-                        </div>
-                        <div class="col-12">
-                            <select class="form-select">
-                                <option selected>Adult</option>
-                                <option value="1">Adult 1</option>
-                                <option value="2">Adult 2</option>
-                                <option value="3">Adult 3</option>
-                            </select>
-                        </div>
-                        <div class="col-12">
-                            <select class="form-select">
-                                <option selected>Child</option>
-                                <option value="1">Child 1</option>
-                                <option value="2">Child 2</option>
-                                <option value="3">Child 3</option>
-                            </select>
-                        </div>
-                        <div class="col-12">
-                            <select class="form-select">
-                                <option selected>Night</option>
-                                <option value="1">Night 1</option>
-                                <option value="2">Night 2</option>
-                                <option value="3">Night 3</option>
-                            </select>
-                        </div>
-                    <div class="row g-3 p-4 pt-2">
-                        <div class="col-12">
+                        </form>
+                    }
+                    else
+                    {
+                        <div class="col-12 pt-2">
                             <a class="btn btn-primary py-3 w-100" asp-page="/Booking/Booking" asp-route-id="@Model.RoomDetail.RoomId">Book Now</a>
                         </div>
-                    </div>
+                    }
+
                 </div>
+
                 <div class="bg-light p-4 mb-5 wow fadeInUp" data-wow-delay="0.1s">
                     <h4 class="section-title text-start mb-4">Category</h4>
                     <a class="d-block position-relative mb-3" href>
@@ -572,9 +579,6 @@
             {
                 <p class="text-center">No related rooms found.</p>
             }
-            <div class="col-12 text-center wow fadeInUp" data-wow-delay="0.9s">
-                <a href="#" class="btn btn-primary py-3 px-5">Explore All Rooms</a>
-            </div>
         </div>
     </div>
 </div>

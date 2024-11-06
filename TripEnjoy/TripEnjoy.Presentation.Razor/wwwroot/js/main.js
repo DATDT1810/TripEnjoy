@@ -125,24 +125,6 @@
         $(".owl-carousel.international-hotels-carousel").owlCarousel(owlCarouselSettings);
     });
 
-
-
-    //// Modal Video
-    //$(document).ready(function () {
-    //    var $videoSrc;
-    //    $('.btn-play').click(function () {
-    //        $videoSrc = $(this).data("src");
-    //    });
-    //    console.log($videoSrc);
-
-    //    $('#videoModal').on('shown.bs.modal', function (e) {
-    //        $("#video").attr('src', $videoSrc + "?autoplay=1&amp;modestbranding=1&amp;showinfo=0");
-    //    })
-
-    //    $('#videoModal').on('hide.bs.modal', function (e) {
-    //        $("#video").attr('src', $videoSrc);
-    //    })
-    //});
    
     // Facts counter
     $('[data-toggle="counter-up"]').counterUp({
@@ -181,6 +163,41 @@
             close: 'fa fa-times'
         }
     });
+
+    $(document).ready(function () {
+        $('#date3').datetimepicker({
+            format: 'YYYY-MM-DD',
+            defaultDate: new Date(), 
+            icons: {
+                time: 'fa fa-clock',
+                date: 'fa fa-calendar',
+                up: 'fa fa-chevron-up',
+                down: 'fa fa-chevron-down',
+                previous: 'fa fa-chevron-left',
+                next: 'fa fa-chevron-right',
+                today: 'fa fa-check',
+                clear: 'fa fa-trash',
+                close: 'fa fa-times'
+            }
+        });
+
+        $('#date4').datetimepicker({
+            format: 'YYYY-MM-DD',
+            defaultDate: moment().add(1, 'days'), // Ngày tiếp theo làm mặc định
+            icons: {
+                time: 'fa fa-clock',
+                date: 'fa fa-calendar',
+                up: 'fa fa-chevron-up',
+                down: 'fa fa-chevron-down',
+                previous: 'fa fa-chevron-left',
+                next: 'fa fa-chevron-right',
+                today: 'fa fa-check',
+                clear: 'fa fa-trash',
+                close: 'fa fa-times'
+            }
+        });
+    });
+
 
 
 

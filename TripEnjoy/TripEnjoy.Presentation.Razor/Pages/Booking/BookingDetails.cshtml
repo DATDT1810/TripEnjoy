@@ -13,9 +13,6 @@
             <div class="card-header">Booking Information</div>
             <div class="card-body">
                 <dl class="row">
-                    <dt class="col-sm-4">Booking ID</dt>
-                    <dd class="col-sm-8">@Model.Booking.BookingId</dd>
-
                     <dt class="col-sm-4">Check-in Date</dt>
                     <dd class="col-sm-8">@Model.Booking.CheckinDate.ToString("MM/dd/yyyy")</dd>
 
@@ -23,7 +20,8 @@
                     <dd class="col-sm-8">@Model.Booking.CheckoutDate.ToString("MM/dd/yyyy")</dd>
 
                     <dt class="col-sm-4">Booking Status</dt>
-                    Booking
+                    <dd class="col-sm-8">@Model.Booking.BookingStatus</dd>
+
                     <dt class="col-sm-4">Total Price</dt>
                     <dd class="col-sm-8">@Model.Booking.BookingTotalPrice.ToString("#,##0 VND")</dd>
                 </dl>
@@ -35,13 +33,13 @@
             <div class="card-body">
                 <dl class="row">
                     <dt class="col-sm-4">Room Title</dt>
-                    <dd class="col-sm-8">@Model.Booking.Room.RoomTitle ?? "N/A"</dd>
+                    <dd class="col-sm-8">@Model.Booking.Room.RoomTitle</dd>
 
                     <dt class="col-sm-4">Room Quantity</dt>
                     <dd class="col-sm-8">@Model.Booking.RoomQuantity</dd>
 
                     <dt class="col-sm-4">Room Price per Night</dt>
-                    <dd class="col-sm-8">@Model.Booking.Room?.RoomPrice.ToString("#,##0 VND") ?? "N/A"</dd>
+                    <dd class="col-sm-8">@Model.Booking.Room?.RoomPrice.ToString("#,##0 VND")</dd>
                 </dl>
             </div>
         </div>

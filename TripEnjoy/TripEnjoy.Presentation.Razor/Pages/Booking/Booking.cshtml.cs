@@ -30,19 +30,26 @@ namespace TripEnjoy.Presentation.Razor.Pages.Booking
         [BindProperty(SupportsGet = true)]
         public UserProfile UserProfile { get; set; }
 
-        public async Task<IActionResult> OnGet(int id)
+        public async Task<IActionResult> OnGet()
         {
-            // Lấy thông tin từ Session và gán vào BookingViewModel
+            var id = HttpContext.Session.GetInt32("RoomId");
+
+            if (id == null)
+            {
+                ModelState.AddModelError(string.Empty, "No Room ID found in session.");
+                return RedirectToPage("/Index");
+            }
+
             BookingViewModel = new BookingViewModel
             {
-                CheckinDate = DateTime.Parse(HttpContext.Session.GetString("CheckinDate")),
-                CheckoutDate = DateTime.Parse(HttpContext.Session.GetString("CheckoutDate")),
+                CheckinDate = DateTime.Parse(HttpContext.Session.GetString("CheckinDate") ?? DateTime.Now.ToString()),
+                CheckoutDate = DateTime.Parse(HttpContext.Session.GetString("CheckoutDate") ?? DateTime.Now.AddDays(1).ToString()),
                 RoomQuantity = HttpContext.Session.GetInt32("RoomQuantity") ?? 1,
-                RoomId = id
+                RoomId = id.Value
             };
 
 
-            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var userId = User.FindFirstValue(ClaimTypes.Email);
             // Call API to get the room details
             var client = _httpClientFactory.CreateClient("DefaultClient");
             var roomResponse = await client.GetAsync($"https://localhost:7126/api/Room/{id}");
