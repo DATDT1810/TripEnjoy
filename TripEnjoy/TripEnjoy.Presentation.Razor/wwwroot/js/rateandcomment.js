@@ -4,66 +4,88 @@ function getCookie(name) {
     for (let i = 0; i < cookieArr.length; i++) {
         let cookiePair = cookieArr[i].split("=");
         if (name == cookiePair[0].trim()) {
-            return decodeURIComponent(cookiePair[1]); // Giải mã cookie và trả về giá trị
+            return decodeURIComponent(cookiePair[1]); 
         }
     }
-    return null; // Trả về null nếu không tìm thấy cookie
+    return null; 
 }
 
 // Đăng ký sự kiện khi form bình luận được gửi
 $("#review-form").submit(function (event) {
-    event.preventDefault(); // Ngăn chặn hành vi gửi form mặc định
+    event.preventDefault();
 
-    const rateValue = document.getElementById("rate-value").value; // Lấy giá trị đánh giá
-    const commentContent = document.getElementById("comment-content").value; // Lấy nội dung bình luận
+    const rateValue = document.getElementById("rate-value").value;
+    const commentContent = document.getElementById("comment-content").value;
 
-    // Kiểm tra xem người dùng đã chọn đánh giá và viết bình luận chưa
     if (rateValue === "0" || commentContent.trim() === "") {
-        alert("Please provide a rating and comment before submitting."); // Thông báo nếu không có đánh giá hoặc bình luận
-        return; // Ngăn không cho gửi form
+        Swal.fire({
+            icon: 'warning',
+            title: 'Incomplete Form',
+            text: 'Please provide a rating and comment before submitting.',
+            confirmButtonText: 'OK'
+        });
+        return;
     }
 
-    // Tạo đối tượng DTO cho yêu cầu
     var rateAndCommentDTO = {
         RoomId: $('#review-form input[name="RateAndComment.RoomId"]').val(),
-        RateValue: $('#rate-value').val(),
-        CommentContent: $('#comment-content').val(),
-        ReviewDate: new Date().toISOString() // Thời gian hiện tại
+        RateValue: rateValue,
+        CommentContent: commentContent,
+        ReviewDate: new Date().toISOString()
     };
 
-    var accessToken = getCookie('accessToken'); // Lấy access token từ cookie
+    var accessToken = getCookie('accessToken');
     if (accessToken == null) {
-        alert("You must login to rate and comment!"); // Thông báo lỗi nếu chưa đăng nhập
-        return; // Ngăn không cho gửi form
+        Swal.fire({
+            icon: 'info',
+            title: 'Login Required',
+            text: 'You must login to rate and comment!',
+            confirmButtonText: 'OK'
+        });
+        return;
     }
 
-    // Gửi yêu cầu AJAX
     $.ajax({
-        url: "https://localhost:7126/api/Rate/RateAndComment", // Đường dẫn đến API
-        type: "POST", // Phương thức POST
-        contentType: "application/json", // Kiểu nội dung là JSON
-        data: JSON.stringify(rateAndCommentDTO), // Chuyển đổi đối tượng thành JSON
-        xhrFields: {
-            withCredentials: true // Gửi cookie cùng yêu cầu
-        },
+        url: "https://localhost:7126/api/Rate/RateAndComment",
+        type: "POST",
+        contentType: "application/json",
+        data: JSON.stringify(rateAndCommentDTO),
         headers: {
-            'Authorization': 'Bearer ' + accessToken // Thêm token vào header
+            'Authorization': 'Bearer ' + accessToken
         },
         success: function (response) {
-            alert("Thanh Cong"); // Thông báo thành công
-            window.location.reload(); // Tải lại trang
+            Swal.fire({
+                icon: 'success',
+                title: 'Review Submitted',
+                text: 'Your review has been posted successfully!',
+                confirmButtonText: 'OK'
+            });
+
+            const commentData = {
+                AccountImage: response.Comment?.AccountImage || "default-image-url",
+                AccountName: response.Comment?.FullName || "Anonymous",
+                CommentDate: response.Comment?.CommentDate || new Date().toISOString(),
+                RateValue: response.Rate?.RateValue || rateValue,
+                CommentContent: response.Comment?.CommentContent || commentContent,
+            };
+
+            addNewCommentToList(commentData);
         },
-        error: function (xhr, status, error) {
-            console.error("Error:", error); // Ghi lại lỗi
-            console.log("Response Text:", xhr.responseText); // Ghi lại phản hồi từ server
-            alert("Error when sending rate and comment: " + xhr.responseText); // Thông báo lỗi
+        error: function (xhr) {
+            Swal.fire({
+                icon: 'error',
+                title: 'Error',
+                text: `An error occurred: ${xhr.responseText || 'Please try again later.'}`,
+                confirmButtonText: 'OK'
+            });
         }
     });
 });
 
+
 // Hàm thêm bình luận mới vào danh sách bình luận
 function addNewCommentToList(comment) {
-    const reviewSection = document.getElementById('review-section'); // Lấy phần tử nơi sẽ hiển thị bình luận
+    const reviewSection = document.getElementById('review-section');
     const newCommentHTML = `
         <div class="d-flex mb-4">
             <img src="${comment.AccountImage}" class="img-fluid rounded" style="width: 45px; height: 45px;">
@@ -76,6 +98,119 @@ function addNewCommentToList(comment) {
                 <p class="mb-2">${comment.CommentContent}</p>
             </div>
         </div>`;
-    reviewSection.insertAdjacentHTML('afterbegin', newCommentHTML); // Thêm bình luận mới vào đầu danh sách
+    reviewSection.insertAdjacentHTML('beforeend', newCommentHTML); 
+    //afterbegin
 }
-  
+
+
+////// Reply
+function getCookie(name) {
+    let cookieArr = document.cookie.split(";");
+    for (let i = 0; i < cookieArr.length; i++) {
+        let cookiePair = cookieArr[i].split("=");
+        if (name == cookiePair[0].trim()) {
+            return decodeURIComponent(cookiePair[1]);
+        }
+    }
+    return null;
+}
+
+
+// Đăng ký sự kiện cho nút submit của form reply
+$(".reply-form").submit(function (event) {
+    event.preventDefault(); // Ngăn không cho form gửi lại
+
+    const form = $(this);
+    const roomId = form.find('input[name="CommentReply.RoomId"]').val();
+    const replyToCommentId = form.find('input[name="CommentReply.ReplyToComment"]').val();
+    const replyContent = form.find('textarea[name="CommentReply.Content"]').val().trim();
+
+    if (!replyContent) {
+        Swal.fire({
+            icon: 'warning',
+            title: 'Warning',
+            text: 'Reply content cannot be empty!',
+            confirmButtonText: 'OK'
+        });
+        return;
+    }
+
+    var accessToken = getCookie('accessToken');
+    if (accessToken == null) {
+        Swal.fire({
+            icon: 'info',
+            title: 'Login Required',
+            text: 'You must login to reply to comments!',
+            confirmButtonText: 'OK'
+        });
+        return;
+    }
+
+    var replyDTO = {
+        RoomId: roomId,
+        Content: replyContent,
+        ReplyToComment: replyToCommentId
+    };
+
+    $.ajax({
+        url: 'https://localhost:7126/api/Comment/Reply',
+        type: 'POST',
+        contentType: 'application/json',
+        data: JSON.stringify(replyDTO),
+        headers: {
+            'Authorization': 'Bearer ' + accessToken
+        },
+        success: function (response) {
+            if (response.success) {
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Success',
+                    text: 'Reply posted successfully!',
+                    confirmButtonText: 'OK'
+                }).then(() => {
+                    addNewReplyToList(response.data);
+                    form[0].reset();
+                    form.hide();
+                });
+            } else {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error',
+                    text: response.message || 'Failed to post reply.',
+                    confirmButtonText: 'OK'
+                });
+            }
+        },
+        error: function (xhr) {
+            Swal.fire({
+                icon: 'error',
+                title: 'Error',
+                text: `An error occurred: ${xhr.responseText || 'Please try again later.'}`,
+                confirmButtonText: 'OK'
+            });
+        }
+    });
+});
+
+// Hàm để thêm phản hồi mới vào danh sách bình luận
+function addNewReplyToList(reply) {
+    const replySection = document.querySelector(`.cmt-replies[data-comment-id="${reply.ReplyToComment}"]`);
+    const newReplyHTML = `
+                <div class="d-flex mt-3">
+                    <img src="${reply.AccountImage || 'default-image-url'}" class="img-fluid rounded" style="width: 35px; height: 35px;">
+                    <div class="ps-3">
+                        <h6>${reply.AccountName || 'Anonymous'} <small class="text-body fw-normal fst-italic">${new Date(reply.CommentDate).toLocaleDateString('vi-VN')}</small></h6>
+                        <p class="mb-2">${reply.Content}</p>
+                    </div>
+                </div>`;
+    if (replySection) {
+        replySection.insertAdjacentHTML('beforeend', newReplyHTML); 
+    } else {
+        Swal.fire({
+            icon: 'error',
+            title: 'Error',
+            text: 'Unable to find the reply section to update.',
+            confirmButtonText: 'OK'
+        });
+    }
+}

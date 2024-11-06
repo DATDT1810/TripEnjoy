@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 using System.Net.WebSockets;
 using System.Security.Claims;
 using TripEnjoy.Application.Data;
+using TripEnjoy.Application.Interface;
 using TripEnjoy.Application.Interface.Booking_Room;
 using TripEnjoy.Domain.Models;
 using TripEnjoy.Infrastructure.Entities;
@@ -16,10 +17,12 @@ namespace TripEnjoy.Presentation.Web.Controllers
     public class BookingController : ControllerBase
     {
         private readonly IBookingService _bookingService;
+        private readonly IAccountService _accountService;
         private readonly IMapper _mapper;
-        public BookingController(IBookingService bookingService, IMapper mapper)
+        public BookingController(IBookingService bookingService, IAccountService accountService, IMapper mapper)
         {
             _bookingService = bookingService;
+            _accountService = accountService;
             _mapper = mapper;
         }
         [Authorize]
@@ -47,11 +50,21 @@ namespace TripEnjoy.Presentation.Web.Controllers
         [Route("CreateBooking")]
         public async Task<IActionResult> CreateBooking([FromBody] BookingDTO bookingDto)
         {
+            ClaimsPrincipal claims = this.User;
+            var email = claims.FindFirst(ClaimTypes.Email)?.Value;
+            if (email == null)
+            {
+                return BadRequest();
+            }
+            var account = await _accountService.GetAccountByEmail(email);
+            var accountId = account.AccountId;
             if (bookingDto == null)
             {
                 return BadRequest();
             }
+            bookingDto.AccountId = accountId;
             var booking = _mapper.Map<Booking>(bookingDto);
+            
             await _bookingService.CreateBookingAsync(booking);
           return Ok(booking.BookingId);
         }

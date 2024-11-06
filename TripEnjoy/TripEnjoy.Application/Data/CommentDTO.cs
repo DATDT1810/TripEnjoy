@@ -16,7 +16,7 @@ namespace TripEnjoy.Application.Data
         public int RoomId { get; set; }           
         public string CommentContent { get; set; } 
         public int CommentLevel { get; set; }      
-        public string CommentReply { get; set; }
+        public string CommentReply { get; set; } // Id của comment cha
         public DateTime CommentDate { get; set; }
     }
 }

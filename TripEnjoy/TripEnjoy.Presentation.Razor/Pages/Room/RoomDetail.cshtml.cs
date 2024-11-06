@@ -32,6 +32,10 @@ namespace TripEnjoy.Presentation.Razor.Pages.Room
 
         [BindProperty(SupportsGet = true)]
         public CommentReply CommentReply { get; set; } = new CommentReply();
+
+        [BindProperty(SupportsGet = true)]
+        public BookingNoSearchVM BookingNoSearchVM { get; set; }
+
         public RoomDetailModel(IHttpClientFactory httpClientFactory)
         {
             _httpClientFactory = httpClientFactory;
@@ -43,7 +47,7 @@ namespace TripEnjoy.Presentation.Razor.Pages.Room
             {
                 return NotFound();
             }
-
+            HttpContext.Session.SetInt32("RoomId", id);
             var client = _httpClientFactory.CreateClient("DefaultClient");
             var response = await client.GetAsync($"https://localhost:7126/api/Room/{id}");
             if (response.IsSuccessStatusCode)
@@ -66,7 +70,7 @@ namespace TripEnjoy.Presentation.Razor.Pages.Room
                 {
                     string relatedRoomsData = await relatedRoomsResponse.Content.ReadAsStringAsync();
                     RelatedRooms = JsonSerializer.Deserialize<List<RoomDetail>>(relatedRoomsData, option);
-                    // Loại bỏ phòng hiện tại khỏi danh sách phòng liên quan
+                    // loại bỏ phòng hiện tại ra
                     RelatedRooms = RelatedRooms.Where(room => room.RoomId != id).ToList();
 
                     // Lấy ảnh cho từng phòng trong danh sách RelatedRooms
@@ -88,7 +92,7 @@ namespace TripEnjoy.Presentation.Razor.Pages.Room
                 if (ratesResponse.IsSuccessStatusCode)
                 {
                     string ratesData = await ratesResponse.Content.ReadAsStringAsync();
-                    Rates = JsonSerializer.Deserialize<List<Rate>>(ratesData, option); //3
+                    Rates = JsonSerializer.Deserialize<List<Rate>>(ratesData, option); //3 lượt rate trong phòng này
                 }
 
                 
@@ -96,7 +100,7 @@ namespace TripEnjoy.Presentation.Razor.Pages.Room
                 if (commentsResponse.IsSuccessStatusCode)
                 {
                     string commentsData = await commentsResponse.Content.ReadAsStringAsync();
-                    Comments = JsonSerializer.Deserialize<List<Comment>>(commentsData, option); // 5
+                    Comments = JsonSerializer.Deserialize<List<Comment>>(commentsData, option); // 5 comment trong phòng
              
                     var ratesList = Rates.ToList(); // chuyển đổi cho việc sử dụng for
                     var rateIndex = 0; // start = 0 -> rate ++
@@ -143,7 +147,7 @@ namespace TripEnjoy.Presentation.Razor.Pages.Room
 
             if (!response.IsSuccessStatusCode)
             {
-                return StatusCode((int)response.StatusCode, "Error when submitting reply."); 
+                return RedirectToPage("/Login");
             }
             return RedirectToPage(new { id = CommentReply.RoomId });
         }
@@ -160,12 +164,10 @@ namespace TripEnjoy.Presentation.Razor.Pages.Room
                 RateValue = RateAndComment.RateValue,
                 CommentContent = RateAndComment.CommentContent,
                 ReviewDate = DateTime.Now
-
             };
 
-            string data = JsonSerializer.Serialize(RateAndComment);
 
-            // Serialize the DTO and send it to the API
+            // rate and comment
             var content = new StringContent(JsonSerializer.Serialize(rateAndCommentDTO), Encoding.UTF8, "application/json");
             var response = await client.PostAsync("https://localhost:7126/api/Rate/RateAndComment", content);
 
@@ -176,5 +178,24 @@ namespace TripEnjoy.Presentation.Razor.Pages.Room
 
             return new JsonResult(new { success = true, message = "Rate and comment added successfully!" });
         }
+
+
+        public async Task<IActionResult> OnPostBookingNoSearch()
+        {
+            if (BookingNoSearchVM != null)
+            {
+                // Kiểm tra và lấy dữ liệu từ form hoặc session
+                var checkinDate = BookingNoSearchVM?.Checkin ?? DateTime.Parse(HttpContext.Session.GetString("CheckinDate") ?? DateTime.Now.ToString());
+                var checkoutDate = BookingNoSearchVM?.Checkout ?? DateTime.Parse(HttpContext.Session.GetString("CheckoutDate") ?? DateTime.Now.AddDays(1).ToString());
+                var quantity = BookingNoSearchVM?.Quantity ?? HttpContext.Session.GetInt32("RoomQuantity") ?? 1;
+
+                // Cập nhật lại session dựa trên form
+                HttpContext.Session.SetString("CheckinDate", checkinDate.ToString());
+                HttpContext.Session.SetString("CheckoutDate", checkoutDate.ToString());
+                HttpContext.Session.SetInt32("RoomQuantity", quantity);
+            }
+            return RedirectToPage("/Booking/Booking");
+        }
+
     }
 }

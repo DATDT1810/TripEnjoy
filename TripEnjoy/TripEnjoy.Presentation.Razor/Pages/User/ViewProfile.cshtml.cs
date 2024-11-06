@@ -19,12 +19,16 @@ namespace TripEnjoy.Presentation.Razor.Pages.User
         [BindProperty(SupportsGet = true)]
         public UserProfile? UserProfile { get; set; }
 
+        [BindProperty(SupportsGet = true)]
+        public List<ViewModels.Booking> Booking { get; set; }
+
 
         public async Task<IActionResult> OnGetAsync()
         {
-            var request = new HttpRequestMessage(HttpMethod.Get, "https://localhost:7126/api/User/GetUserProfile");        
             var client = httpClientFactory.CreateClient("DefaultClient");
             client.Timeout = TimeSpan.FromMinutes(2);
+            // profile
+            var request = new HttpRequestMessage(HttpMethod.Get, "https://localhost:7126/api/User/GetUserProfile");        
             var response = await client.SendAsync(request);
             if (response.IsSuccessStatusCode)
             {
@@ -33,8 +37,17 @@ namespace TripEnjoy.Presentation.Razor.Pages.User
                 {
                     UserProfile = JsonConvert.DeserializeObject<UserProfile>(userProfile);
                 }
+
+                // booking history
+                var bookingRequest = new HttpRequestMessage(HttpMethod.Get, "https://localhost:7126/api/Booking");
+                var bookingResponse = await client.SendAsync(bookingRequest);
+                if (bookingResponse.IsSuccessStatusCode)
+                {
+                    var bookingContent = await bookingResponse.Content.ReadAsStringAsync();
+                    Booking = JsonConvert.DeserializeObject<List<ViewModels.Booking>>(bookingContent);
+                }
                 return Page();
-            }
+            }   
             else
             {
                 var errorMessage = await response.Content.ReadAsStringAsync();

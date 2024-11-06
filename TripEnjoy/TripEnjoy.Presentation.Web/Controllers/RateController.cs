@@ -122,6 +122,13 @@ namespace TripEnjoy.Presentation.Web.Controllers
 
             int accountId = account.AccountId;
 
+            // check hasbooking
+            bool hasBooking = await _rateService.HasUserBookedRoomAsync(rateAndCommentDTO.RoomId, accountId);
+            if (!hasBooking)
+            {
+                return StatusCode(StatusCodes.Status403Forbidden, "You cannot rate or comment without booking this room.");
+            }
+
             // Validate the incoming DTO
             if (!ModelState.IsValid)
             {
@@ -158,15 +165,22 @@ namespace TripEnjoy.Presentation.Web.Controllers
                     RoomId = rateAndCommentDTO.RoomId,
                     CommentContent = rateAndCommentDTO.CommentContent,
                     CommentDate = DateTime.Now,
-                    CommentLevel = 1,  // Regular comment
+                    CommentLevel = 1,  
                     AccountId = accountId,
                     CommentReply = "0"  // No reply, main comment
                 };
 
                 var comment = _mapper.Map<Comment>(commentDTO);
                 await _commentService.CreateCommentAsync(comment);
+                return Ok(new
+                {
+                    Rate = rate,
+                    Comment = comment,
+                    AccountImage = account.AccountImage, 
+                    FullName = account.AccountFullname 
+                });
 
-                return Ok(new { Rate = rate, Comment = comment });
+                //return Ok(new { Rate = rate, Comment = comment });
             }
             catch (Exception ex)
             {

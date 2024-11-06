@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Newtonsoft.Json;
 using System.Text.Json;
@@ -11,13 +12,13 @@ namespace TripEnjoy.Presentation.Razor.Pages
         private readonly IHttpClientFactory _httpClientFactory;
         private readonly TokenServices _tokenServices;
         [BindProperty(SupportsGet = true)]
-        public IEnumerable<Hotel> Hotels { get; set; }   
+        public IEnumerable<Hotel> Hotels { get; set; }
 
         [BindProperty(SupportsGet = true)]
         public IEnumerable<HotelImages> HotelImages { get; set; }
         [BindProperty(SupportsGet = true)]
         public IEnumerable<Category> ListCategory { get; set; }
-        public IndexModel(IHttpClientFactory httpClientFactory , TokenServices tokenServices)
+        public IndexModel(IHttpClientFactory httpClientFactory, TokenServices tokenServices)
         {
             _httpClientFactory = httpClientFactory;
             _tokenServices = tokenServices;
@@ -77,6 +78,7 @@ namespace TripEnjoy.Presentation.Razor.Pages
         {
             var client = _httpClientFactory.CreateClient("DefaultClient");
             client.Timeout = TimeSpan.FromMinutes(2);
+
             var dateParts = dateBooking.Split(new string[] { " to " }, StringSplitOptions.None);
             var checkinDate = dateParts[0];
             var checkoutDate = dateParts[1];
@@ -89,6 +91,21 @@ namespace TripEnjoy.Presentation.Razor.Pages
             ViewData["RoomInfo"] = roomInfo;
             var roomQuantityRoom = roomTypeQuanlity.Split(" ");
             var roomQuantity = roomQuantityRoom[0];
+
+            var roomInfoParts = roomtypeInput.Split(", ");
+
+            // Lấy số lượng phòng và chuyển thành chuỗi để phù hợp với roomQuantity
+            var roomQuantityInfo = roomInfoParts[2].Split(" ");
+            if (roomQuantityInfo.Length > 0 && int.TryParse(roomQuantityInfo[0], out int parsedRooms))
+            {
+                roomQuantity = parsedRooms.ToString(); // Chuyển parsedRooms thành chuỗi trước khi gán cho roomQuantity
+            }
+
+            // Lưu thông tin tìm kiếm vào Session
+            HttpContext.Session.SetString("CheckinDate", checkinDate);
+            HttpContext.Session.SetString("CheckoutDate", checkoutDate);
+            HttpContext.Session.SetInt32("RoomQuantity", int.Parse(roomQuantity));
+
             var apiUrlHotel = $"https://localhost:7126/api/SearchHotel/GetAvailableHotels?categoryId={categoryId}&hotelAddress={Uri.EscapeDataString(hotelAddress)}&roomTypeName={Uri.EscapeDataString(roomInfo)}&checkinDate={Uri.EscapeDataString(checkinDate)}&checkoutDate={Uri.EscapeDataString(checkoutDate)}&roomQuantity={roomQuantity}";
             var responseListSearchHotel = await client.GetAsync(apiUrlHotel);
 
