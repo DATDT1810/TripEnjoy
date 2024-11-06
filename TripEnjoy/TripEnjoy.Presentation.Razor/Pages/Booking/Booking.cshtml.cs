@@ -115,7 +115,7 @@ namespace TripEnjoy.Presentation.Razor.Pages.Booking
             else
             {
                 var redirectPath = await response.Content.ReadAsStringAsync();
-                return RedirectToPage(redirectPath);
+                return RedirectToPage(redirectPath , new { Url = "/Booking/Booking"});
             }
            
         }

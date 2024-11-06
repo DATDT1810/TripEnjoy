@@ -33,9 +33,9 @@ namespace TripEnjoy.Presentation.Razor.ViewModels
         [DataType(DataType.Date)]
         [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}", ApplyFormatInEditMode = true)]
         public DateTime AccountDateOfBirth { get; set; }
-
-
+        public bool AccountUpLevel { get; set; }
         public string AccountImage { get; set; }
+        public int AccountRole { get; set; }
     }
 
     public class NotAnonymousCustomerAttribute : ValidationAttribute

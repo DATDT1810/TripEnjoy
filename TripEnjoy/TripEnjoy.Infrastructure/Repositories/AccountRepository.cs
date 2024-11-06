@@ -157,6 +157,15 @@ namespace TripEnjoy.Infrastructure.Repositories
                     await roleManager.CreateAsync(new IdentityRole(AppRole.User));
 
                 }
+                else if(!await roleManager.RoleExistsAsync(AppRole.Admin))
+                {
+                    await roleManager.CreateAsync(new IdentityRole(AppRole.User));
+                }
+                else if(!await roleManager.RoleExistsAsync(AppRole.Partner))
+                {
+                    await roleManager.CreateAsync(new IdentityRole(AppRole.Partner));
+                }
+
                 await userManager.AddToRoleAsync(user, AppRole.User);
 
                 using (var transaction = await _context.Database.BeginTransactionAsync())
@@ -310,6 +319,11 @@ namespace TripEnjoy.Infrastructure.Repositories
                         }
                     }
                 }
+            }
+            var userBlock = _context.Accounts.FirstOrDefault(a => a.AccountEmail == email);
+            if (userBlock?.AccountIsDeleted == true)
+            {
+                throw new UnauthorizedAccessException("This account has been banned");
             }
             var result = await signInManager.CanSignInAsync(user);
             var token = await GenerateAccessToken(user);

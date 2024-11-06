@@ -66,11 +66,11 @@ namespace TripEnjoy.Presentation.Razor.Helper
                     response.Content = new StringContent("/Login");
                 }
             }
-            else if(response.StatusCode == HttpStatusCode.InternalServerError)
+            else if (response.StatusCode == HttpStatusCode.InternalServerError)
             {
-                response.Content =  new StringContent("/Home/404");
+                response.Content = new StringContent("/Home/404");
             }
-            else if(response.StatusCode == HttpStatusCode.NotFound)
+            else if (response.StatusCode == HttpStatusCode.NotFound)
             {
                 response.Content = new StringContent("/Home/404");
             }
@@ -102,7 +102,7 @@ namespace TripEnjoy.Presentation.Razor.Helper
             return clone;
         }
 
-       
-        
+
+
     }
 }

@@ -34,6 +34,22 @@ namespace TripEnjoy.Infrastructure.Repositories
             return hotel;
         }
 
+
+        // partner email repository 
+        public async Task<IEnumerable<Hotel>> GetHotelByPartnerEmail(string email)
+        {
+            if(email == null)
+            {   
+                throw new ArgumentNullException(nameof(email));
+            }
+            var account = _context.Accounts.FirstOrDefault(p => p.AccountEmail == email);
+            if (account == null)
+            {
+                throw new Exception("Account not found");
+            }
+           return  await _context.Hotels.Where(p => p.Account.AccountId ==  account.AccountId).ToListAsync();         
+        }
+
         public async Task<Hotel> GetHotelsByIdAsync(int Id) => await this._context.Hotels.FirstOrDefaultAsync(p => p.HotelId.Equals(Id));
 
         public async Task<IEnumerable<Hotel>> GetHotelsByUsernameAsync(int AccountId) => await this._context.Hotels.Where(p => p.AccountId.Equals(AccountId)).ToListAsync();

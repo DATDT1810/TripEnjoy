@@ -62,31 +62,12 @@
                             <div class="navbar-nav mr-auto py-0">
                                 <a asp-page="/Index" class="nav-link">Home</a>
 
-                                <a asp-page="./About/Index" class="nav-link">About</a>
+                                <a asp-page="/About/Index" class="nav-link">About</a>
 
                                 <div class="nav-item dropdown">
-                                    <a href="#" class="nav-link" >Partnership</a>
+                                    <a asp-page="/Partner/Partnership" class="nav-link" >Partnership</a>
                                 </div>
-                                <div class="nav-item dropdown">
-                                    <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">Pages</a>
-                                    <div class="dropdown-menu fade-down rounded-0 m-0">
-                                        <a href="service-1.html" class="dropdown-item">Service 1</a>
-                                        <a href="service-2.html" class="dropdown-item">Service 2</a>
-                                        <a href="service-detail.html" class="dropdown-item">Service Detail</a>
-                                        <a href="blog-grid.html" class="dropdown-item">Blog Grid</a>
-                                        <a href="blog-list.html" class="dropdown-item">Blog List</a>
-                                        <a href="blog-detail.html" class="dropdown-item">Blog Detail</a>
-                                        <a href="faq.html" class="dropdown-item">FAQs</a>
-                                        <a href="gallery.html" class="dropdown-item">Gallery</a>
-                                        <a href="contact.html" class="dropdown-item">Contact Us</a>
-                                        <a href="booking-1.html" class="dropdown-item">Booking 1</a>
-                                        <a href="booking-2.html" class="dropdown-item">Booking 2</a>
-                                        <a href="team.html" class="dropdown-item">Our Team</a>
-                                        <a href="testimonial-1.html" class="dropdown-item">Testimonial 1</a>
-                                        <a href="testimonial-2.html" class="dropdown-item">Testimonial 2</a>
-                                        <a href="404.html" class="dropdown-item">404</a>
-                                    </div>
-                                </div>
+                             
 
                             </div>
                             @{
@@ -103,7 +84,7 @@
                                     </button>
                                     <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
                                         <li>
-                                            <a class="dropdown-item" asp-page="/User/ViewProfile">View Profile</a>
+                                            <a class="dropdown-item" href="~/User/ViewProfile">View Profile</a>
                                         </li>
                                         <li>
                                             <a class="dropdown-item" href="~/Logout">Logout</a>

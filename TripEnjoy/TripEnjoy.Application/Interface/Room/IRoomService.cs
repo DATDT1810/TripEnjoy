@@ -15,6 +15,7 @@ namespace TripEnjoy.Application.Interface.Room
         Task<TripEnjoy.Domain.Models.Room> UpdateRoomAsync(int roomId, TripEnjoy.Domain.Models.Room room);
         Task<TripEnjoy.Domain.Models.Room> DeleteRoomAsync(int roomId);
         Task<IEnumerable<TripEnjoy.Domain.Models.Room>> GetRelatedRoomsByRoomTypeIdAsync(int roomTypeId, int hotelId);
-
+        Task<IEnumerable<Domain.Models.Room>> GetRoomsPartner(string email);
+        //    Task<IEnumerable<TripEnjoy.Domain.Models.Room>> GetRoomsByPartnerEmailAsync(string email);
     }
 }

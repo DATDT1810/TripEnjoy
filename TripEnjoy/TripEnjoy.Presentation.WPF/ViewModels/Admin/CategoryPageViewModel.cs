@@ -43,8 +43,42 @@ namespace TripEnjoy.Presentation.WPF.ViewModels.Admin
 
         private async Task ShowAddCatePopup()
         {
-            var popup = new AddNewCategoryWindow();
-            popup.ShowDialog();
+            var addCategoryViewModel = new AddNewCategoryViewModel();
+            var popup = new AddNewCategoryWindow
+            {
+                DataContext = addCategoryViewModel
+            };
+            addCategoryViewModel.CloseWindow = result => popup.DialogResult = result;
+            if (popup.ShowDialog() == true)
+            {
+                var newCategory = new Category
+                {
+                    CategoryName = addCategoryViewModel.CategoryName,
+                    CategoryStatus = addCategoryViewModel.CategoryStatus
+                };
+                var client = new HttpClient();
+                client.Timeout = TimeSpan.FromMinutes(2);
+                var request = new HttpRequestMessage(HttpMethod.Post, "https://localhost:7126/api/Category");
+                var content = new StringContent(JsonConvert.SerializeObject(newCategory), Encoding.UTF8, "application/json");
+                request.Content = content;
+                var token = TokenHelper.LoadToken();
+                if (token == null)
+                {
+                    throw new ArgumentNullException("Token");
+                }
+                request.Headers.Add("Authorization", $"Bearer {token.accessToken}");
+                var response = await client.SendAsync(request);
+                if (response.IsSuccessStatusCode)
+                {
+                    MessageBox.Show("Add category successfully.");
+                    await LoadDataAsync();
+                }
+                else
+                {
+                    MessageBox.Show("Failed to add category.");
+                    await LoadDataAsync();
+                }
+            }
         }
 
         private async Task DeleteCate(Category category)
@@ -86,8 +120,8 @@ namespace TripEnjoy.Presentation.WPF.ViewModels.Admin
             var client = new HttpClient();
             client.Timeout = TimeSpan.FromMinutes(2);
             var request = new HttpRequestMessage(HttpMethod.Put, "https://localhost:7126/api/Category/" + category.CategoryId);
-            //var content = new StringContent(JsonConvert.SerializeObject(category), Encoding.UTF8, "application/json");
-            //request.Content = content;
+            var content = new StringContent(JsonConvert.SerializeObject(category), Encoding.UTF8, "application/json");
+            request.Content = content;
             var token = TokenHelper.LoadToken();
             if (token == null)
             {

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using TripEnjoy.Application.Data;
 using TripEnjoy.Application.Interface.Booking_Room;
 using TripEnjoy.Domain.Models;
 
@@ -38,8 +39,13 @@ namespace TripEnjoy.Application.Services.Booking
 
         public Task UpdateBookingAsync(Domain.Models.Booking booking)
         {
-           _bookingRepository.UpdateBookingAsync(booking);
+            _bookingRepository.UpdateBookingAsync(booking);
             return Task.CompletedTask;
+        }
+
+        public async Task<IEnumerable<Domain.Models.Booking>> GetBookingListByPartner(string email)
+        {
+            return await _bookingRepository.GetBookingByAccoutPartner(email);     
         }
     }
 }

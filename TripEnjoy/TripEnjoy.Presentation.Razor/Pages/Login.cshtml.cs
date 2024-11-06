@@ -23,9 +23,16 @@ namespace TripEnjoy.Presentation.Razor.Pages
         [BindProperty(SupportsGet = true)]
         public LoginViewModel LoginViewModel { get; set; }
 
+        // mặc định trả về
+        [BindProperty(SupportsGet = true)]
+        public string UrlPageFrom { get; set; } = "/Index";
         public async Task<IActionResult> OnGet()
         {
-
+            var urlFrom = Request.Query["Url"].ToString();
+            if(!string.IsNullOrEmpty(urlFrom))
+            {
+                UrlPageFrom = urlFrom;
+            }
             return Page();
 
         }
@@ -50,8 +57,9 @@ namespace TripEnjoy.Presentation.Razor.Pages
                             return Page();
                         }
 
-                        _tokenServices.SetTokens(tokenResponse.AccessToken, tokenResponse.RefreshToken);
-                        return RedirectToPage("/Index");    
+                       await _tokenServices.SetTokens(tokenResponse.AccessToken, tokenResponse.RefreshToken);
+
+                        return RedirectToPage(UrlPageFrom);
                     }
                     else
                     {
@@ -65,7 +73,7 @@ namespace TripEnjoy.Presentation.Razor.Pages
                     return Page();
                 }
             }
-            return RedirectToPage("/Index");
+            return Page();
         }
 
         public IActionResult OnGetLoginWithGoogle()

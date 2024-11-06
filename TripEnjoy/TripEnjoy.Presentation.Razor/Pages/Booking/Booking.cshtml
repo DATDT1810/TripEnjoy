@@ -74,11 +74,12 @@
                             <div class="card-body">
                                 <h6 class="card-subtitle mb-2 text-muted">Pricing Summary</h6>
                                 <p class="card-text">
-                                    <strong>Original Price per Room:</strong> VND @Model.RoomDetail.RoomPrice <br>
-                                    <strong>Number of Rooms:</strong> @Model.BookingViewModel.RoomQuantity <br>
+                                    <strong>Original Price per Room:</strong> VND @Model.RoomDetail.RoomPrice.ToString("#,##0 VND") <br>
+                                    <strong>Number of Rooms:</strong> @Model.BookingViewModel.RoomQuantity
+                                    <br>
                                     <strong>Total Stay Duration:</strong> @(Model.BookingViewModel.CheckoutDate - Model.BookingViewModel.CheckinDate) Days nights <br>
                                     <hr />
-                                    <strong>Total Price:</strong> <span style="color: red">@Model.BookingViewModel.BookingTotalPrice.ToString("# , ##0 VND")</span> <br>
+                                    <strong>Total Price:</strong> <span style="color: red">@Model.BookingViewModel.BookingTotalPrice.ToString("#,##0 VND")</span> <br>
                                 </p>
                             </div>
                         </div>

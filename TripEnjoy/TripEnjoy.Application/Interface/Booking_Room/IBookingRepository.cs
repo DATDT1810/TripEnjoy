@@ -14,5 +14,8 @@ namespace TripEnjoy.Application.Interface.Booking_Room
         Task<Booking> CancelBookingAsync(int bookingId, int accId);
         Task<Booking> GetBookingByIdAsync(int bookingId);
         Task UpdateBookingAsync(Booking booking);
+
+        // lấy toàn bộ booking của Phòng này 
+        Task<IEnumerable<Booking>> GetBookingByAccoutPartner(string email);
     }
 }

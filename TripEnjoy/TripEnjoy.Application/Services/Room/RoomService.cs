@@ -51,5 +51,11 @@ namespace TripEnjoy.Application.Services.Room
         {
             return await _roomRepository.GetRelatedRoomsByRoomTypeIdAsync(roomTypeId, hotelId);
         }
+
+        public async Task<IEnumerable<Domain.Models.Room>> GetRoomsPartner(string email)
+        {
+            return await _roomRepository.GetRoomsPartner(email);
+
+        }
     }
 }

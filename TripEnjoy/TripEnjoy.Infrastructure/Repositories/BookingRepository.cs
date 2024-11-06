@@ -132,5 +132,20 @@ namespace TripEnjoy.Infrastructure.Repositories
             _context.Bookings.Update(booking);
             await _context.SaveChangesAsync();
         }
+
+        public async Task<IEnumerable<Booking>> GetBookingByAccoutPartner(string email)
+        {
+            if (email == null)
+            {
+                throw new Exception("Email is required to get booking.");
+            }
+            var bookings = await _context.Bookings
+                .Include(b => b.Room)
+                .ThenInclude(r => r.Hotel)
+                .ThenInclude(h => h.Account)
+                .Where(b => b.Room.Hotel != null && b.Room.Hotel.Account != null && b.Room.Hotel.Account.AccountEmail == email)
+                .ToListAsync();
+            return bookings;
+        }
     }
 }

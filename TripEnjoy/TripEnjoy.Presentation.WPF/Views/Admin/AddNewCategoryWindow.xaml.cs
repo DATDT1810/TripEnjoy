@@ -11,6 +11,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using TripEnjoy.Presentation.WPF.ViewModels.Admin;
 
 namespace TripEnjoy.Presentation.WPF.Views.Admin
 {
@@ -22,6 +23,8 @@ namespace TripEnjoy.Presentation.WPF.Views.Admin
         public AddNewCategoryWindow()
         {
             InitializeComponent();
+            var viewModel = new AddNewCategoryViewModel();
+            DataContext = viewModel;
         }
     }
 }

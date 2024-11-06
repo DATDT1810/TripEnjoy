@@ -62,7 +62,7 @@
             <TextBlock Padding="10,0,0,0" Text="{Binding AccountStatus }" Grid.Row="5" Grid.Column="1" Margin="10,5"/>
 
             <TextBlock Padding="10,0,0,0" Text="Status:" FontWeight="Bold" Grid.Row="6" Grid.Column="0" Margin="0,5"/>
-            <TextBlock Padding="10,0,0,0" Text="{Binding Account }" Grid.Row="6" Grid.Column="1" Margin="10,5"/>
+            <TextBlock Padding="10,0,0,0" Text="{Binding AccountStatus }" Grid.Row="6" Grid.Column="1" Margin="10,5"/>
 
             <TextBlock Padding="10,0,0,0" Text="UplevelBefore:" FontWeight="Bold" Grid.Row="7" Grid.Column="0" Margin="0,5"/>
             <TextBlock Padding="10,0,0,0" Text="{Binding AccountUplevel }" Grid.Row="7" Grid.Column="1" Margin="10,5"/>

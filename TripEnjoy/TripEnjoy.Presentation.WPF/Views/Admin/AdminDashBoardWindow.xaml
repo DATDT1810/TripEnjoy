@@ -27,10 +27,7 @@
                     <RowDefinition></RowDefinition>
                     <RowDefinition></RowDefinition>
                     <RowDefinition></RowDefinition>
-                    <RowDefinition></RowDefinition>
-                    <RowDefinition></RowDefinition>
-                    <RowDefinition></RowDefinition>
-                    
+                                
                 </Grid.RowDefinitions>
                 <Button Grid.Row="0" Content="Account" Height="50" Width="200"
         HorizontalAlignment="Center" VerticalAlignment="Center"
@@ -52,19 +49,7 @@
                     HorizontalAlignment="Center" VerticalAlignment="Center"
                     Command="{Binding TabSelectedCommand}"
                     CommandParameter="Category"></Button>
-                <Button Grid.Row="4" Content="Voucher" Height="50" Width="200"
-         HorizontalAlignment="Center" VerticalAlignment="Center"
-         Command="{Binding TabSelectedCommand}"
-         CommandParameter="ManageBookings"></Button>
-                <Button Grid.Row="5" Content="Confirm Hotel" Height="50" Width="200"
-         HorizontalAlignment="Center" VerticalAlignment="Center"
-         Command="{Binding TabSelectedCommand}"
-         CommandParameter="ManageBookings"></Button>
-                <Button Grid.Row="6" Content="Hotel " Height="50" Width="200"
-         HorizontalAlignment="Center" VerticalAlignment="Center"
-         Command="{Binding TabSelectedCommand}"
-         CommandParameter="ManageBookings"></Button>
-                
+               
             </Grid>
         </Grid>
 

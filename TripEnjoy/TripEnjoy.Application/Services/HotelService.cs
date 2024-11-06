@@ -20,7 +20,12 @@ namespace TripEnjoy.Application.Services
 
 		public async Task<Hotel> DeleteHotelAsync(Hotel hotel) => await this._hotelRepository.DeleteHotelAsync(hotel);
 
-		public async Task<Hotel> GetHotelsByIdAsync(int Id) => await this._hotelRepository.GetHotelsByIdAsync(Id);
+        public async Task<IEnumerable<Hotel>> GetHotelByPartnerEmail(string email)
+        {
+           return await this._hotelRepository.GetHotelByPartnerEmail(email);
+        }
+
+        public async Task<Hotel> GetHotelsByIdAsync(int Id) => await this._hotelRepository.GetHotelsByIdAsync(Id);
 
 		public async Task<IEnumerable<Hotel>> GetHotelsByUsernameAsync(int AccountId) => await this._hotelRepository.GetHotelsByUsernameAsync(AccountId);
 
