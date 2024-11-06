@@ -58,5 +58,10 @@ namespace TripEnjoy.Infrastructure.Repositories
         .Include(r => r.Account)  
         .ToListAsync();
         }
+
+        public async Task<bool> HasUserBookedRoomAsync(int roomId, int accountId)
+        {
+            return await _context.Bookings.AnyAsync(b => b.RoomId == roomId && b.AccountId == accountId);
+        }
     }
 }

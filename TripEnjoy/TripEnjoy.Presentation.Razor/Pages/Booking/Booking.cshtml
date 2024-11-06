@@ -62,7 +62,7 @@
                                 <p class="card-text">
                                     <strong>Check-in:</strong> @Model.BookingViewModel.CheckinDate.ToString("dddd, dd MMMM yyyy") <br>
                                     <strong>Check-out:</strong> @Model.BookingViewModel.CheckoutDate.ToString("dddd, dd MMMM yyyy") <br>
-                                    <strong>Total stay duration:</strong> @(Model.BookingViewModel.CheckoutDate - Model.BookingViewModel.CheckinDate).Days nights <br>
+                                    <strong>Total stay duration:</strong> @(Model.BookingViewModel.CheckoutDate - Model.BookingViewModel.CheckinDate) Days nights <br>
                                     <strong>Room Quantity:</strong> @Model.BookingViewModel.RoomQuantity <br>
                                     <hr />
                                 </p>
@@ -76,7 +76,7 @@
                                 <p class="card-text">
                                     <strong>Original Price per Room:</strong> VND @Model.RoomDetail.RoomPrice <br>
                                     <strong>Number of Rooms:</strong> @Model.BookingViewModel.RoomQuantity <br>
-                                    <strong>Total Stay Duration:</strong> @(Model.BookingViewModel.CheckoutDate - Model.BookingViewModel.CheckinDate).Days nights <br>
+                                    <strong>Total Stay Duration:</strong> @(Model.BookingViewModel.CheckoutDate - Model.BookingViewModel.CheckinDate) Days nights <br>
                                     <hr />
                                     <strong>Total Price:</strong> <span style="color: red">@Model.BookingViewModel.BookingTotalPrice.ToString("# , ##0 VND")</span> <br>
                                 </p>
@@ -120,7 +120,7 @@
                                         <div class="card-body">
                                             <h5 class="card-title">@room.RoomTitle</h5>
                                             <p class="card-text">
-                                                heheheh <br>
+                                                <br>
                                                 @{
                                                     string bedInfo = string.Empty;
                                                     string bathInfo = string.Empty;

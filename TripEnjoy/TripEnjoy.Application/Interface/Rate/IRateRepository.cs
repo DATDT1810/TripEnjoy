@@ -14,6 +14,7 @@ namespace TripEnjoy.Application.Interface.Rate
         Task<Domain.Models.Rate> UpdateRateAsync(Domain.Models.Rate rate);
         Task<Domain.Models.Rate> DeteleRateAsync(int rateId);
         Task<IEnumerable<Domain.Models.Rate>> GetRatesForRoomAsync(int roomId);
+        Task<bool> HasUserBookedRoomAsync(int roomId, int accountId);
 
     }
 }

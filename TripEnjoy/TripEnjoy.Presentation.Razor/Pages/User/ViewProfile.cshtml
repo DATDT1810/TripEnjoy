@@ -7,8 +7,8 @@
 <div class="container-xl px-4 mt-4">
     <!-- Account page navigation-->
     <nav class="nav nav-borders mb-4">
-        <a class="nav-link ms-0 active" href="javascript:void(0)" onclick="showSection('profileSection')" id="profileTab">Profile</a>
-        <a class="nav-link" href="javascript:void(0)" onclick="showSection('bookingSection')" id="bookingTab">Booking</a>
+        <a class="nav-link ms-0 active" id="profileTab">Profile</a>
+        <a class="nav-link" id="bookingTab">Booking</a>
     </nav>
 
     <!-- Profile Section -->
@@ -110,9 +110,9 @@
                                         <td>@booking.BookingTotalPrice.ToString("#, ##0 VND")</td>
                                         <td>@booking.BookingStatus</td>
                                         <td>
-                                            <button class="btn btn-sm btn-info" onclick="viewBookingDetails(@booking.BookingId)">
+                                            <a class="btn btn-sm btn-info" asp-page="/Booking/BookingDetails" asp-route-id="@booking.BookingId">
                                                 View Details
-                                            </button>
+                                            </a>
                                         </td>
                                     </tr>
                                 }
@@ -131,30 +131,47 @@
     </div>
 </div>
 
-<!--<!-- Booking Details Modal -->
-<div class="modal fade" id="bookingDetailsModal" tabindex="-1" aria-labelledby="bookingDetailsModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-lg">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="bookingDetailsModalLabel">Booking Details</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-                <div id="bookingDetailsContent">
-                    <!-- Booking details will be loaded here dynamically -->
-                    <p>Loading...</p>
-                </div>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-            </div>
-        </div>
-    </div>
-</div>
+@section Scripts {
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            // Kiểm tra sự tồn tại của các phần tử
+            const profileTab = document.getElementById("profileTab");
+            const bookingTab = document.getElementById("bookingTab");
+            const profileSection = document.getElementById("profileSection");
+            const bookingSection = document.getElementById("bookingSection");
+
+            if (profileTab && bookingTab && profileSection && bookingSection) {
+                profileTab.addEventListener("click", function () {
+                    profileSection.style.display = "block";
+                    bookingSection.style.display = "none";
+                    profileTab.classList.add("active");
+                    bookingTab.classList.remove("active");
+                });
+
+                bookingTab.addEventListener("click", function () {
+                    bookingSection.style.display = "block";
+                    profileSection.style.display = "none";
+                    bookingTab.classList.add("active");
+                    profileTab.classList.remove("active");
+                });
+            } else {
+                console.error("One or more elements are missing.");
+            }
+        });
+    </script>
+}
+
 
 
 @section Styles {
     <style>
+        #profileTab{
+            cursor: pointer;
+        }
+
+        #bookingTab{
+            cursor: pointer;
+        }
         .nav.nav-borders .nav-link {
             color: #555;
             border-bottom: 2px solid transparent;
@@ -178,88 +195,3 @@
     </style>
 }
 
-@section Scripts {
-    <script>
-        function showSection(sectionId) {
-            document.getElementById("profileSection").style.display = "none";
-            document.getElementById("bookingSection").style.display = "none";
-            document.getElementById(sectionId).style.display = "block";
-            document.getElementById("profileTab").classList.remove("active");
-            document.getElementById("bookingTab").classList.remove("active");
-            document.getElementById(sectionId === 'profileSection' ? "profileTab" : "bookingTab").classList.add("active");
-        }
-
-        function viewBookingDetails(bookingId) {
-    // Show the modal
-    var modal = new bootstrap.Modal(document.getElementById('bookingDetailsModal'));
-    modal.show();
-    document.getElementById("bookingDetailsContent").innerHTML = "<p>Loading...</p>";
-
-    // Fetch booking details using the correct endpoint
-    fetch(`/api/Booking/GetBookingId/${bookingId}`)
-        .then(response => {
-            if (!response.ok) {
-                throw new Error(`HTTP error! Status: ${response.status}`);
-            }
-            return response.json();
-        })
-        .then(data => {
-            // Populate the modal with booking details
-            document.getElementById("bookingDetailsContent").innerHTML = `
-                <dl class="row">
-                    <dt class="col-sm-4">Booking ID</dt>
-                    <dd class="col-sm-8">${data.bookingId}</dd>
-
-                    <dt class="col-sm-4">Check-in Date</dt>
-                    <dd class="col-sm-8">${new Date(data.checkinDate).toLocaleDateString()}</dd>
-
-                    <dt class="col-sm-4">Check-out Date</dt>
-                    <dd class="col-sm-8">${new Date(data.checkoutDate).toLocaleDateString()}</dd>
-
-                    <dt class="col-sm-4">Booking Status</dt>
-                    <dd class="col-sm-8">${data.bookingStatus}</dd>
-
-                    <dt class="col-sm-4">Total Price</dt>
-                    <dd class="col-sm-8">${data.bookingTotalPrice.toLocaleString()} VND</dd>
-
-                    <dt class="col-sm-4">Room Title</dt>
-                    <dd class="col-sm-8">${data.room?.roomTitle ?? "N/A"}</dd>
-
-                    <dt class="col-sm-4">Room Quantity</dt>
-                    <dd class="col-sm-8">${data.roomQuantity}</dd>
-
-                    <dt class="col-sm-4">Room Price per Night</dt>
-                    <dd class="col-sm-8">${data.room?.roomPrice?.toLocaleString() ?? "N/A"} VND</dd>
-
-                    <dt class="col-sm-4">Customer Name</dt>
-                    <dd class="col-sm-8">${data.account?.accountFullname ?? "N/A"}</dd>
-
-                    <dt class="col-sm-4">Email</dt>
-                    <dd class="col-sm-8">${data.account?.accountEmail ?? "N/A"}</dd>
-
-                    <dt class="col-sm-4">Phone Number</dt>
-                    <dd class="col-sm-8">${data.account?.accountPhone ?? "N/A"}</dd>
-                </dl>`;
-        })
-        .catch(error => {
-            console.error("Error fetching booking details:", error);
-            document.getElementById("bookingDetailsContent").innerHTML = "<p class='text-danger'>Error loading booking details. Please try again.</p>";
-        });
-
-        }
-
-        $(document).ready(function () {
-            var message = '@TempData["message"]';
-            if (message) {
-                Swal.fire({
-                    title: 'Notification',
-                    text: message,
-                    icon: message.includes("successfully") ? 'success' : 'error',
-                    confirmButtonText: 'OK',
-                    timer: 3000,
-                    timerProgressBar: true
-                });
-            }
-        });
-    </script>
-}

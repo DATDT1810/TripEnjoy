@@ -8,6 +8,7 @@ using System.Security.Claims;
 using TripEnjoy.Application.Data;
 using TripEnjoy.Application.Interface;
 using TripEnjoy.Application.Interface.Comment;
+using TripEnjoy.Application.Interface.Rate;
 using TripEnjoy.Application.Interface.Room;
 
 namespace TripEnjoy.Presentation.Web.Controllers
@@ -18,13 +19,16 @@ namespace TripEnjoy.Presentation.Web.Controllers
     {
         private readonly ICommentService _commentService;
         private readonly IAccountService _accountService;
+        private readonly IRateService _rateService;
+
         private readonly IRoomService _roomService;
         private readonly IMapper _mapper;
 
-        public CommentController(ICommentService commentService, IAccountService accountService, IRoomService roomService, IMapper mapper)
+        public CommentController(ICommentService commentService, IAccountService accountService, IRoomService roomService, IRateService rateService, IMapper mapper)
         {
             _commentService = commentService;
             _accountService = accountService;
+            _rateService = rateService;
             _roomService = roomService;
             _mapper = mapper;
         }
@@ -33,7 +37,7 @@ namespace TripEnjoy.Presentation.Web.Controllers
         public async Task<IActionResult> GetAllComment()
         {
             var comments = await _commentService.GetAllCommentAsync();
-            return Ok(comments);    
+            return Ok(comments);
         }
 
         // GET: api/Comment/Room/{roomId}
@@ -45,7 +49,7 @@ namespace TripEnjoy.Presentation.Web.Controllers
             {
                 return NotFound("No comments found for this room.");
             }
-          
+
             return Ok(comments);
         }
 
@@ -71,12 +75,12 @@ namespace TripEnjoy.Presentation.Web.Controllers
 
             CommentDTO comment = new CommentDTO
             {
-                CommentLevel = 1, // Main comment
+                CommentLevel = 1,
                 CommentContent = obj.Content,
                 RoomId = obj.RoomId,
                 AccountId = accountId,
                 CommentDate = DateTime.Now,
-                CommentReply = "0" // Not a reply, just a comment
+                CommentReply = "0"
             };
 
             // mapper
@@ -112,6 +116,12 @@ namespace TripEnjoy.Presentation.Web.Controllers
                 return NotFound("Account not found.");
             }
             int accountId = account.AccountId;
+
+            bool hasBooking = await _rateService.HasUserBookedRoomAsync(obj.RoomId, accountId);
+            if (!hasBooking)
+            {
+                return StatusCode(StatusCodes.Status403Forbidden, "You cannot reply without booking this room.");
+            }
             CommentDTO replyComment = new CommentDTO
             {
                 CommentLevel = 2, // Main comment
@@ -119,7 +129,7 @@ namespace TripEnjoy.Presentation.Web.Controllers
                 RoomId = obj.RoomId,
                 AccountId = accountId,
                 CommentDate = DateTime.Now,
-                CommentReply = obj.ReplyToComment
+                CommentReply = obj.ReplyToComment // ID của bình luận cha
             };
 
             // mapper

@@ -51,8 +51,7 @@ namespace TripEnjoy.Presentation.Razor.Pages
                         }
 
                         _tokenServices.SetTokens(tokenResponse.AccessToken, tokenResponse.RefreshToken);
-
-                        return RedirectToPage("/Index");
+                        return RedirectToPage("/Index");    
                     }
                     else
                     {
