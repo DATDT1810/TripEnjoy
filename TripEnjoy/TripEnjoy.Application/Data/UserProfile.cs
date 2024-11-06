@@ -16,5 +16,7 @@ namespace TripEnjoy.Application.Data
         public string AccountGender { get; set; }
         public DateTime AccountDateOfBirth { get; set; }
         public string AccountImage { get; set; }
+        public bool AccountUpLevel { get; set; }
+        public int AccountRole { get; set; }
     }
 }

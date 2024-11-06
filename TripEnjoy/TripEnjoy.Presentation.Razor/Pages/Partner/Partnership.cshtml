@@ -1,21 +1,98 @@
 ﻿@page
 @model TripEnjoy.Presentation.Razor.Pages.Partner.PartnershipModel
 @{
-	ViewData["Title"] = "Partner";
+    ViewData["Title"] = "Partner";
 }
-<div class="strttech120">
-	<h4>Become a Partner</h4>
-	<p>
-		Partner with TripEnjoy and expand your reach in the hotel booking industry. We provide tools and solutions to help you connect with millions of potential customers, increase revenue, and build sustainable relationships in the travel sector.
-	</p>
-	<button id="RegisInstructorBtn" class="Get_btn" onclick="window.location.href = '/Account/UpdateAccountLevel';">Start Teaching</button>
+<div class="container-xxl py-5">
+    <div class="container">
+        <div class="text-center wow fadeInUp" data-wow-delay="0.1s">
+            <h6 class="section-title text-center text-primary text-uppercase">Contact Us</h6>
+            <h1 class="mb-5"><span class="text-primary text-uppercase">Register</span> To Become Our Partner</h1>
+        </div>
+        @if (Model.UserProfile.AccountUpLevel)
+        {
+            <h1>Vui lòng đợi Admin phản hồi</h1>
+        }
+        else if (Model.UserProfile.AccountRole == 2 && !Model.UserProfile.AccountUpLevel)
+        {
+           <h1>Chúc mừng bạn đã là đối tác của chúng tôi</h1>
+        }
+        else
+        {
+            <div class="row g-4">
+                <div class="col-12">
+                    <div class="row gy-4">
+                    </div>
+                </div>
+                <div class="col-md-6 wow fadeIn" data-wow-delay="0.1s">
+                    <img class="position-relative rounded w-100 h-100"
+                         src="@Model.UserProfile.AccountImage"
+                         alt="Your Image Description"
+                         style="min-height: 350px; object-fit: cover; border:0;">
+                </div>
+                <div class="col-md-6">
+                    <div class="contact-form wow fadeInUp" data-wow-delay="0.2s">
+                        <div id="alertMessage"></div>
+                        <form asp-page="Partnership" method="post" novalidate="novalidate">
+                            <div class="row gx-3">
+                                <div class="col-md-6 control-group">
+                                    <div class="form-floating">
+                                        <input asp-for="@Model.UserProfile.AccountFullname" type="text" class="form-control" id="name" placeholder="Your Name"
+                                               required="required"
+                                               data-validation-required-message="Please enter your name">
+                                        <label for="name">Your Name</label>
+                                    </div>
+                                    <p class="help-block text-danger"></p>
+                                </div>
+                                <div class="col-md-6 control-group">
+                                    <div class="form-floating">
+                                        <input asp-for="@Model.UserProfile.AccountEmail" type="email" class="form-control" id="email" placeholder="Your Email"
+                                               required="required"
+                                               data-validation-required-message="Please enter your email">
+                                        <label for="email">Your Email</label>
+                                    </div>
+                                    <p class="help-block text-danger"></p>
+                                </div>
+                                <div class="col-12 control-group">
+                                    <div class="form-floating">
+                                        <input type="text" class="form-control" id="subject" placeholder="Subject"
+                                               required="required"
+                                               data-validation-required-message="Please enter a subject">
+                                        <label for="subject">Subject</label>
+                                    </div>
+                                    <p class="help-block text-danger"></p>
+                                </div>
+                                <div class="col-12 control-group">
+                                    <div class="form-floating">
+                                        <textarea class="form-control" placeholder="Leave a message here"
+                                                  id="message" required="required"
+                                                  data-validation-required-message="Please enter your message"
+                                                  style="height: 150px"></textarea>
+                                        <label for="message">Message</label>
+                                    </div>
+                                    <p class="help-block text-danger"></p>
+                                </div>
+                                <div class="col-12">
+                                    <button class="btn btn-primary w-100 py-3" type="submit" id="sendMessageButton">
+                                        <span>Send Message</span>
+                                        <div class="d-none spinner-border spinner-border-sm text-light ms-3"
+                                             role="status"></div>
+                                    </button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
 </div>
 
-@section Scripts{
-	<script src="~/js/sweetAlert.js"></script>
-	<script>
-		document.getElementById('RegisInstructorBtn').addEventListener('click', function () {
-			sweetAlertSuccess("Success", "You have successfully registered to become an Instructor.");
-		});
-	</script>
+@section Scripts {
+    <script src="~/js/sweetAlert.js"></script>
+    <script>
+        document.getElementById('RegisInstructorBtn').addEventListener('click', function () {
+            sweetAlertSuccess("Success", "You have successfully registered to become an Instructor.");
+        });
+    </script>
 }

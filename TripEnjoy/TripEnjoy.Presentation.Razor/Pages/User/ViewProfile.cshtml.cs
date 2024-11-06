@@ -51,7 +51,7 @@ namespace TripEnjoy.Presentation.Razor.Pages.User
                 var request = new HttpRequestMessage(HttpMethod.Post, "https://localhost:7126/api/User/UpdateUserProfile");
                 request.Content = new StringContent(JsonConvert.SerializeObject(UserProfile), Encoding.UTF8, "application/json");
                 var client = httpClientFactory.CreateClient("DefaultClient");
-                client.Timeout = TimeSpan.FromMinutes(2);
+                client.Timeout = TimeSpan.FromMinutes(5);
                 var response = await client.SendAsync(request);
                 if (response.IsSuccessStatusCode)
                 {

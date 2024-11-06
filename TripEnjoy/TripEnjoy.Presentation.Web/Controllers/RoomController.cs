@@ -1,6 +1,9 @@
 ﻿using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore.Metadata;
+using System.Security.Claims;
 using TripEnjoy.Application.Data;
 using TripEnjoy.Application.Interface.Room;
 using TripEnjoy.Domain.Models;
@@ -58,15 +61,15 @@ namespace TripEnjoy.Presentation.Web.Controllers
                 return BadRequest();
             }
             var newRoom = _mapper.Map<Room>(roomDTO);
-            await _roomService.CreateRoomAsync(newRoom);
-            return CreatedAtRoute("GetRoomById", new { id = newRoom.RoomId }, newRoom);
+           var room =  await _roomService.CreateRoomAsync(newRoom);
+            return Ok(room.RoomId);
         }
 
         //Update an existing room
         [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateRoom(int id, [FromBody] RoomDTO roomDTO)
+        public async Task<IActionResult> UpdateRoom(int id,[FromBody] RoomDTO roomDTO)
         {
-            if(roomDTO == null)
+            if (roomDTO == null)
             {
                 return BadRequest("Invalid data!!!");
             }
@@ -76,6 +79,7 @@ namespace TripEnjoy.Presentation.Web.Controllers
                 return NotFound();
             }
             var updateRoom = _mapper.Map<Room>(roomDTO);
+            
             await _roomService.UpdateRoomAsync(id, updateRoom);
             return Ok(obj);
         }
@@ -106,6 +110,28 @@ namespace TripEnjoy.Presentation.Web.Controllers
             return Ok(relatedRooms);
         }
 
+
+        [Authorize(Roles = "Partner")]
+        [HttpGet]
+        [Route("GetRoomsByPartner")]
+        public async Task<IActionResult> GetRoomsByPartner()
+        {
+             var email = User.FindFirstValue(ClaimTypes.Email);
+        //    var email = "haodangtest1@gmail.com";
+            if (email == null)
+            {
+                return Unauthorized("Invalid");
+            }
+            var rooms = await _roomService.GetRoomsPartner(email);
+            var roomResponse = new List<RoomPartner>();
+            foreach (var items in rooms)
+            {
+                var roomPartner = _mapper.Map<RoomPartner>(items);
+                roomPartner.HotelName = items.Hotel.HotelName;
+                roomResponse.Add(roomPartner);
+            }
+            return Ok(roomResponse);
+        }
 
     }
 }

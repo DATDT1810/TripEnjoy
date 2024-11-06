@@ -51,7 +51,7 @@ $("#review-form").submit(function (event) {
         },
         success: function (response) {
             alert("Thanh Cong"); // Thông báo thành công
-            addNewCommentToList(response); // Cập nhật danh sách bình luận
+            window.location.reload(); // Tải lại trang
         },
         error: function (xhr, status, error) {
             console.error("Error:", error); // Ghi lại lỗi

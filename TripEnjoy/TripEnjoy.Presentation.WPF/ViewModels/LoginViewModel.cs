@@ -187,7 +187,7 @@ namespace TripEnjoy.Presentation.WPF.ViewModels
             String data = JsonConvert.SerializeObject(accountDTO);
             var content = new StringContent(data, System.Text.Encoding.UTF8, "application/json");
             var response = await client.PostAsync(api+ "/Login", content);
-            if (response.IsSuccessStatusCode) // nhận phản hồi về sau khi gửi dữ liệu đi
+            if (response.IsSuccessStatusCode) 
             {
                 var responseData = await response.Content.ReadAsStringAsync(); // take token
                 var tokenResponse = JsonConvert.DeserializeObject<TokenResponse>(responseData);

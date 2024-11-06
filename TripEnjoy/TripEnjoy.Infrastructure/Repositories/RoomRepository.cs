@@ -54,15 +54,15 @@ namespace TripEnjoy.Infrastructure.Repositories
             {
                 throw new KeyNotFoundException($"Room with ID {roomId} not found.");
             }
-            existingRoom.HotelId = room.HotelId;
+            //existingRoom.HotelId = room.HotelId;
             existingRoom.RoomTitle = room.RoomTitle;
-            existingRoom.RoomTypeId = room.RoomTypeId;
+            //existingRoom.RoomTypeId = room.RoomTypeId;
             existingRoom.RoomQuantity = room.RoomQuantity;
-            existingRoom.RoomStatusID = room.RoomStatusID;
+            //existingRoom.RoomStatusID = room.RoomStatusID;
             existingRoom.RoomPrice = room.RoomPrice;
             existingRoom.RoomDescription = room.RoomDescription;
-            _context.Rooms.Update(existingRoom); 
-            await _context.SaveChangesAsync(); 
+            _context.Rooms.Update(existingRoom);
+            await _context.SaveChangesAsync();
 
             return existingRoom;
         }
@@ -84,6 +84,16 @@ namespace TripEnjoy.Infrastructure.Repositories
             return await _context.Rooms
                          .Where(r => r.RoomTypeId == roomTypeId && r.HotelId == hotelId && r.RoomStatus.RoomStatusName == "Available")
                          .ToListAsync();
+        }
+
+        public async Task<IEnumerable<Room>> GetRoomsPartner(string email)
+        {
+            if (email == null)
+            {
+                throw new ArgumentNullException(nameof(email));
+            }
+            var room = _context.Rooms.Include(p => p.Hotel).ThenInclude(p => p.Account).Where(p => p.Hotel.Account.AccountEmail == email).ToList();
+            return room;
         }
     }
 }

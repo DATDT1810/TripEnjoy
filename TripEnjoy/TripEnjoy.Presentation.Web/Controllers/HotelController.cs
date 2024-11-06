@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System.Security.Claims;
 using TripEnjoy.Application.Interface.Hotel;
 using TripEnjoy.Domain.Models;
 using TripEnjoy.Infrastructure.Entities;
@@ -88,5 +89,21 @@ namespace TripEnjoy.Presentation.Web.Controllers
             }
             return Ok(hotelList);
         }
+
+
+	//	[Authorize(Roles = "Partner")]
+        [HttpGet]
+        [Route("GetListHotelByEmailPartner")]
+        public async Task<IActionResult> GetListHotelByEmailPartner()
+		{
+			//var email = User.FindFirstValue(ClaimTypes.Email);
+			var email  = "haodangtest1@gmail.com";
+            if (email == null)
+			{
+                return Unauthorized("Invalid token");
+            }
+			var hotelList = await _hotelService.GetHotelByPartnerEmail(email); 
+            return Ok(hotelList);
+		}
     }
 }

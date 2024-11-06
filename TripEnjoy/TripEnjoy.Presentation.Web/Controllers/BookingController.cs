@@ -2,6 +2,8 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using System.Net.WebSockets;
+using System.Security.Claims;
 using TripEnjoy.Application.Data;
 using TripEnjoy.Application.Interface.Booking_Room;
 using TripEnjoy.Domain.Models;
@@ -82,6 +84,35 @@ namespace TripEnjoy.Presentation.Web.Controllers
 			return Ok(booking.BookingStatus);
 		}
 
-       // public async Task<IActionResult> CheckRoomBookedForAccount
+        [Authorize(Roles = "Partner")]
+        [HttpGet]
+        [Route("GetBookingByPartner")]
+        public async Task<IActionResult> GetBookingByPartner()
+        {
+           var email =  User.FindFirstValue(ClaimTypes.Email);
+         //   var email = "haodangtest1@gmail.com";
+            if(email == null)
+            {
+                return Unauthorized();
+            }
+            var bookingList = await _bookingService.GetBookingListByPartner(email);
+            if(bookingList == null)
+            {
+                return NotFound();
+            }
+            var bookingResponse = new List<BookingOfPartnerResponse>();
+            foreach (var item in bookingList)
+            {
+               var booking = _mapper.Map<BookingOfPartnerResponse>(item);
+                booking.AccountEmail = item.Account.AccountEmail;
+                booking.AccountFullName = item.Account.AccountFullname;
+                booking.AccountPhoneNumber = item.Account.AccountPhone;
+                booking.HotelId = item.Room.Hotel.HotelId;
+                booking.HotelName = item.Room.Hotel.HotelName;
+                booking.RoomName = item.Room.RoomTitle;            
+                bookingResponse.Add(booking);
+            }
+            return Ok(bookingResponse);
+        }
 	}
 }

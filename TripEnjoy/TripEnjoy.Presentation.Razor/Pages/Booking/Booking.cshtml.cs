@@ -32,8 +32,8 @@ namespace TripEnjoy.Presentation.Razor.Pages.Booking
 
         public async Task<IActionResult> OnGet(int id)
         {
-            //var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-            id = 2;
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            //id = 2;
             // Call API to get the room details
             var client = _httpClientFactory.CreateClient("DefaultClient");
             var roomResponse = await client.GetAsync($"https://localhost:7126/api/Room/{id}");
@@ -67,6 +67,11 @@ namespace TripEnjoy.Presentation.Razor.Pages.Booking
                 var profile = JsonConvert.DeserializeObject<UserProfile>(accountData);
                 UserProfile = profile;
             }
+            else
+            {
+                string redirectPath = await accountResponse.Content.ReadAsStringAsync();
+                return RedirectToPage(redirectPath, new {Url = "/Booking/Booking/"+id});
+            }
 
             return Page();
         }
@@ -86,7 +91,7 @@ namespace TripEnjoy.Presentation.Razor.Pages.Booking
             else
             {
                 var redirectPath = await response.Content.ReadAsStringAsync();
-                return RedirectToPage(redirectPath);
+                return RedirectToPage(redirectPath , new { Url = "/Booking/Booking"});
             }
            
         }

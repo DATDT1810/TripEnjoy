@@ -1,0 +1,48 @@
+﻿@page
+@model TripEnjoy.Presentation.Razor.Pages.Partner.UpdateRoomModel
+@{
+    Layout = "~/Pages/Shared/_LayoutPartner.cshtml";
+}
+
+
+<h1>Update Room</h1>
+
+<div class="container">
+    <form method="post" class="bg-light p-4 rounded shadow">
+        <input asp-for="@Model.Room.RoomId" type="hidden"/>
+        <div class="form-row">
+            <div class="form-group col-md-6">
+                <label for="RoomTitle">Room Title</label>
+                <input type="text" class="form-control" id="RoomTitle" name="Room.RoomTitle" value="@Model.Room.RoomTitle" required>
+            </div>
+            <div class="form-group col-md-6">
+                <label for="RoomTypeId">Room Type</label>
+                <input type="number" class="form-control" id="RoomQuantity" name="Room.RoomQuantity" value="@Model.Room.RoomTypeId" min="1" required>
+            </div>
+        </div>
+
+        <div class="form-row">
+            <div class="form-group col-md-6">
+                <label for="RoomQuantity">Room Quantity</label>
+                <input type="number" class="form-control" id="RoomQuantity" name="Room.RoomQuantity" value="@Model.Room.RoomQuantity" min="1" required>
+            </div>
+            <div class="form-group col-md-6">
+                <label for="RoomStatusID">Room Status</label>
+                <input type="number" class="form-control" id="RoomQuantity" name="Room.RoomQuantity" value="@Model.Room.RoomStatusID" min="1" required>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="RoomPrice">Room Price (VND)</label>
+            <input type="number" class="form-control" id="RoomPrice" name="Room.RoomPrice" value="@Model.Room.RoomPrice" step="0.01" required>
+        </div>
+
+        <div class="form-group">
+            <label for="RoomDescription">Room Description</label>
+            <textarea class="form-control" id="RoomDescription" name="Room.RoomDescription" rows="4">@Model.Room.RoomDescription</textarea>
+        </div>
+
+        <button type="submit" class="btn btn-primary">Save Changes</button>
+        <a href="/Partner/Dashboard" class="btn btn-secondary">Cancel</a>
+    </form>
+</div>

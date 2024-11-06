@@ -34,17 +34,20 @@
                                     <p class="text-center mt-4 mb-5">Or sign in with</p>
 
                                     <form method="post">
+                                        <input type="hidden" asp-for="@Model.UrlPageFrom" />
                                         <div class="row gy-3 overflow-hidden">
                                             <div class="col-12">
                                                 <div class="form-floating mb-3">
                                                     <input asp-for="LoginViewModel.email" type="text" class="form-control" name="email" id="email" placeholder="name@example.com" required>
                                                     <label for="email" class="form-label">Email</label>
+                                                    <span asp-validation-for="LoginViewModel.email" class="text-warning"></span>
                                                 </div>
                                             </div>
                                             <div class="col-12">
                                                 <div class="form-floating mb-3">
                                                     <input asp-for="LoginViewModel.passWord" type="password" class="form-control" name="password" id="password" value="" placeholder="Password" required>
                                                     <label for="password" class="form-label">Password</label>
+                                                    <span asp-validation-for="LoginViewModel.passWord" class="text-warning"></span>
                                                 </div>
                                             </div>
                                          
